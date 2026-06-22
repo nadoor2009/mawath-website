@@ -76,7 +76,131 @@ nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:c
 .ac{background:#fff;color:var(--teal);border-color:var(--teal)}
 .ac:hover{background:#EBF9FA}
 .ph{background:var(--white);border-radius:12px;border:1px solid var(--gm);padding:48px 20px;text-align:center}
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  
+  /* إخفاء العناصر غير المطلوبة */
+  nav, .app > div:first-child, .rac, #ph, #lock { display: none !important; }
+  
+  /* الصفحة */
+  body { background: #fff !important; margin: 0; padding: 0; font-size: 12px; }
+  .app { display: block !important; padding: 0 !important; max-width: 100% !important; }
+  
+  /* التقرير */
+  .rep { display: block !important; box-shadow: none !important; border: none !important; }
+  
+  /* الهيدر */
+  .rh {
+    background: #1B2B5E !important;
+    color: #fff !important;
+    padding: 16px 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+  }
+  .rh-t { font-size: 18px !important; font-weight: 700 !important; color: #fff !important; }
+  .rh-b { font-size: 13px !important; color: rgba(255,255,255,0.7) !important; }
+  .rh-d { font-size: 11px !important; color: rgba(255,255,255,0.5) !important; }
+
+  /* شريط MAWATH في الأعلى */
+  .rep::before {
+    content: 'MAWATH — أداة تقييم الأداء | mawath.com';
+    display: block !important;
+    background: #F5C518 !important;
+    color: #1B2B5E !important;
+    text-align: center !important;
+    padding: 6px !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+  }
+
+  /* قسم الدرجة + المعايير جنب بعض */
+  .sc-sec {
+    float: right !important;
+    width: 35% !important;
+    padding: 16px !important;
+    border-left: 2px solid #E4E8EF !important;
+  }
+
+  .cl {
+    float: left !important;
+    width: 60% !important;
+    padding: 16px !important;
+  }
+
+  /* بعد الفلوت */
+  .cl + .ch { clear: both !important; }
+
+  /* الدائرة */
+  .sc-ring { width: 100px !important; height: 100px !important; }
+  .sc-ring svg { width: 100px !important; height: 100px !important; }
+  .sv { font-size: 26px !important; }
+  .sc-cls { font-size: 13px !important; padding: 4px 14px !important; }
+  .sc-rec { font-size: 11px !important; }
+
+  /* شريط المعايير */
+  .ci { margin-bottom: 10px !important; }
+  .cn { font-size: 12px !important; }
+  .cs { font-size: 12px !important; }
+  .cb2 { height: 8px !important; background: #E4E8EF !important; border-radius: 4px !important; }
+  .cf { height: 8px !important; border-radius: 4px !important; }
+
+  /* هيدر الأقسام */
+  .ch {
+    background: #1B2B5E !important;
+    padding: 10px 16px !important;
+    clear: both !important;
+    page-break-inside: avoid !important;
+  }
+  .ch h2 { color: #fff !important; font-size: 13px !important; }
+  .ch .ico { font-size: 14px !important; }
+
+  /* فرص التحسين */
+  .ops { padding: 12px 16px !important; }
+  .oi {
+    background: #FEF8DC !important;
+    border-right: 3px solid #F5C518 !important;
+    border-radius: 6px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 8px !important;
+    page-break-inside: avoid !important;
+  }
+  .or { font-size: 16px !important; color: #F5C518 !important; }
+  .on strong { font-size: 12px !important; color: #1B2B5E !important; }
+  .on p { font-size: 11px !important; color: #555 !important; }
+
+  /* تصنيفات الألوان */
+  .ce { background: #D1FAE5 !important; color: #065F46 !important; }
+  .cg { background: #DBEAFE !important; color: #1E40AF !important; }
+  .cm { background: #FEF3C7 !important; color: #92400E !important; }
+  .cw { background: #FEE2E2 !important; color: #991B1B !important; }
+
+  /* فوتر الطباعة */
+  .rep::after {
+    content: 'تقرير سري — للاستخدام الداخلي فقط | MAWATH © 2025';
+    display: block !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    color: #9AA0A6 !important;
+    border-top: 1px solid #E4E8EF !important;
+    padding: 10px !important;
+    margin-top: 16px !important;
+    clear: both !important;
+  }
+
+  /* ألوان الأشرطة */
+  #s1b { background: #1BA8B8 !important; }
+  #s2b { background: #F5C518 !important; }
+  #s3b { background: #22C55E !important; }
+  #s4b { background: #F97316 !important; }
+  #s5b { background: #1B2B5E !important; }
+}
+
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div id="lock" style="position:fixed;inset:0;background:#1B2B5E;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:20px">
@@ -219,7 +343,7 @@ window.onload=function(){
       <div class="ops" style="padding-top:14px" id="ops">—</div>
 
       <div class="rac">
-        <button class="ab2 ap" onclick="window.print()">🖨️ طباعة</button>
+        <button class="ab2 ap" onclick="generatePDF()" style="background:#1B2B5E">📄 تحميل PDF</button>
         <button class="ab2 ac" onclick="copyWA()">📋 نسخ للواتساب</button>
       </div>
     </div>
@@ -397,6 +521,165 @@ function tips5(ca,kw){
   if(!ca)return'الفئة الرئيسية غير دقيقة — غيّرها لتطابق نشاطك بالضبط لتحسين الظهور';
   if(!kw)return'الوصف لا يحتوي كلمات مفتاحية محلية — أضف الحي والمدينة ونوع الخدمة';
   return'الظهور في البحث يحتاج تحسيناً إضافياً';
+}
+
+
+function generatePDF() {
+  if (!window._rd) { alert('احسب الدرجة أولاً'); return; }
+  const d = window._rd;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const W = 210, M = 15;
+  let y = 0;
+
+  // ── الشريط الذهبي العلوي ──
+  doc.setFillColor(245, 197, 24);
+  doc.rect(0, 0, W, 8, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(27, 43, 94);
+  doc.text('MAWATH | mawath.com | info@mawath.com', W/2, 5.5, { align: 'center' });
+
+  // ── الهيدر الداكن ──
+  doc.setFillColor(27, 43, 94);
+  doc.rect(0, 8, W, 30, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(18);
+  doc.text('MAWATH', M, 22);
+  doc.setFontSize(10);
+  doc.setTextColor(27, 168, 184);
+  doc.text('Performance Score Report', M, 29);
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
+  doc.text(d.biz, W-M, 22, { align: 'right' });
+  doc.setTextColor(180, 180, 180);
+  doc.text(new Date().toLocaleDateString('ar-SA'), W-M, 29, { align: 'right' });
+
+  y = 48;
+
+  // ── الدرجة الكلية ──
+  const scoreColor = d.T>=85?[34,197,94]:d.T>=65?[27,168,184]:d.T>=45?[245,197,24]:[239,68,68];
+  doc.setFillColor(...scoreColor);
+  doc.roundedRect(M, y, 55, 40, 4, 4, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(32);
+  doc.setFont('helvetica','bold');
+  doc.text(String(d.T), M+27.5, y+22, { align:'center' });
+  doc.setFontSize(9);
+  doc.text('/ 100', M+27.5, y+30, { align:'center' });
+  doc.setFontSize(10);
+  doc.text(d.lbl.replace(/★/g,'*'), M+27.5, y+38, { align:'center' });
+
+  // ── التوصية ──
+  const recs = {
+    'ممتاز':'Excellent — Keep maintaining this level with regular follow-up.',
+    'جيد':'Good — Strong base with clear improvement opportunities.',
+    'متوسط':'Average — Profile losing potential customers daily.',
+    'ضعيف':'Weak — Urgent action needed immediately.'
+  };
+  const recKey = Object.keys(recs).find(k=>d.lbl.includes(k)) || 'متوسط';
+  doc.setFillColor(245,247,250);
+  doc.roundedRect(M+60, y, W-M-60-M, 40, 4, 4, 'F');
+  doc.setTextColor(27,43,94);
+  doc.setFontSize(11);
+  doc.setFont('helvetica','bold');
+  doc.text('Performance Summary', M+65, y+12);
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(100,100,100);
+  const recLines = doc.splitTextToSize(recs[recKey], W-M-60-M-10);
+  doc.text(recLines, M+65, y+22);
+
+  y += 50;
+
+  // ── تفصيل المعايير ──
+  doc.setFillColor(27,43,94);
+  doc.rect(M, y, W-2*M, 8, 'F');
+  doc.setTextColor(245,197,24);
+  doc.setFontSize(10);
+  doc.setFont('helvetica','bold');
+  doc.text('Criteria Breakdown', M+4, y+5.5);
+  y += 12;
+
+  const criteria = [
+    { label:'Profile Completeness', score:d.S1, max:25, color:[27,168,184] },
+    { label:'Review Quality',       score:d.S2, max:10, color:[245,197,24] },
+    { label:'Response Rate',        score:d.S3, max:20, color:[34,197,94] },
+    { label:'Activity Freshness',   score:d.S4, max:15, color:[249,115,22] },
+    { label:'Search Visibility',    score:d.S5, max:30, color:[27,43,94] },
+  ];
+
+  criteria.forEach(cr => {
+    const pct = cr.score / cr.max;
+    const barW = W - 2*M - 60;
+
+    doc.setTextColor(27,43,94);
+    doc.setFontSize(9);
+    doc.setFont('helvetica','bold');
+    doc.text(cr.label, M, y+4);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(100,100,100);
+    doc.text(`${cr.score}/${cr.max}`, W-M, y+4, { align:'right' });
+
+    // شريط خلفية
+    doc.setFillColor(228,232,239);
+    doc.roundedRect(M, y+6, barW, 5, 2, 2, 'F');
+    // شريط التقدم
+    doc.setFillColor(...cr.color);
+    doc.roundedRect(M, y+6, barW*pct, 5, 2, 2, 'F');
+
+    y += 16;
+  });
+
+  y += 4;
+
+  // ── فرص التحسين ──
+  doc.setFillColor(27,43,94);
+  doc.rect(M, y, W-2*M, 8, 'F');
+  doc.setTextColor(245,197,24);
+  doc.setFontSize(10);
+  doc.setFont('helvetica','bold');
+  doc.text('Top Improvement Opportunities', M+4, y+5.5);
+  y += 12;
+
+  d.crit.slice(0,3).forEach((cr,i) => {
+    doc.setFillColor(254,248,220);
+    doc.roundedRect(M, y, W-2*M, 18, 3, 3, 'F');
+    doc.setFillColor(245,197,24);
+    doc.rect(M, y, 3, 18, 'F');
+
+    doc.setTextColor(245,197,24);
+    doc.setFontSize(14);
+    doc.setFont('helvetica','bold');
+    doc.text(`0${i+1}`, M+8, y+12);
+
+    doc.setTextColor(27,43,94);
+    doc.setFontSize(9);
+    doc.setFont('helvetica','bold');
+    doc.text(`${cr.n} — ${cr.s}/${cr.m}`, M+20, y+7);
+
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(80,80,80);
+    const tipLines = doc.splitTextToSize(cr.t, W-2*M-25);
+    doc.text(tipLines[0]||'', M+20, y+13);
+
+    y += 22;
+  });
+
+  // ── الفوتر ──
+  doc.setFillColor(27,43,94);
+  doc.rect(0, 287, W, 10, 'F');
+  doc.setTextColor(245,197,24);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','bold');
+  doc.text('MAWATH', M, 293);
+  doc.setTextColor(180,180,180);
+  doc.setFont('helvetica','normal');
+  doc.text('Confidential — Internal Use Only', W/2, 293, { align:'center' });
+  doc.text('mawath.com', W-M, 293, { align:'right' });
+
+  doc.save(`MAWATH_Score_${d.biz.replace(/\s/g,'_')}_${new Date().toLocaleDateString('en')}.pdf`);
 }
 
 function copyWA(){
