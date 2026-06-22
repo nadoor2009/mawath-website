@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الأسئلة الشائعة — MAWATH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1B2B5E;--teal:#1BA8B8;--gold:#F5C518;--white:#fff;--gray-l:#F5F7FA;--gray-m:#E4E8EF;--gray-d:#6C757D}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--gray-l);color:var(--navy)}
+nav{background:var(--navy);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Readex Pro',sans-serif;font-size:18px;font-weight:700;color:var(--white);letter-spacing:2px}
+.logo span{color:var(--teal)}
+.back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s}
+.back:hover{color:var(--teal)}
+.hero{background:var(--navy);padding:48px 24px 40px;text-align:center}
+.hero-tag{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-bottom:12px}
+.hero h1{font-family:'Readex Pro',sans-serif;font-size:clamp(24px,4vw,36px);font-weight:700;color:var(--white);margin-bottom:10px}
+.hero p{font-size:13px;color:rgba(255,255,255,0.45)}
+.content{max-width:760px;margin:0 auto;padding:48px 24px}
+
+/* Tabs */
+.tabs{display:flex;background:var(--white);border-radius:10px;padding:4px;gap:2px;margin-bottom:28px;border:1px solid var(--gray-m);flex-wrap:wrap}
+.tab{flex:1;min-width:120px;padding:9px 8px;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:var(--gray-d);cursor:pointer;border-radius:7px;transition:all 0.2s;text-align:center}
+.tab.on{background:var(--navy);color:var(--white)}
+
+/* FAQ items */
+.faq-group{display:none}
+.faq-group.on{display:block}
+.faq-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;margin:24px 0 10px;padding-right:4px}
+.fi{background:var(--white);border:1px solid var(--gray-m);border-radius:10px;overflow:hidden;margin-bottom:8px;transition:border-color 0.2s}
+.fi.on{border-color:var(--teal)}
+.fq{padding:15px 18px;font-size:13px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:color 0.2s;line-height:1.5}
+.fq:hover{color:var(--teal)}
+.fi-icon{color:var(--teal);font-size:18px;transition:transform 0.3s;flex-shrink:0;font-weight:300}
+.fi.on .fi-icon{transform:rotate(45deg)}
+.fa{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;padding:0 18px;font-size:13px;color:#555;line-height:1.9}
+.fi.on .fa{max-height:400px;padding:0 18px 16px}
+.fa strong{color:var(--navy)}
+.fa a{color:var(--teal);text-decoration:none}
+
+/* CTA bottom */
+.cta-box{background:var(--navy);border-radius:14px;padding:32px;text-align:center;margin-top:32px}
+.cta-box h3{font-family:'Readex Pro',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px}
+.cta-box p{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.7}
+.cta-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:var(--white);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:background 0.2s}
+.cta-wa:hover{background:#20BA5A}
+
+footer{background:var(--navy);padding:20px;text-align:center;margin-top:40px}
+footer p{font-size:11px;color:rgba(255,255,255,0.3)}
+footer a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">MAW<span>A</span>TH</div>
+  <a href="index.html" class="back">← الرئيسية</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">MAWATH GROUP</div>
+  <h1>الأسئلة الشائعة</h1>
+  <p>إجابات على أكثر الأسئلة التي يطرحها عملاؤنا</p>
+</div>
+
+<div class="content">
+
+  <div class="tabs">
+    <button class="tab on" onclick="sw('general')" id="tab-general">عام</button>
+    <button class="tab" onclick="sw('maps')" id="tab-maps">خرائط قوقل</button>
+    <button class="tab" onclick="sw('mawqi3')" id="tab-mawqi3">مَوْقِع</button>
+    <button class="tab" onclick="sw('athar')" id="tab-athar">أثَر OS</button>
+    <button class="tab" onclick="sw('payment')" id="tab-payment">الدفع</button>
+  </div>
+
+  <!-- ══ عام ══ -->
+  <div class="faq-group on" id="group-general">
+    <div class="faq-label">عن MAWATH</div>
+
+    <div class="fi on">
+      <div class="fq">ما هي مجموعة MAWATH؟<span class="fi-icon">+</span></div>
+      <div class="fa">MAWATH مجموعة سعودية متخصصة في خدمات دعم الأعمال المحلية. نقدم ثلاثة منتجات: <strong>خرائط قوقل</strong> لإدارة حضورك الرقمي، <strong>مَوْقِع</strong> لتحليل جدوى المواقع التجارية، و<strong>أثَر OS</strong> لتحسين تجربة عملائك.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">كيف أتواصل مع MAWATH؟<span class="fi-icon">+</span></div>
+      <div class="fa">التواصل عبر واتساب هو الأسرع — اضغط أي زر "تواصل عبر واتساب" في موقعنا وسنرد خلال ساعات. يمكنك أيضاً مراسلتنا على <a href="mailto:info@mawath.com">info@mawath.com</a></div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل تعملون مع جميع أنواع الأعمال؟<span class="fi-icon">+</span></div>
+      <div class="fa">نعم — نخدم المطاعم والكافيهات، المحلات التجارية، الصالونات، العيادات، شركات الخدمات، وأي نشاط تجاري محلي في المملكة العربية السعودية.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">في أي مدن تقدمون خدماتكم؟<span class="fi-icon">+</span></div>
+      <div class="fa">خدماتنا متاحة في جميع مدن المملكة العربية السعودية — معظم خدماتنا تُنفَّذ عن بُعد بدون حاجة لزيارة ميدانية.</div>
+    </div>
+  </div>
+
+  <!-- ══ خرائط قوقل ══ -->
+  <div class="faq-group" id="group-maps">
+    <div class="faq-label">التأسيس والإدارة</div>
+
+    <div class="fi on">
+      <div class="fq">ما الفرق بين التأسيس والنمو الشهري؟<span class="fi-icon">+</span></div>
+      <div class="fa"><strong>التأسيس</strong> خدمة لمرة واحدة — ننشئ ملفك التجاري من الصفر ونهيئه بالكامل خلال ٤٨ ساعة. <strong>النمو الشهري</strong> اشتراك مستمر — ندير ملفك بنشر منشورات أسبوعية، الرد على التقييمات، تحديث المنتجات، وتقارير الأداء.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">كم يستغرق ظهور الملف في خرائط قوقل؟<span class="fi-icon">+</span></div>
+      <div class="fa">الملف يبدأ بالظهور في البحث خلال <strong>٢٤-٧٢ ساعة</strong> من الإنشاء. الظهور في خرائط قوقل عند البحث بالموقع الجغرافي يستغرق ٣-٧ أيام. التحسن الملموس في الترتيب يظهر خلال ٣-٤ أسابيع.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل يمكنني إلغاء الاشتراك الشهري؟<span class="fi-icon">+</span></div>
+      <div class="fa">نعم — يمكن إلغاء الاشتراك الشهري بإشعار مسبق ٧ أيام قبل تجديد الشهر القادم، بدون أي رسوم إضافية. الملف التجاري يبقى ملكاً لك بعد الإلغاء.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">ماذا أحتاج لتجهيزه قبل التأسيس؟<span class="fi-icon">+</span></div>
+      <div class="fa">نحتاج منك: اسم النشاط الكامل، العنوان التفصيلي، رقم الهاتف الرسمي، ساعات العمل لكل الأيام، ١٠ صور للنشاط، وأسماء وأسعار ٥ منتجات أو خدمات أساسية.</div>
+    </div>
+
+    <div class="faq-label">حل المشكلات</div>
+
+    <div class="fi">
+      <div class="fq">ما هو فحص تقييم الأداء؟<span class="fi-icon">+</span></div>
+      <div class="fa">نحلل ملفك التجاري عبر ٥ معايير ونعطيه درجة من ١٠٠: اكتمال الملف، جودة التقييمات، نسبة الردود، حداثة النشاط، والظهور في البحث. تحصل على درجتك وأهم ٣ فرص تحسين خلال ٢٤ ساعة.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل يمكن حذف التقييمات السلبية؟<span class="fi-icon">+</span></div>
+      <div class="fa">يمكن طلب إزالة التقييمات <strong>المزيفة أو المخالفة لسياسات Google</strong> — القرار النهائي لـ Google. التقييمات الحقيقية لا يمكن حذفها، لكن يمكن الرد عليها بشكل احترافي. نقدم طلب الإزالة الرسمي نيابةً عنك.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">كيف أسترد ملفي إذا كان مسجلاً بإيميل المالك السابق؟<span class="fi-icon">+</span></div>
+      <div class="fa">هذا ممكن عبر "طلب الملكية" الرسمي من Google. إذا كان المالك السابق متعاوناً يستغرق يوماً واحداً، وإذا لم يرد خلال ٧ أيام يتيح لك Google توثيق الملف بطريقة بديلة. نتولى هذه الإجراءات كاملاً.</div>
+    </div>
+  </div>
+
+  <!-- ══ مَوْقِع ══ -->
+  <div class="faq-group" id="group-mawqi3">
+    <div class="faq-label">تحليل المواقع</div>
+
+    <div class="fi on">
+      <div class="fq">ما هو منتج مَوْقِع وكيف يفيدني؟<span class="fi-icon">+</span></div>
+      <div class="fa">مَوْقِع يحلل جدوى موقع تجاري <strong>قبل</strong> أن توقّع عقد الإيجار. يعطيك تقريراً يشمل: عدد المنافسين وتقييماتهم، القوة الشرائية للحي، الكثافة السكانية، وتوصية نهائية مع درجة من ١٠٠.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">ما المعلومات التي تحتاجونها لتحليل الموقع؟<span class="fi-icon">+</span></div>
+      <div class="fa">نحتاج: الحي أو العنوان التقريبي للموقع المستهدف، نوع النشاط الذي تريد فتحه، وأي تفضيلات أو مخاوف لديك. كل شيء يُنجز عن بُعد.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل التقرير يضمن نجاح المشروع؟<span class="fi-icon">+</span></div>
+      <div class="fa">التقرير يعطيك بيانات وتحليلاً موضوعياً لمساعدتك على اتخاذ قرار مدروس — لا يضمن النجاح التجاري لأن ذلك يعتمد على عوامل كثيرة خارج نطاق تحليل الموقع.</div>
+    </div>
+  </div>
+
+  <!-- ══ أثَر OS ══ -->
+  <div class="faq-group" id="group-athar">
+    <div class="faq-label">رادار النزيف</div>
+
+    <div class="fi on">
+      <div class="fq">ما هو رادار النزيف؟<span class="fi-icon">+</span></div>
+      <div class="fa">رادار النزيف هو خدمة تشخيص رحلة العميل في نشاطك التجاري — نكشف أين تخسر عملاء دون أن تلاحظ، ونعطيك خطة إصلاح فورية بـ ١٠ خطوات واضحة خلال ٤٨ ساعة.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل يحتاج رادار النزيف زيارة ميدانية؟<span class="fi-icon">+</span></div>
+      <div class="fa">لا — رادار النزيف يعمل عن بُعد بالكامل. ترسل لنا سجل محادثات واتساب، وصف للمشكلة، ورابط صفحتك. نحن نحلل ونرسل التقرير.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">كيف يعمل الضمان الذهبي؟<span class="fi-icon">+</span></div>
+      <div class="fa">إذا لم نحدد <strong>١٠ نقاط تسريب</strong> واضحة وقابلة للإصلاح في تجربة عملائك — يُسترد لك ٥٠٪ من المبلغ (مع احتفاظك بالتقرير كاملاً). شرط تطبيق الضمان هو توفير جميع المواد المطلوبة.</div>
+    </div>
+  </div>
+
+  <!-- ══ الدفع ══ -->
+  <div class="faq-group" id="group-payment">
+    <div class="faq-label">الدفع والفواتير</div>
+
+    <div class="fi on">
+      <div class="fq">ما طرق الدفع المتاحة؟<span class="fi-icon">+</span></div>
+      <div class="fa">نقبل: <strong>تحويل بنكي</strong>، <strong>مدى</strong>، و<strong>STC Pay</strong>. بعد تأكيد طلبك على واتساب، نرسل لك تفاصيل الدفع.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل تصدرون فاتورة رسمية؟<span class="fi-icon">+</span></div>
+      <div class="fa">نعم — نرسل إيصال دفع رسمي بعد تأكيد استلام المبلغ. للفواتير الرسمية بالسجل التجاري، يُرجى الإشارة إلى ذلك عند التواصل.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">متى يبدأ العمل بعد الدفع؟<span class="fi-icon">+</span></div>
+      <div class="fa">يبدأ العمل فور تأكيد استلام الدفع وتوفير جميع البيانات المطلوبة. إذا وفّرت البيانات قبل الدفع، يبدأ العمل مباشرة بعد تأكيد الدفع.</div>
+    </div>
+
+    <div class="fi">
+      <div class="fq">هل هناك رسوم خفية؟<span class="fi-icon">+</span></div>
+      <div class="fa">لا — الأسعار المتفق عليها نهائية وشاملة. لا رسوم إضافية إلا إذا طلبت خدمات إضافية تتجاوز نطاق الاتفاق الأصلي، وفي هذه الحالة نُبلغك مسبقاً.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h3>لم تجد إجابتك؟</h3>
+    <p>تواصل معنا مباشرة على واتساب — نرد خلال ساعات ونجيب على أي سؤال لديك.</p>
+    <a href="https://wa.me/966509551105?text=مرحباً،%20لدي%20سؤال%20عن%20خدمات%20MAWATH" target="_blank" class="cta-wa">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      اسأل على واتساب
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 MAWATH Group — <a href="index.html">الرئيسية</a> · <a href="privacy.html">سياسة الخصوصية</a> · <a href="terms.html">الشروط والأحكام</a></p>
+</footer>
+
+<script>
+function sw(t) {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.faq-group').forEach(x => x.classList.remove('on'));
+  document.getElementById('tab-' + t).classList.add('on');
+  document.getElementById('group-' + t).classList.add('on');
+}
+document.querySelectorAll('.fi').forEach(function(item) {
+  item.querySelector('.fq').addEventListener('click', function() {
+    var isOpen = item.classList.contains('on');
+    document.querySelectorAll('.fi').forEach(function(i) { i.classList.remove('on'); });
+    if (!isOpen) item.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

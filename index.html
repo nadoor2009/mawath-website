@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAWATH — شريكك في نجاح نشاطك التجاري</title>
+<meta name="description" content="MAWATH مجموعة متخصصة في خدمات الأعمال المحلية السعودية — خرائط قوقل، تحليل المواقع، وتجربة العملاء.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --navy:   #1B2B5E;
+  --navy2:  #152348;
+  --gold:   #F5C518;
+  --gold-l: #FEF8DC;
+  --gold-d: #D4A800;
+  --teal:   #1BA8B8;
+  --blue:   #2D6FBF;
+  --white:  #FFFFFF;
+  --gray-l: #F5F7FA;
+  --gray-m: #E4E8EF;
+  --gray-d: #6C757D;
+  --text:   #1B2B5E;
+}
+
+body {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(11,22,40,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212,168,67,0.15);
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 2px;
+}
+.nav-logo span { color: var(--teal); }
+
+.nav-tag {
+  font-size: 11px;
+  color: rgba(27,168,184,0.8);
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(27,168,184,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,168,67,0.1);
+  border: 1px solid rgba(245,197,24,0.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  margin-bottom: 28px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: clamp(32px, 6vw, 60px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 20px;
+  max-width: 700px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--gold);
+}
+
+.hero p {
+  font-size: clamp(14px, 2vw, 17px);
+  color: rgba(255,255,255,0.55);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 48px;
+}
+
+.hero-divider {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  margin: 0 auto 48px;
+  opacity: 0.8;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-n {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--teal);
+  display: block;
+}
+
+.stat-l {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.25);
+  font-size: 10px;
+  letter-spacing: 1px;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, rgba(27,168,184,0.5), transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── PRODUCTS SECTION ── */
+.products {
+  background: var(--gray-l);
+  padding: 80px 24px;
+}
+
+.products-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: clamp(22px, 4vw, 34px);
+  font-weight: 700;
+  color: var(--navy);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.section-sub {
+  text-align: center;
+  font-size: 14px;
+  color: var(--gray-d);
+  margin-bottom: 56px;
+  line-height: 1.7;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--gray-m);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(11,22,40,0.1);
+  border-color: var(--teal);
+}
+
+.card-top {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3570 100%);
+  padding: 28px 24px 24px;
+  position: relative;
+  border-bottom: 2px solid var(--teal);
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.card-name {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.card-name-en {
+  font-size: 11px;
+  color: rgba(27,168,184,0.8);
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.card-num {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: rgba(27,168,184,0.1);
+  line-height: 1;
+  user-select: none;
+}
+
+.card-body {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--gray-d);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.card-services {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.card-services li {
+  font-size: 13px;
+  color: var(--text);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-m);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-services li:last-child { border-bottom: none; }
+
+.card-services li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+
+.card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  margin-top: auto;
+}
+
+.card-cta:hover {
+  background: var(--teal);
+  transform: scale(1.01);
+}
+
+.card-cta svg {
+  flex-shrink: 0;
+}
+
+.card-cta-gold {
+  background: var(--teal);
+  color: var(--white);
+}
+.card-cta-gold:hover {
+  background: #158f9d;
+}
+
+/* ── ABOUT ── */
+.about {
+  background: linear-gradient(180deg, var(--navy) 0%, #152348 100%);
+  padding: 72px 24px;
+  text-align: center;
+}
+
+.about-inner {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.about h2 {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: clamp(20px, 3.5vw, 28px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.about h2 span { color: var(--teal); }
+
+.about p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.9;
+  margin-bottom: 32px;
+}
+
+.about-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: var(--white);
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: inherit;
+}
+
+.about-wa:hover {
+  background: #20BA5A;
+  transform: scale(1.02);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy);
+  border-top: 1px solid rgba(212,168,67,0.1);
+  padding: 24px;
+  text-align: center;
+}
+
+.footer-logo {
+  font-family: 'Readex Pro', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+footer p {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+}
+
+footer a {
+  color: rgba(27,168,184,0.7);
+  text-decoration: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .products-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+  .hero-stats { gap: 28px; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 0 16px; }
+  .hero { padding: 80px 16px 60px; }
+  .products { padding: 56px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div>
+    <div class="nav-logo">MAW<span>A</span>TH</div>
+  </div>
+  <div class="nav-tag">BUSINESS GROUP</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">مجموعة MAWATH — المملكة العربية السعودية</div>
+  <h1>شريكك في <em>نجاح</em><br>نشاطك التجاري</h1>
+  <p>نساعد أصحاب الأعمال المحلية في السعودية على الظهور، الاختيار، والنمو — بأدوات مختلفة لكل مرحلة.</p>
+  <div class="hero-divider"></div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-n">٣</span>
+      <div class="stat-l">منتجات متخصصة</div>
+    </div>
+    <div class="stat">
+      <span class="stat-n">١٠٠٪</span>
+      <div class="stat-l">سعودي المصدر</div>
+    </div>
+    <div class="stat">
+      <span class="stat-n">٤٨H</span>
+      <div class="stat-l">وقت التسليم</div>
+    </div>
+  </div>
+  <div class="scroll-hint">اكتشف</div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products">
+  <div class="products-inner">
+    <div class="section-eyebrow">منتجاتنا</div>
+    <h2 class="section-title">ثلاثة منتجات — مرحلة واحدة في كل وقت</h2>
+    <p class="section-sub">كل منتج يحل مشكلة مختلفة لنفس العميل — صاحب النشاط التجاري السعودي.</p>
+
+    <div class="products-grid">
+
+      <!-- Product 1: خرائط قوقل -->
+      <div class="product-card">
+        <div class="card-top">
+          <div class="card-num">01</div>
+          <span class="card-icon">🗺️</span>
+          <div class="card-name">خرائط قوقل</div>
+          <div class="card-name-en">GOOGLE BUSINESS</div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">إنشاء وإدارة ملفك التجاري على Google — يظهر نشاطك لعملاء يبحثون عنك الآن.</p>
+          <ul class="card-services">
+            <li>إنشاء وتوثيق الملف التجاري</li>
+            <li>تهيئة الملف لمحركات البحث المحلية</li>
+            <li>إدارة التقييمات والمنشورات</li>
+            <li>حل مشكلات الملف التجاري</li>
+            <li>تقييم أداء الملف من 100</li>
+          </ul>
+          <a href="https://wa.me/966509551105?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمة%20خرائط%20قوقل" target="_blank" class="card-cta card-cta-gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            تواصل عبر واتساب
+          </a>
+        </div>
+      </div>
+
+      <!-- Product 2: مَوْقِع -->
+      <div class="product-card">
+        <div class="card-top">
+          <div class="card-num">02</div>
+          <span class="card-icon">📍</span>
+          <div class="card-name">مَوْقِع</div>
+          <div class="card-name-en">LOCATION INTELLIGENCE</div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">تحليل جدوى الموقع التجاري قبل الإيجار — بيانات المنافسين والكثافة السكانية والقوة الشرائية.</p>
+          <ul class="card-services">
+            <li>تحليل المنافسين في المنطقة</li>
+            <li>تقييم القوة الشرائية للحي</li>
+            <li>درجة جدوى الموقع من 100</li>
+            <li>مقارنة أحياء بديلة</li>
+            <li>تقرير قرار مدروس خلال 48 ساعة</li>
+          </ul>
+          <a href="https://wa.me/966509551105?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمة%20مَوْقِع%20لتحليل%20الموقع%20التجاري" target="_blank" class="card-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            تواصل عبر واتساب
+          </a>
+        </div>
+      </div>
+
+      <!-- Product 3: أثَر OS -->
+      <div class="product-card">
+        <div class="card-top">
+          <div class="card-num">03</div>
+          <span class="card-icon">⚡</span>
+          <div class="card-name">أثَر OS</div>
+          <div class="card-name-en">CUSTOMER EXPERIENCE</div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">تشخيص تجربة عملائك وإصلاح نقاط التسريب — عملاؤك يأتون ولا يعودون؟ نعرف السبب.</p>
+          <ul class="card-services">
+            <li>تشخيص رحلة العميل كاملة</li>
+            <li>تقرير 15 نقطة تسريب</li>
+            <li>خطة إصلاح فورية 10 خطوات</li>
+            <li>نصوص واتساب احترافية جاهزة</li>
+            <li>جلسة تمكين 30 دقيقة</li>
+          </ul>
+          <a href="https://wa.me/966509551105?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمة%20أثَر%20OS%20لتجربة%20العملاء" target="_blank" class="card-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            تواصل عبر واتساب
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="about-inner">
+    <h2>سؤال؟ تواصل معنا<br><span>مباشرة على واتساب</span></h2>
+    <p>فريق MAWATH يرد خلال ساعات — نسمع احتياجك ونحدد المنتج المناسب لك، بدون التزام مسبق.</p>
+    <a href="https://wa.me/966509551105?text=مرحباً،%20أود%20الاستفسار%20عن%20خدمات%20MAWATH" target="_blank" class="about-wa">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      ابدأ المحادثة
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">MAWATH</div>
+  <p>© 2025 MAWATH Group — المملكة العربية السعودية</p>
+  <p style="margin-top:6px"><a href="mailto:info@mawath.com">info@mawath.com</a></p>
+  <p style="margin-top:10px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="terms.html">الشروط والأحكام</a>
+    <a href="faq.html">الأسئلة الشائعة</a>
+  </p>
+</footer>
+
+</body>
+</html>
