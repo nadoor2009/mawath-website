@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أداة تقييم الأداء — MAWATH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1B2B5E;--teal:#1BA8B8;--gold:#F5C518;--white:#fff;--gl:#F5F7FA;--gm:#E4E8EF;--gd:#6C757D;--green:#22C55E;--red:#EF4444;--orange:#F97316}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--gl);color:var(--navy);min-height:100vh}
+nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Readex Pro',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:2px}
+.logo span{color:var(--teal)}
+.nav-tag{font-size:11px;color:rgba(255,255,255,0.4)}
+.app{max-width:1060px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:780px){.app{grid-template-columns:1fr}}
+.card{background:var(--white);border-radius:12px;border:1px solid var(--gm);overflow:hidden}
+.ch{background:var(--navy);padding:12px 18px;display:flex;align-items:center;gap:8px}
+.ch h2{font-family:'Readex Pro',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.ch .ico{font-size:16px}
+.cb{padding:18px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.ab{font-size:9px;background:var(--teal);color:#fff;padding:1px 5px;border-radius:3px;margin-right:4px;font-weight:700}
+.mb{font-size:9px;background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:3px;margin-right:4px;font-weight:700}
+.field input,.field select{width:100%;padding:8px 11px;border:1.5px solid var(--gm);border-radius:7px;font-family:inherit;font-size:13px;color:var(--navy);outline:none;transition:border 0.2s;background:#fff}
+.field input:focus,.field select:focus{border-color:var(--teal)}
+.field input.auto{background:#EBF9FA;border-color:var(--teal);color:var(--teal);font-weight:600}
+.fb{width:100%;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.fb:hover{background:#158f9d}
+.fb:disabled{background:var(--gm);cursor:not-allowed;color:var(--gd)}
+.cb-btn{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.cb-btn:hover{background:#0f1e45}
+.sl{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--teal);text-transform:uppercase;margin:14px 0 8px;border-bottom:1px solid var(--gm);padding-bottom:5px}
+.st{font-size:11px;padding:7px 11px;border-radius:6px;margin-bottom:12px;display:none}
+.st.show{display:block}
+.st.loading{background:#EBF9FA;color:var(--teal)}
+.st.success{background:#D1FAE5;color:#065F46}
+.st.error{background:#FEE2E2;color:#991B1B}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+/* REPORT */
+.rep{display:none}.rep.show{display:block}
+.rh{background:var(--navy);padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.rh-t{font-family:'Readex Pro',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.rh-b{font-size:11px;color:rgba(255,255,255,0.45);margin-top:3px}
+.rh-d{font-size:10px;color:rgba(255,255,255,0.3)}
+.sc-sec{text-align:center;padding:24px 18px 16px}
+.sc-ring{position:relative;width:130px;height:130px;margin:0 auto 14px}
+.sc-ring svg{transform:rotate(-90deg)}
+.sc-ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.rbg{stroke:var(--gm)}
+.rfg{transition:stroke-dashoffset 1s ease}
+.sv{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Readex Pro',sans-serif;font-size:34px;font-weight:700;color:var(--navy)}
+.sc-cls{display:inline-block;font-family:'Readex Pro',sans-serif;font-size:15px;font-weight:700;padding:5px 18px;border-radius:100px;margin-bottom:6px}
+.ce{background:#D1FAE5;color:#065F46}.cg{background:#DBEAFE;color:#1E40AF}
+.cm{background:#FEF3C7;color:#92400E}.cw{background:#FEE2E2;color:#991B1B}
+.sc-rec{font-size:12px;color:var(--gd);line-height:1.7;max-width:260px;margin:0 auto}
+.cl{padding:0 18px 16px}
+.ci{margin-bottom:10px}
+.ct{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.cn{font-size:12px;font-weight:600;color:var(--navy)}
+.cs{font-size:12px;font-weight:700}
+.cb2{height:6px;background:var(--gm);border-radius:3px;overflow:hidden}
+.cf{height:100%;border-radius:3px;transition:width 1s ease}
+.ops{padding:0 18px 16px}
+.oi{background:var(--gl);border-radius:8px;padding:11px 13px;margin-bottom:7px;display:flex;gap:9px;align-items:flex-start;border-right:3px solid var(--gold)}
+.or{font-family:'Readex Pro',sans-serif;font-size:17px;font-weight:700;color:var(--gold);flex-shrink:0;line-height:1}
+.on strong{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.on p{font-size:11px;color:var(--gd);line-height:1.5}
+.rac{padding:14px 18px;display:flex;gap:8px;border-top:1px solid var(--gm)}
+.ab2{flex:1;padding:9px;border-radius:6px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;border:1.5px solid}
+.ap{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ac{background:#fff;color:var(--teal);border-color:var(--teal)}
+.ac:hover{background:#EBF9FA}
+.ph{background:var(--white);border-radius:12px;border:1px solid var(--gm);padding:48px 20px;text-align:center}
+</style>
+</head>
+<body>
+<div id="lock" style="position:fixed;inset:0;background:#1B2B5E;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:20px">
+  <div style="font-family:'Readex Pro',sans-serif;font-size:28px;font-weight:700;color:#F5C518;letter-spacing:3px">MAWATH</div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:-10px">أداة داخلية — خاصة</div>
+  <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:32px;width:300px;text-align:center">
+    <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px">أدخل كلمة المرور للدخول</div>
+    <input id="pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()"
+      style="width:100%;padding:11px 14px;border-radius:7px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;font-size:15px;outline:none;text-align:center;letter-spacing:4px;margin-bottom:12px">
+    <div id="pw_err" style="font-size:11px;color:#EF4444;margin-bottom:10px;display:none">كلمة المرور غير صحيحة</div>
+    <button onclick="chk()" style="width:100%;padding:11px;background:#1BA8B8;color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">دخول ←</button>
+  </div>
+</div>
+<script>
+function chk(){
+  const v=document.getElementById('pw').value;
+  if(v==='MAWATH2025'){
+    document.getElementById('lock').style.display='none';
+    sessionStorage.setItem('mauth','1');
+  } else {
+    document.getElementById('pw_err').style.display='block';
+    document.getElementById('pw').value='';
+    document.getElementById('pw').focus();
+  }
+}
+window.onload=function(){
+  if(sessionStorage.getItem('mauth')==='1'){
+    document.getElementById('lock').style.display='none';
+  }
+  document.getElementById('pw').focus();
+}
+</script>
+
+<nav>
+  <div class="logo">MAW<span>A</span>TH</div>
+  <div class="nav-tag">أداة تقييم الأداء</div>
+</nav>
+
+<div class="app">
+  <!-- INPUT -->
+  <div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch"><span class="ico">🔍</span><h2>جلب بيانات الملف التجاري</h2></div>
+      <div class="cb">
+        <div class="field">
+          <label>اسم النشاط التجاري *</label>
+          <input type="text" id="biz_name" placeholder="مثال: قهوة كارڤ الملقا">
+        </div>
+        <div class="field">
+          <label>المدينة</label>
+          <select id="city">
+            <option value="Riyadh, Saudi Arabia">الرياض</option>
+            <option value="Jeddah, Saudi Arabia">جدة</option>
+            <option value="Dammam, Saudi Arabia">الدمام</option>
+            <option value="Mecca, Saudi Arabia">مكة المكرمة</option>
+            <option value="Medina, Saudi Arabia">المدينة المنورة</option>
+          </select>
+        </div>
+        <button class="fb" onclick="fetchPlace()" id="fbtn">
+          <span id="fico">🔍</span>
+          <span id="ftxt">جلب البيانات من قوقل</span>
+        </button>
+        <div class="st" id="fst"></div>
+        <div class="field" style="margin-top:8px">
+          <label>اسم المحلل</label>
+          <input type="text" id="analyst" value="MAWATH">
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch"><span class="ico">📋</span><h2>المعيار ١ — اكتمال الملف (٢٥ نقطة)</h2></div>
+      <div class="cb">
+        <div class="field"><label><span class="ab">تلقائي</span>متوسط التقييم (من ٥)</label><input type="number" id="avg_rating" min="0" max="5" step="0.1" placeholder="4.2" class="auto"></div>
+        <div class="field"><label><span class="ab">تلقائي</span>عدد التقييمات الكلي</label><input type="number" id="total_reviews" min="0" placeholder="65" class="auto"></div>
+        <div class="field"><label><span class="mb">يدوي</span>الوصف مكتوب (١٥٠+ حرف)؟</label><select id="has_desc"><option value="0">لا</option><option value="1">نعم</option></select></div>
+        <div class="field"><label><span class="mb">يدوي</span>الفئة الرئيسية + فئتان فرعيتان؟</label><select id="has_cats"><option value="0">لا</option><option value="1">نعم</option></select></div>
+        <div class="field"><label><span class="mb">يدوي</span>عدد الصور المرفوعة</label><input type="number" id="photos_count" min="0" placeholder="8"></div>
+        <div class="field"><label><span class="mb">يدوي</span>عدد المنتجات المدرجة</label><input type="number" id="products_count" min="0" placeholder="3"></div>
+        <div class="field"><label><span class="mb">يدوي</span>ساعات العمل مكتملة؟</label><select id="has_hours"><option value="0">لا</option><option value="1">نعم</option></select></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch"><span class="ico">💬</span><h2>المعيار ٢ — الردود والنشاط (٣٥ نقطة)</h2></div>
+      <div class="cb">
+        <div class="field"><label><span class="mb">يدوي</span>نسبة الردود على التقييمات (%)</label><input type="number" id="reply_pct" min="0" max="100" placeholder="60"></div>
+        <div class="field"><label><span class="mb">يدوي</span>الرد على السلبية (١-٣ نجوم)</label><select id="neg_reply"><option value="0">لا شيء</option><option value="1">بعضها</option><option value="2">كلها</option></select></div>
+        <div class="field"><label><span class="mb">يدوي</span>تقييمات جديدة شهرياً</label><input type="number" id="monthly_reviews" min="0" placeholder="3"></div>
+        <div class="field"><label><span class="mb">يدوي</span>آخر صورة (منذ كم شهر؟)</label><input type="number" id="last_photo" min="0" placeholder="2"></div>
+        <div class="field"><label><span class="mb">يدوي</span>آخر منشور (منذ كم أسبوع؟)</label><input type="number" id="last_post" min="0" placeholder="5"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch"><span class="ico">🔍</span><h2>المعيار ٣ — الظهور في البحث (٤٠ نقطة)</h2></div>
+      <div class="cb">
+        <div class="field"><label><span class="ab">تلقائي</span>اسم الملف كما يظهر في قوقل</label><input type="text" id="biz_name_gmb" placeholder="سيُملأ تلقائياً" class="auto" readonly></div>
+        <div class="field"><label><span class="mb">يدوي</span>الفئة دقيقة ومطابقة للنشاط؟</label><select id="cat_acc"><option value="0">لا</option><option value="1">نعم</option></select></div>
+        <div class="field"><label><span class="mb">يدوي</span>الوصف يحتوي كلمات مفتاحية محلية؟</label><select id="has_kw"><option value="0">لا</option><option value="1">نعم</option></select></div>
+      </div>
+    </div>
+
+    <button class="cb-btn" onclick="calcScore()">احسب الدرجة وأنشئ التقرير ←</button>
+  </div>
+
+  <!-- REPORT -->
+  <div>
+    <div class="card rep" id="rep">
+      <div class="rh">
+        <div>
+          <div class="rh-t">تقرير تقييم الأداء</div>
+          <div class="rh-b" id="r_biz">—</div>
+        </div>
+        <div class="rh-d" id="r_date">—</div>
+      </div>
+
+      <div class="sc-sec">
+        <div class="sc-ring">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle class="rbg" cx="65" cy="65" r="55" stroke-dasharray="345" stroke-dashoffset="0"/>
+            <circle class="rfg" id="rfg" cx="65" cy="65" r="55" stroke-dasharray="345" stroke-dashoffset="345"/>
+          </svg>
+          <div class="sv" id="sv">—</div>
+        </div>
+        <div class="sc-cls" id="scls">—</div>
+        <div class="sc-rec" id="srec">—</div>
+      </div>
+
+      <div class="ch"><span class="ico">📊</span><h2>تفصيل المعايير</h2></div>
+      <div class="cl" style="padding-top:14px">
+        <div class="ci"><div class="ct"><span class="cn">اكتمال الملف</span><span class="cs" id="s1v">—/٢٥</span></div><div class="cb2"><div class="cf" id="s1b" style="width:0%;background:var(--teal)"></div></div></div>
+        <div class="ci"><div class="ct"><span class="cn">جودة التقييمات</span><span class="cs" id="s2v">—/١٠</span></div><div class="cb2"><div class="cf" id="s2b" style="width:0%;background:var(--gold)"></div></div></div>
+        <div class="ci"><div class="ct"><span class="cn">الرد على التقييمات</span><span class="cs" id="s3v">—/٢٠</span></div><div class="cb2"><div class="cf" id="s3b" style="width:0%;background:var(--green)"></div></div></div>
+        <div class="ci"><div class="ct"><span class="cn">حداثة النشاط</span><span class="cs" id="s4v">—/١٥</span></div><div class="cb2"><div class="cf" id="s4b" style="width:0%;background:var(--orange)"></div></div></div>
+        <div class="ci"><div class="ct"><span class="cn">الظهور في البحث</span><span class="cs" id="s5v">—/٣٠</span></div><div class="cb2"><div class="cf" id="s5b" style="width:0%;background:var(--navy)"></div></div></div>
+      </div>
+
+      <div class="ch"><span class="ico">🎯</span><h2>أهم فرص التحسين</h2></div>
+      <div class="ops" style="padding-top:14px" id="ops">—</div>
+
+      <div class="rac">
+        <button class="ab2 ap" onclick="window.print()">🖨️ طباعة</button>
+        <button class="ab2 ac" onclick="copyWA()">📋 نسخ للواتساب</button>
+      </div>
+    </div>
+
+    <div class="ph" id="ph">
+      <div style="font-size:44px;margin-bottom:14px">📊</div>
+      <div style="font-family:'Readex Pro',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px">التقرير سيظهر هنا</div>
+      <div style="font-size:12px;color:var(--gd);line-height:1.7">أدخل اسم النشاط واضغط "جلب البيانات"<br>ثم اضغط "احسب الدرجة"</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SERP_KEY = '15640d8d22926e1e705c68051417e63bf2fecc78413747bf2941b1935baa4bd8';
+
+async function fetchPlace() {
+  const name = document.getElementById('biz_name').value.trim();
+  if (!name) { showSt('أدخل اسم النشاط أولاً', 'error'); return; }
+
+  const btn = document.getElementById('fbtn');
+  btn.disabled = true;
+  document.getElementById('fico').innerHTML = '<span class="spin"></span>';
+  document.getElementById('ftxt').textContent = 'جاري الجلب من قوقل...';
+  showSt('جاري البحث عن الملف التجاري...', 'loading');
+
+  const city = document.getElementById('city').value;
+  const q = encodeURIComponent(name);
+  const loc = encodeURIComponent(city);
+  const url = `https://serpapi.com/search.json?engine=google_maps&q=${q}&location=${loc}&hl=ar&gl=sa&api_key=${SERP_KEY}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+
+    const places = data.local_results || [];
+    if (places.length === 0) throw new Error('لم يُعثر على الملف التجاري');
+
+    const p = places[0];
+    document.getElementById('avg_rating').value = p.rating || '';
+    document.getElementById('total_reviews').value = p.reviews || '';
+    document.getElementById('biz_name_gmb').value = p.title || name;
+
+    showSt(`✅ تم جلب بيانات "${p.title}" — التقييم: ${p.rating} | التقييمات: ${p.reviews?.toLocaleString('ar')}`, 'success');
+  } catch(e) {
+    showSt('تعذر الجلب: ' + e.message + ' — أكمل البيانات يدوياً', 'error');
+  }
+
+  btn.disabled = false;
+  document.getElementById('fico').textContent = '🔍';
+  document.getElementById('ftxt').textContent = 'جلب البيانات من قوقل';
+}
+
+function showSt(msg, type) {
+  const el = document.getElementById('fst');
+  el.textContent = msg;
+  el.className = 'st show ' + type;
+}
+
+function calcScore() {
+  const biz = document.getElementById('biz_name').value || document.getElementById('biz_name_gmb').value || 'غير محدد';
+
+  // S1: اكتمال الملف (25)
+  const desc   = +document.getElementById('has_desc').value;
+  const cats   = +document.getElementById('has_cats').value;
+  const photos = +document.getElementById('photos_count').value || 0;
+  const prods  = +document.getElementById('products_count').value || 0;
+  const hours  = +document.getElementById('has_hours').value;
+  const S1 = desc*5 + cats*5 +
+    (photos>=10?5:photos>=5?3:photos>=1?1:0) +
+    (prods>=5?5:prods>=2?3:prods>=1?1:0) +
+    hours*5;
+
+  // S2: جودة التقييمات (10)
+  const avg = +document.getElementById('avg_rating').value || 0;
+  const cnt = +document.getElementById('total_reviews').value || 0;
+  const S2 = (avg>=4.5?5:avg>=4?4:avg>=3.5?2:avg>0?1:0) +
+             (cnt>=100?5:cnt>=50?4:cnt>=20?2:cnt>0?1:0);
+
+  // S3: الردود (20)
+  const rp  = +document.getElementById('reply_pct').value || 0;
+  const neg = +document.getElementById('neg_reply').value;
+  const mr  = +document.getElementById('monthly_reviews').value || 0;
+  const S3 = (rp>=90?10:rp>=50?6:rp>0?2:0) +
+             (neg===2?7:neg===1?4:0) +
+             (mr>=5?3:mr>=2?2:mr>=1?1:0);
+
+  // S4: حداثة النشاط (15)
+  const lp = +document.getElementById('last_photo').value || 99;
+  const lpo = +document.getElementById('last_post').value || 99;
+  const S4 = (lp<=1?7:lp<=3?4:1) + (lpo<=2?8:lpo<=4?4:0);
+
+  // S5: الظهور (30)
+  const ca = +document.getElementById('cat_acc').value;
+  const kw = +document.getElementById('has_kw').value;
+  const S5 = ca*15 + kw*15;
+
+  const T = S1+S2+S3+S4+S5;
+
+  // تصنيف
+  let cls, lbl, rec;
+  if (T>=85){cls='ce';lbl='ممتاز ★★★★★';rec='ملفك في أفضل حالاته — حافظ على نفس المستوى بالمتابعة الدورية.';}
+  else if(T>=65){cls='cg';lbl='جيد ★★★★';rec='أساس قوي، لكن فيه فرص تحسين واضحة تستحق الاستثمار فيها.';}
+  else if(T>=45){cls='cm';lbl='متوسط ★★★';rec='ملفك يخسر عملاء محتملين يومياً — التحسين الآن يوقف هذا الفقد.';}
+  else{cls='cw';lbl='ضعيف ★★';rec='ملفك يحتاج تدخلاً عاجلاً — أنت تخسر فرصاً كثيرة يومياً.';}
+
+  // دائرة
+  const rfg = document.getElementById('rfg');
+  rfg.style.stroke = T>=85?'#22C55E':T>=65?'var(--teal)':T>=45?'var(--gold)':'#EF4444';
+  setTimeout(()=>rfg.style.strokeDashoffset = 345-(T/100)*345, 100);
+
+  document.getElementById('sv').textContent = T;
+  const sc = document.getElementById('scls');
+  sc.textContent = lbl; sc.className = 'sc-cls '+cls;
+  document.getElementById('srec').textContent = rec;
+  document.getElementById('r_biz').textContent = biz;
+  document.getElementById('r_date').textContent = new Date().toLocaleDateString('ar-SA');
+
+  // Bars
+  upBar('s1',S1,25); upBar('s2',S2,10); upBar('s3',S3,20); upBar('s4',S4,15); upBar('s5',S5,30);
+
+  // أولويات
+  const crit = [
+    {n:'اكتمال الملف',s:S1,m:25,t:tips1(desc,cats,photos,prods,hours)},
+    {n:'جودة التقييمات',s:S2,m:10,t:tips2(avg,cnt)},
+    {n:'الرد على التقييمات',s:S3,m:20,t:tips3(rp,neg,mr)},
+    {n:'حداثة النشاط',s:S4,m:15,t:tips4(lp,lpo)},
+    {n:'الظهور في البحث',s:S5,m:30,t:tips5(ca,kw)},
+  ].sort((a,b)=>(a.s/a.m)-(b.s/b.m));
+
+  document.getElementById('ops').innerHTML = crit.slice(0,3).map((c,i)=>`
+    <div class="oi">
+      <div class="or">0${i+1}</div>
+      <div class="on"><strong>${c.n} — ${c.s}/${c.m} نقطة</strong><p>${c.t}</p></div>
+    </div>`).join('');
+
+  document.getElementById('rep').classList.add('show');
+  document.getElementById('ph').style.display = 'none';
+
+  window._rd = {biz,T,lbl,S1,S2,S3,S4,S5,crit};
+}
+
+function upBar(id,s,m){
+  const pct=Math.round(s/m*100);
+  document.getElementById(id+'v').textContent=`${s}/${m}`;
+  setTimeout(()=>document.getElementById(id+'b').style.width=pct+'%',200);
+}
+
+function tips1(d,c,ph,pr,h){
+  if(!d)return'أضف وصفاً لا يقل عن ١٥٠ حرفاً مع الكلمات المفتاحية';
+  if(!c)return'حدد فئة رئيسية وفئتين فرعيتان على الأقل';
+  if(ph<5)return'ارفع المزيد من الصور — الحد الأدنى ١٠ صور';
+  if(pr<5)return'أضف ٥ منتجات أو خدمات بأسعارها';
+  if(!h)return'أكمل ساعات العمل لجميع أيام الأسبوع';
+  return'اكتمال الملف ممتاز';
+}
+function tips2(avg,cnt){
+  if(avg<4)return`التقييم ${avg} منخفض — حسّن تجربة العميل لتشجيع التقييمات الإيجابية`;
+  if(cnt<20)return'عدد التقييمات قليل — اطلب من عملائك الراضين كتابة تقييم';
+  return'التقييمات ممتازة — حافظ على الاستمرارية';
+}
+function tips3(rp,neg,mr){
+  if(rp<50)return`نسبة ردودك ${rp}٪ فقط — ارد على جميع التقييمات حتى تحسّن ظهورك`;
+  if(neg===0)return'لم ترد على أي تقييم سلبي — هذا يضر بالسمعة ويخيف العملاء الجدد';
+  if(mr<2)return'التقييمات الجديدة نادرة — فعّل استراتيجية طلب التقييمات من العملاء';
+  return'الردود بحاجة لتحسين في الجودة';
+}
+function tips4(lp,lpo){
+  if(lpo>4)return`آخر منشور منذ ${lpo} أسابيع — انشر على الأقل أسبوعياً للحفاظ على الظهور`;
+  if(lp>3)return`آخر صورة منذ ${lp} أشهر — أضف صوراً جديدة شهرياً`;
+  return'النشاط يحتاج انتظاماً أكثر في النشر';
+}
+function tips5(ca,kw){
+  if(!ca)return'الفئة الرئيسية غير دقيقة — غيّرها لتطابق نشاطك بالضبط لتحسين الظهور';
+  if(!kw)return'الوصف لا يحتوي كلمات مفتاحية محلية — أضف الحي والمدينة ونوع الخدمة';
+  return'الظهور في البحث يحتاج تحسيناً إضافياً';
+}
+
+function copyWA(){
+  if(!window._rd)return;
+  const d=window._rd;
+  const txt=`📊 تقرير تقييم الأداء — MAWATH
+━━━━━━━━━━━━━━━━━
+🏢 النشاط: ${d.biz}
+📅 التاريخ: ${new Date().toLocaleDateString('ar-SA')}
+
+🎯 الدرجة الكلية: ${d.T}/100
+${d.lbl}
+
+📋 تفصيل المعايير:
+• اكتمال الملف: ${d.S1}/25
+• جودة التقييمات: ${d.S2}/10
+• الردود: ${d.S3}/20
+• حداثة النشاط: ${d.S4}/15
+• الظهور في البحث: ${d.S5}/30
+
+🎯 أهم فرص التحسين:
+${d.crit.slice(0,3).map((c,i)=>`${i+1}. ${c.n} (${c.s}/${c.m}) — ${c.t}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━
+MAWATH | mawath.com | info@mawath.com`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    event.target.textContent='✅ تم النسخ!';
+    setTimeout(()=>event.target.textContent='📋 نسخ للواتساب',2000);
+  });
+}
+</script>
+</body>
+</html>
