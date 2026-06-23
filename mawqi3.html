@@ -1,0 +1,2920 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مَوْقِع — أداة تحليل الجدوى | MAWATH</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1B2B5E;--teal:#1BA8B8;--gold:#F5C518;--goldl:#FEF8DC;--white:#fff;--gl:#F5F7FA;--gm:#E4E8EF;--gd:#6C757D;--green:#22C55E;--red:#EF4444;--orange:#F97316}
+body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--gl);color:var(--navy);min-height:100vh}
+
+/* NAV */
+nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Readex Pro',sans-serif;font-size:16px;font-weight:700;color:#fff;letter-spacing:1px}
+.logo span{color:var(--teal)}
+.logo em{color:var(--gold);font-style:normal;margin-right:8px}
+
+/* LOCK */
+#lock{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+#pw{width:240px;padding:11px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:15px;text-align:center;letter-spacing:4px;outline:none;font-family:inherit;margin-bottom:8px}
+#pw_err{color:var(--red);font-size:11px;display:none;margin-bottom:8px}
+.lbtn{padding:10px 32px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+
+/* LAYOUT */
+.app{max-width:1100px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:380px 1fr;gap:16px}
+@media(max-width:800px){.app{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:var(--white);border-radius:12px;border:1px solid var(--gm);overflow:hidden;margin-bottom:14px}
+.ch{background:var(--navy);padding:11px 16px;display:flex;align-items:center;gap:8px}
+.ch span{color:var(--gold);font-weight:600;font-size:13px}
+.cb{padding:16px}
+.f{margin-bottom:11px}
+.f label{display:block;font-size:11px;color:var(--gd);margin-bottom:4px;font-weight:600}
+.f input,.f select{width:100%;padding:9px 12px;border:1.5px solid var(--gm);border-radius:7px;font-family:inherit;font-size:13px;color:var(--navy);outline:none;transition:border 0.2s}
+.f input:focus,.f select:focus{border-color:var(--teal)}
+.f datalist{direction:rtl}
+.btn-teal{width:100%;padding:11px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-teal:hover{background:#158f9d}
+.btn-teal:disabled{background:var(--gm);color:var(--gd);cursor:not-allowed}
+.btn-navy{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-navy:hover{background:#0f1e45}
+.st{font-size:11px;padding:7px 11px;border-radius:6px;margin-bottom:10px;display:none}
+.st.show{display:block}
+.st.ok{background:#D1FAE5;color:#065F46}
+.st.err{background:#FEE2E2;color:#991B1B}
+.st.load{background:#EBF9FA;color:var(--teal)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+
+/* REPORT */
+#rep{display:none}
+#rep.show{display:block}
+#ph{border:1px solid var(--gm);border-radius:12px;padding:60px 20px;text-align:center;background:var(--white);color:var(--gd);font-size:13px}
+
+/* Score section */
+.score-wrap{display:flex;gap:14px;padding:16px 18px;border-bottom:1px solid var(--gm)}
+.score-box{min-width:90px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;flex-shrink:0}
+.score-num{font-family:'Readex Pro',sans-serif;font-size:38px;font-weight:700;color:#fff;line-height:1}
+.score-100{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px}
+.score-lbl{font-size:10px;font-weight:700;color:#fff;margin-top:6px;text-align:center;line-height:1.3}
+.score-right{flex:1;background:var(--gl);border-radius:8px;padding:12px 14px}
+.score-right h4{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.score-right p{font-size:11px;color:var(--gd);line-height:1.7;margin-bottom:10px}
+.mini-grid{display:flex;gap:6px;flex-wrap:wrap}
+.mini-item{background:var(--white);border:1px solid var(--gm);border-radius:5px;padding:4px 8px;text-align:center}
+.mini-n{font-size:10px;font-weight:700}
+.mini-l{font-size:9px;color:var(--gd);margin-top:1px}
+
+/* Data rows */
+.data-row{display:flex;justify-content:space-between;align-items:center;padding:9px 18px;border-bottom:1px solid var(--gm);font-size:12px}
+.data-row:last-child{border-bottom:none}
+.data-row .lbl{color:var(--gd)}
+.data-row .val{font-weight:700;color:var(--navy)}
+
+/* Criteria bars */
+.crit-wrap{padding:14px 18px}
+.crit-item{margin-bottom:12px}
+.crit-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.crit-name{font-size:12px;font-weight:600;color:var(--navy)}
+.crit-score{font-size:12px;font-weight:700}
+.crit-bar{background:var(--gm);border-radius:4px;height:7px}
+.crit-fill{border-radius:4px;height:7px;transition:width 0.8s ease}
+
+/* Competitors */
+.comp-item{background:var(--gl);border-radius:8px;padding:11px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.comp-rank{font-family:'Readex Pro',sans-serif;font-size:18px;font-weight:700;color:var(--teal);flex-shrink:0;min-width:24px}
+.comp-info .name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.comp-info .meta{font-size:11px;color:var(--gd)}
+.comp-rating{font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+/* Opps */
+.opp-item{background:var(--goldl);border-right:4px solid var(--gold);border-radius:0 7px 7px 0;padding:10px 13px;margin-bottom:8px}
+.opp-num{font-size:16px;font-weight:700;color:var(--gold)}
+.opp-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.opp-text{font-size:11px;color:var(--gd);line-height:1.6}
+
+/* Rec box */
+.rec-box{margin:14px 18px;border-radius:8px;padding:14px 16px;text-align:center}
+.rec-box .rec-icon{font-size:24px;margin-bottom:6px}
+.rec-box .rec-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.rec-box .rec-text{font-size:12px;line-height:1.7;opacity:0.8}
+
+/* Actions */
+.rac{padding:14px 18px;display:flex;gap:8px;border-top:1px solid var(--gm)}
+.rbtn{flex:1;padding:10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all 0.2s}
+.rpdf{background:var(--navy);color:#fff;border-color:var(--navy)}
+.rwa{background:#fff;color:#25D366;border-color:#25D366}
+
+/* Notes field */
+.notes-field{width:100%;padding:9px 12px;border:1.5px solid var(--gm);border-radius:7px;font-family:inherit;font-size:12px;color:var(--navy);outline:none;resize:none;height:72px;margin-top:8px}
+.notes-field:focus{border-color:var(--teal)}
+</style>
+</head>
+<body>
+
+<div id="lock">
+  <div style="font-family:'Readex Pro',sans-serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:4px">MAWATH · مَوْقِع</div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:20px">أداة داخلية — خاصة</div>
+  <input id="pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()">
+  <div id="pw_err">كلمة المرور غير صحيحة</div>
+  <button class="lbtn" onclick="chk()">دخول ←</button>
+</div>
+
+<nav>
+  <div class="logo"><em>مَوْقِع</em><span>MAW</span>ATH</div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.4)">أداة تحليل الجدوى التجارية</div>
+</nav>
+
+<div class="app">
+
+  <!-- INPUT -->
+  <div>
+    <div class="card">
+      <div class="ch"><span>بيانات التحليل</span></div>
+      <div class="cb">
+        <div class="f">
+          <label>اسم العميل</label>
+          <input id="client_name" type="text" placeholder="أبو محمد">
+        </div>
+        <div class="f">
+          <label>نوع النشاط التجاري *</label>
+          <select id="biz_type">
+            <option value="">اختر...</option>
+            <option value="مطعم">مطعم</option>
+            <option value="كافيه">كافيه</option>
+            <option value="متجر تجزئة">متجر تجزئة</option>
+            <option value="صالون رجالي">صالون رجالي</option>
+            <option value="صالون نسائي">صالون نسائي</option>
+            <option value="عيادة">عيادة</option>
+            <option value="صيدلية">صيدلية</option>
+            <option value="محل ملابس">محل ملابس</option>
+            <option value="بقالة">بقالة</option>
+            <option value="غسيل سيارات">غسيل سيارات</option>
+            <option value="خدمات">خدمات عامة</option>
+          </select>
+        </div>
+        <div class="f">
+          <label>الحي المستهدف *</label>
+          <input id="hood_input" type="text" placeholder="مثال: الملقا" list="hoods_list" oninput="onHoodInput(this.value)">
+          <datalist id="hoods_list"></datalist>
+        </div>
+        <div class="st" id="hood_st"></div>
+
+        <div class="f" id="pop_preview" style="display:none;background:var(--gl);border-radius:8px;padding:10px 12px;border:1px solid var(--gm)">
+          <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px">📊 بيانات الحي (هيئة الإحصاء 2022)</div>
+          <div id="pop_quick" style="font-size:11px;color:var(--gd);line-height:1.9"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span>🔍 جلب المنافسين من قوقل</span></div>
+      <div class="cb">
+        <button class="btn-teal" onclick="fetchCompetitors()" id="fetch_btn">
+          <span id="fetch_ico">🔍</span>
+          <span id="fetch_txt">جلب المنافسين تلقائياً</span>
+        </button>
+        <div class="st" id="fetch_st"></div>
+        <div id="comp_preview" style="display:none">
+          <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px">المنافسون المكتشفون:</div>
+          <div id="comp_list_preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span>ملاحظات المحلل</span></div>
+      <div class="cb">
+        <textarea class="notes-field" id="analyst_notes" placeholder="أي ملاحظات إضافية عن الموقع أو المنافسة..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn-navy" onclick="generateReport()">إنشاء التقرير ←</button>
+  </div>
+
+  <!-- REPORT -->
+  <div>
+    <div id="ph">
+      <div style="font-size:40px;margin-bottom:12px">📍</div>
+      <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px">التقرير سيظهر هنا</div>
+      <div style="font-size:12px">أدخل البيانات واضغط "إنشاء التقرير"</div>
+    </div>
+
+    <div id="rep">
+      <!-- GOLD BAR -->
+      <div style="background:var(--gold);padding:6px;text-align:center;border-radius:10px 10px 0 0">
+        <span style="font-size:9px;font-weight:700;color:var(--navy);letter-spacing:1px">MAWATH · مَوْقِع | mawath.com | تقرير تحليل الجدوى التجارية</span>
+      </div>
+
+      <!-- HEADER -->
+      <div style="background:var(--navy);padding:14px 18px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-family:'Readex Pro',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:1px">مَوْقِع</div>
+          <div style="font-size:10px;color:var(--teal);margin-top:2px">تقرير تحليل جدوى الموقع التجاري</div>
+        </div>
+        <div style="text-align:left">
+          <div id="r_client" style="font-size:13px;font-weight:700;color:#fff"></div>
+          <div id="r_date" style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px"></div>
+        </div>
+      </div>
+
+      <!-- SCORE -->
+      <div class="score-wrap">
+        <div class="score-box" id="score_box">
+          <div class="score-num" id="score_num">—</div>
+          <div class="score-100">/ 100</div>
+          <div class="score-lbl" id="score_lbl">—</div>
+        </div>
+        <div class="score-right">
+          <h4>ملخص الجدوى</h4>
+          <p id="score_rec">—</p>
+          <div class="mini-grid" id="mini_grid"></div>
+        </div>
+      </div>
+
+      <!-- POPULATION DATA -->
+      <div style="background:var(--navy);padding:9px 18px">
+        <span style="color:var(--gold);font-weight:600;font-size:12px">📊 بيانات السكان — تعداد 2022</span>
+      </div>
+      <div id="pop_rows"></div>
+
+      <!-- CRITERIA SCORES -->
+      <div style="background:var(--navy);padding:9px 18px;margin-top:0">
+        <span style="color:var(--gold);font-weight:600;font-size:12px">🎯 تفصيل درجة الجدوى</span>
+      </div>
+      <div class="crit-wrap" id="crit_wrap"></div>
+
+      <!-- COMPETITORS -->
+      <div style="background:var(--navy);padding:9px 18px">
+        <span style="color:var(--gold);font-weight:600;font-size:12px">🏪 تحليل المنافسين — خرائط قوقل</span>
+      </div>
+      <div style="padding:14px 18px">
+        <div id="comp_summary" style="background:var(--gl);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--gd)"></div>
+        <div id="comp_list"></div>
+      </div>
+
+      <!-- OPPORTUNITIES -->
+      <div style="background:var(--navy);padding:9px 18px">
+        <span style="color:var(--gold);font-weight:600;font-size:12px">💡 فرص التحسين والمخاطر</span>
+      </div>
+      <div style="padding:14px 18px" id="opps"></div>
+
+      <!-- NOTES -->
+      <div id="notes_section" style="display:none">
+        <div style="background:var(--navy);padding:9px 18px">
+          <span style="color:var(--gold);font-weight:600;font-size:12px">📝 ملاحظات المحلل</span>
+        </div>
+        <div style="padding:14px 18px;font-size:12px;color:var(--gd);line-height:1.8" id="notes_content"></div>
+      </div>
+
+      <!-- RECOMMENDATION -->
+      <div id="rec_box" class="rec-box"></div>
+
+      <!-- FOOTER -->
+      <div style="background:var(--navy);padding:10px 18px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 10px 10px">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1px">MAWATH · مَوْقِع</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.4)">تقرير سري — للاستخدام الداخلي فقط</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.4)">mawath.com</div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="rac">
+        <button class="rbtn rpdf" onclick="printReport()">🖨️ طباعة / PDF</button>
+        <button class="rbtn rwa" onclick="copyWA()">📋 نسخ للواتساب</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══ PASSWORD ══
+function chk(){
+  if(document.getElementById('pw').value==='MAWATH2025'){
+    document.getElementById('lock').style.display='none';
+    sessionStorage.setItem('ma','1');
+  } else {
+    document.getElementById('pw_err').style.display='block';
+    document.getElementById('pw').value='';
+  }
+}
+window.onload=function(){
+  if(sessionStorage.getItem('ma')==='1') document.getElementById('lock').style.display='none';
+  buildHoodsList();
+};
+
+// ══ HOODS DATA (مدمج من هيئة الإحصاء) ══
+const HOODS_DATA = {
+  "ظهرة البديعة": {
+    "total": 49357,
+    "saudi": 32938,
+    "non_saudi": 16419,
+    "pct_saudi": 67,
+    "youth": 19287,
+    "adults": 15841,
+    "children": 10659,
+    "seniors": 3570,
+    "housing_total": 9999,
+    "owned": 4448,
+    "rented": 5551
+  },
+  "المحمدية": {
+    "total": 21708,
+    "saudi": 9958,
+    "non_saudi": 11750,
+    "pct_saudi": 46,
+    "youth": 8600,
+    "adults": 8668,
+    "children": 2947,
+    "seniors": 1493,
+    "housing_total": 4970,
+    "owned": 1627,
+    "rented": 3343
+  },
+  "التعاون": {
+    "total": 49965,
+    "saudi": 17455,
+    "non_saudi": 32510,
+    "pct_saudi": 35,
+    "youth": 24355,
+    "adults": 17029,
+    "children": 6931,
+    "seniors": 1650,
+    "housing_total": 11049,
+    "owned": 2805,
+    "rented": 8244
+  },
+  "منتزه الثمامه": {
+    "total": 1665,
+    "saudi": 462,
+    "non_saudi": 1203,
+    "pct_saudi": 28,
+    "youth": 735,
+    "adults": 712,
+    "children": 197,
+    "seniors": 21,
+    "housing_total": 502,
+    "owned": 93,
+    "rented": 409
+  },
+  "الناصرية": {
+    "total": 6167,
+    "saudi": 678,
+    "non_saudi": 5489,
+    "pct_saudi": 11,
+    "youth": 2250,
+    "adults": 2735,
+    "children": 655,
+    "seniors": 527,
+    "housing_total": 1654,
+    "owned": 183,
+    "rented": 1471
+  },
+  "النهضة": {
+    "total": 99091,
+    "saudi": 61104,
+    "non_saudi": 37987,
+    "pct_saudi": 62,
+    "youth": 40074,
+    "adults": 30019,
+    "children": 24493,
+    "seniors": 4505,
+    "housing_total": 23095,
+    "owned": 7938,
+    "rented": 15157
+  },
+  "العوالي": {
+    "total": 47102,
+    "saudi": 33388,
+    "non_saudi": 13714,
+    "pct_saudi": 71,
+    "youth": 19812,
+    "adults": 13248,
+    "children": 12858,
+    "seniors": 1184,
+    "housing_total": 10206,
+    "owned": 4456,
+    "rented": 5750
+  },
+  "الدفاع": {
+    "total": 11244,
+    "saudi": 2134,
+    "non_saudi": 9110,
+    "pct_saudi": 19,
+    "youth": 7494,
+    "adults": 2627,
+    "children": 1030,
+    "seniors": 93,
+    "housing_total": 543,
+    "owned": 87,
+    "rented": 456
+  },
+  "البطيحا": {
+    "total": 3833,
+    "saudi": 154,
+    "non_saudi": 3679,
+    "pct_saudi": 4,
+    "youth": 1615,
+    "adults": 1666,
+    "children": 423,
+    "seniors": 129,
+    "housing_total": 1135,
+    "owned": 53,
+    "rented": 1082
+  },
+  "المناخ": {
+    "total": 25087,
+    "saudi": 2405,
+    "non_saudi": 22682,
+    "pct_saudi": 10,
+    "youth": 12155,
+    "adults": 11538,
+    "children": 965,
+    "seniors": 429,
+    "housing_total": 5908,
+    "owned": 508,
+    "rented": 5400
+  },
+  "المروة": {
+    "total": 17726,
+    "saudi": 11309,
+    "non_saudi": 6417,
+    "pct_saudi": 64,
+    "youth": 7492,
+    "adults": 5437,
+    "children": 3947,
+    "seniors": 850,
+    "housing_total": 3463,
+    "owned": 1480,
+    "rented": 1983
+  },
+  "العريجاء الأوسط": {
+    "total": 52233,
+    "saudi": 35630,
+    "non_saudi": 16603,
+    "pct_saudi": 68,
+    "youth": 20332,
+    "adults": 15971,
+    "children": 12542,
+    "seniors": 3388,
+    "housing_total": 10722,
+    "owned": 4441,
+    "rented": 6281
+  },
+  "منفوحة": {
+    "total": 39929,
+    "saudi": 1957,
+    "non_saudi": 37972,
+    "pct_saudi": 5,
+    "youth": 18364,
+    "adults": 18194,
+    "children": 2011,
+    "seniors": 1360,
+    "housing_total": 13341,
+    "owned": 524,
+    "rented": 12817
+  },
+  "طيبة": {
+    "total": 7124,
+    "saudi": 4631,
+    "non_saudi": 2493,
+    "pct_saudi": 65,
+    "youth": 2796,
+    "adults": 2253,
+    "children": 1988,
+    "seniors": 87,
+    "housing_total": 1603,
+    "owned": 850,
+    "rented": 753
+  },
+  "بدر": {
+    "total": 116151,
+    "saudi": 74737,
+    "non_saudi": 41414,
+    "pct_saudi": 64,
+    "youth": 44543,
+    "adults": 37071,
+    "children": 29535,
+    "seniors": 5002,
+    "housing_total": 24564,
+    "owned": 9915,
+    "rented": 14649
+  },
+  "سلام": {
+    "total": 32,
+    "saudi": 0,
+    "non_saudi": 32,
+    "pct_saudi": 0,
+    "youth": 32,
+    "adults": 0,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 39,
+    "owned": 4,
+    "rented": 35
+  },
+  "الملك عبدالعزيز": {
+    "total": 55155,
+    "saudi": 3853,
+    "non_saudi": 51302,
+    "pct_saudi": 7,
+    "youth": 25541,
+    "adults": 25888,
+    "children": 2937,
+    "seniors": 789,
+    "housing_total": 7702,
+    "owned": 668,
+    "rented": 7034
+  },
+  "المعيزيلة": {
+    "total": 22586,
+    "saudi": 16229,
+    "non_saudi": 6357,
+    "pct_saudi": 72,
+    "youth": 9308,
+    "adults": 6139,
+    "children": 6439,
+    "seniors": 700,
+    "housing_total": 5252,
+    "owned": 1581,
+    "rented": 3671
+  },
+  "الوسام": {
+    "total": 1813,
+    "saudi": 0,
+    "non_saudi": 1813,
+    "pct_saudi": 0,
+    "youth": 880,
+    "adults": 916,
+    "children": 0,
+    "seniors": 17,
+    "housing_total": 529,
+    "owned": 59,
+    "rented": 470
+  },
+  "الريان": {
+    "total": 38482,
+    "saudi": 18459,
+    "non_saudi": 20023,
+    "pct_saudi": 48,
+    "youth": 15826,
+    "adults": 13649,
+    "children": 6591,
+    "seniors": 2416,
+    "housing_total": 10037,
+    "owned": 2923,
+    "rented": 7114
+  },
+  "المشرق": {
+    "total": 306,
+    "saudi": 0,
+    "non_saudi": 306,
+    "pct_saudi": 0,
+    "youth": 145,
+    "adults": 161,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 161,
+    "owned": 91,
+    "rented": 70
+  },
+  "نمار": {
+    "total": 17496,
+    "saudi": 10281,
+    "non_saudi": 7215,
+    "pct_saudi": 59,
+    "youth": 7077,
+    "adults": 5347,
+    "children": 4155,
+    "seniors": 917,
+    "housing_total": 3241,
+    "owned": 1450,
+    "rented": 1791
+  },
+  "الفيصلية": {
+    "total": 18787,
+    "saudi": 7984,
+    "non_saudi": 10803,
+    "pct_saudi": 42,
+    "youth": 8003,
+    "adults": 6857,
+    "children": 3300,
+    "seniors": 627,
+    "housing_total": 3803,
+    "owned": 1003,
+    "rented": 2800
+  },
+  "قرطبة": {
+    "total": 87548,
+    "saudi": 52235,
+    "non_saudi": 35313,
+    "pct_saudi": 60,
+    "youth": 34759,
+    "adults": 27112,
+    "children": 23028,
+    "seniors": 2649,
+    "housing_total": 21669,
+    "owned": 6698,
+    "rented": 14971
+  },
+  "اليرموك": {
+    "total": 100677,
+    "saudi": 55067,
+    "non_saudi": 45610,
+    "pct_saudi": 55,
+    "youth": 43357,
+    "adults": 29728,
+    "children": 24900,
+    "seniors": 2692,
+    "housing_total": 24647,
+    "owned": 6379,
+    "rented": 18268
+  },
+  "الرائد": {
+    "total": 9594,
+    "saudi": 4920,
+    "non_saudi": 4674,
+    "pct_saudi": 51,
+    "youth": 3714,
+    "adults": 3682,
+    "children": 1523,
+    "seniors": 675,
+    "housing_total": 2417,
+    "owned": 784,
+    "rented": 1633
+  },
+  "المونسية": {
+    "total": 130201,
+    "saudi": 74975,
+    "non_saudi": 55226,
+    "pct_saudi": 58,
+    "youth": 55301,
+    "adults": 40268,
+    "children": 31674,
+    "seniors": 2958,
+    "housing_total": 27894,
+    "owned": 8613,
+    "rented": 19281
+  },
+  "الروابي": {
+    "total": 57209,
+    "saudi": 29762,
+    "non_saudi": 27447,
+    "pct_saudi": 52,
+    "youth": 23011,
+    "adults": 18862,
+    "children": 12392,
+    "seniors": 2944,
+    "housing_total": 13265,
+    "owned": 3954,
+    "rented": 9311
+  },
+  "القرى": {
+    "total": 119,
+    "saudi": 0,
+    "non_saudi": 119,
+    "pct_saudi": 0,
+    "youth": 59,
+    "adults": 60,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 32,
+    "owned": 0,
+    "rented": 32
+  },
+  "العود": {
+    "total": 25580,
+    "saudi": 3591,
+    "non_saudi": 21989,
+    "pct_saudi": 14,
+    "youth": 10306,
+    "adults": 10034,
+    "children": 3862,
+    "seniors": 1378,
+    "housing_total": 7893,
+    "owned": 410,
+    "rented": 7483
+  },
+  "المصفاة": {
+    "total": 6577,
+    "saudi": 151,
+    "non_saudi": 6426,
+    "pct_saudi": 2,
+    "youth": 3068,
+    "adults": 3322,
+    "children": 85,
+    "seniors": 102,
+    "housing_total": 1303,
+    "owned": 81,
+    "rented": 1222
+  },
+  "غبيرا": {
+    "total": 46140,
+    "saudi": 3880,
+    "non_saudi": 42260,
+    "pct_saudi": 8,
+    "youth": 17900,
+    "adults": 18176,
+    "children": 7281,
+    "seniors": 2783,
+    "housing_total": 14102,
+    "owned": 615,
+    "rented": 13487
+  },
+  "النموذجية": {
+    "total": 8085,
+    "saudi": 2330,
+    "non_saudi": 5755,
+    "pct_saudi": 29,
+    "youth": 3049,
+    "adults": 3053,
+    "children": 1565,
+    "seniors": 418,
+    "housing_total": 1958,
+    "owned": 243,
+    "rented": 1715
+  },
+  "البديعة": {
+    "total": 30180,
+    "saudi": 7286,
+    "non_saudi": 22894,
+    "pct_saudi": 24,
+    "youth": 11217,
+    "adults": 11700,
+    "children": 5457,
+    "seniors": 1806,
+    "housing_total": 7501,
+    "owned": 967,
+    "rented": 6534
+  },
+  "الفوطة": {
+    "total": 15484,
+    "saudi": 483,
+    "non_saudi": 15001,
+    "pct_saudi": 3,
+    "youth": 5870,
+    "adults": 7573,
+    "children": 1393,
+    "seniors": 648,
+    "housing_total": 5225,
+    "owned": 222,
+    "rented": 5003
+  },
+  "الشرفية": {
+    "total": 13892,
+    "saudi": 2369,
+    "non_saudi": 11523,
+    "pct_saudi": 17,
+    "youth": 5236,
+    "adults": 5586,
+    "children": 1783,
+    "seniors": 1287,
+    "housing_total": 4384,
+    "owned": 453,
+    "rented": 3931
+  },
+  "الروضة": {
+    "total": 99115,
+    "saudi": 34662,
+    "non_saudi": 64453,
+    "pct_saudi": 35,
+    "youth": 44303,
+    "adults": 34920,
+    "children": 14568,
+    "seniors": 5324,
+    "housing_total": 27330,
+    "owned": 6003,
+    "rented": 21327
+  },
+  "الرمال": {
+    "total": 141144,
+    "saudi": 97037,
+    "non_saudi": 44107,
+    "pct_saudi": 69,
+    "youth": 60919,
+    "adults": 37884,
+    "children": 39162,
+    "seniors": 3179,
+    "housing_total": 29276,
+    "owned": 11152,
+    "rented": 18124
+  },
+  "الدار البيضاء": {
+    "total": 157909,
+    "saudi": 98324,
+    "non_saudi": 59585,
+    "pct_saudi": 62,
+    "youth": 62879,
+    "adults": 45373,
+    "children": 44530,
+    "seniors": 5127,
+    "housing_total": 33793,
+    "owned": 11217,
+    "rented": 22576
+  },
+  "السفارات": {
+    "total": 5525,
+    "saudi": 1679,
+    "non_saudi": 3846,
+    "pct_saudi": 30,
+    "youth": 1609,
+    "adults": 2899,
+    "children": 713,
+    "seniors": 304,
+    "housing_total": 1650,
+    "owned": 234,
+    "rented": 1416
+  },
+  "الدوبية": {
+    "total": 3755,
+    "saudi": 15,
+    "non_saudi": 3740,
+    "pct_saudi": 0,
+    "youth": 1653,
+    "adults": 1599,
+    "children": 292,
+    "seniors": 211,
+    "housing_total": 1247,
+    "owned": 30,
+    "rented": 1217
+  },
+  "الصالحية": {
+    "total": 10542,
+    "saudi": 2401,
+    "non_saudi": 8141,
+    "pct_saudi": 23,
+    "youth": 4712,
+    "adults": 4340,
+    "children": 1109,
+    "seniors": 381,
+    "housing_total": 3068,
+    "owned": 191,
+    "rented": 2877
+  },
+  "الملز": {
+    "total": 93066,
+    "saudi": 11142,
+    "non_saudi": 81924,
+    "pct_saudi": 12,
+    "youth": 33121,
+    "adults": 39537,
+    "children": 16018,
+    "seniors": 4390,
+    "housing_total": 24919,
+    "owned": 2018,
+    "rented": 22901
+  },
+  "الجنادرية": {
+    "total": 70875,
+    "saudi": 48795,
+    "non_saudi": 22080,
+    "pct_saudi": 69,
+    "youth": 27914,
+    "adults": 18748,
+    "children": 22093,
+    "seniors": 2120,
+    "housing_total": 15476,
+    "owned": 6023,
+    "rented": 9453
+  },
+  "المؤتمرات": {
+    "total": 6126,
+    "saudi": 915,
+    "non_saudi": 5211,
+    "pct_saudi": 15,
+    "youth": 2375,
+    "adults": 3041,
+    "children": 422,
+    "seniors": 288,
+    "housing_total": 1717,
+    "owned": 217,
+    "rented": 1500
+  },
+  "النفل": {
+    "total": 49428,
+    "saudi": 15779,
+    "non_saudi": 33649,
+    "pct_saudi": 32,
+    "youth": 23242,
+    "adults": 18594,
+    "children": 6412,
+    "seniors": 1180,
+    "housing_total": 10675,
+    "owned": 2709,
+    "rented": 7966
+  },
+  "النسيم الغربي": {
+    "total": 159949,
+    "saudi": 78747,
+    "non_saudi": 81202,
+    "pct_saudi": 49,
+    "youth": 63460,
+    "adults": 52287,
+    "children": 36372,
+    "seniors": 7830,
+    "housing_total": 36118,
+    "owned": 9870,
+    "rented": 26248
+  },
+  "أم سليم": {
+    "total": 23842,
+    "saudi": 893,
+    "non_saudi": 22949,
+    "pct_saudi": 4,
+    "youth": 9744,
+    "adults": 10677,
+    "children": 2548,
+    "seniors": 873,
+    "housing_total": 6670,
+    "owned": 128,
+    "rented": 6542
+  },
+  "وادي لبن": {
+    "total": 11841,
+    "saudi": 9115,
+    "non_saudi": 2726,
+    "pct_saudi": 77,
+    "youth": 5469,
+    "adults": 2963,
+    "children": 3192,
+    "seniors": 217,
+    "housing_total": 2094,
+    "owned": 1084,
+    "rented": 1010
+  },
+  "الربوة": {
+    "total": 70591,
+    "saudi": 25977,
+    "non_saudi": 44614,
+    "pct_saudi": 37,
+    "youth": 28097,
+    "adults": 26717,
+    "children": 11628,
+    "seniors": 4149,
+    "housing_total": 18582,
+    "owned": 4611,
+    "rented": 13971
+  },
+  "الرحمانية": {
+    "total": 14577,
+    "saudi": 5562,
+    "non_saudi": 9015,
+    "pct_saudi": 38,
+    "youth": 5783,
+    "adults": 6042,
+    "children": 1747,
+    "seniors": 1005,
+    "housing_total": 3861,
+    "owned": 1150,
+    "rented": 2711
+  },
+  "المصانع": {
+    "total": 14280,
+    "saudi": 565,
+    "non_saudi": 13715,
+    "pct_saudi": 4,
+    "youth": 6494,
+    "adults": 7166,
+    "children": 328,
+    "seniors": 292,
+    "housing_total": 2244,
+    "owned": 162,
+    "rented": 2082
+  },
+  "مغرزات": {
+    "total": 16451,
+    "saudi": 8400,
+    "non_saudi": 8051,
+    "pct_saudi": 51,
+    "youth": 6842,
+    "adults": 5736,
+    "children": 2968,
+    "seniors": 905,
+    "housing_total": 4377,
+    "owned": 1336,
+    "rented": 3041
+  },
+  "الصفا": {
+    "total": 6420,
+    "saudi": 2464,
+    "non_saudi": 3956,
+    "pct_saudi": 38,
+    "youth": 2517,
+    "adults": 2264,
+    "children": 1194,
+    "seniors": 445,
+    "housing_total": 1747,
+    "owned": 455,
+    "rented": 1292
+  },
+  "المروج": {
+    "total": 39391,
+    "saudi": 13312,
+    "non_saudi": 26079,
+    "pct_saudi": 34,
+    "youth": 15922,
+    "adults": 15045,
+    "children": 6455,
+    "seniors": 1969,
+    "housing_total": 10355,
+    "owned": 2174,
+    "rented": 8181
+  },
+  "القادسية": {
+    "total": 58762,
+    "saudi": 45959,
+    "non_saudi": 12803,
+    "pct_saudi": 78,
+    "youth": 24316,
+    "adults": 14729,
+    "children": 18440,
+    "seniors": 1277,
+    "housing_total": 13767,
+    "owned": 4468,
+    "rented": 9299
+  },
+  "غرناطة": {
+    "total": 33304,
+    "saudi": 13195,
+    "non_saudi": 20109,
+    "pct_saudi": 40,
+    "youth": 12885,
+    "adults": 12044,
+    "children": 7244,
+    "seniors": 1131,
+    "housing_total": 8044,
+    "owned": 1802,
+    "rented": 6242
+  },
+  "عكاظ": {
+    "total": 38396,
+    "saudi": 29601,
+    "non_saudi": 8795,
+    "pct_saudi": 77,
+    "youth": 15284,
+    "adults": 9904,
+    "children": 12330,
+    "seniors": 878,
+    "housing_total": 8155,
+    "owned": 4204,
+    "rented": 3951
+  },
+  "الجزيرة": {
+    "total": 39842,
+    "saudi": 26563,
+    "non_saudi": 13279,
+    "pct_saudi": 67,
+    "youth": 16594,
+    "adults": 12289,
+    "children": 8749,
+    "seniors": 2210,
+    "housing_total": 8246,
+    "owned": 3604,
+    "rented": 4642
+  },
+  "سكيرينة": {
+    "total": 11377,
+    "saudi": 172,
+    "non_saudi": 11205,
+    "pct_saudi": 2,
+    "youth": 4895,
+    "adults": 4814,
+    "children": 1471,
+    "seniors": 197,
+    "housing_total": 4123,
+    "owned": 88,
+    "rented": 4035
+  },
+  "ضاحية نمار": {
+    "total": 14358,
+    "saudi": 8909,
+    "non_saudi": 5449,
+    "pct_saudi": 62,
+    "youth": 5917,
+    "adults": 4717,
+    "children": 3616,
+    "seniors": 108,
+    "housing_total": 873,
+    "owned": 285,
+    "rented": 588
+  },
+  "الحمراء": {
+    "total": 53967,
+    "saudi": 30868,
+    "non_saudi": 23099,
+    "pct_saudi": 57,
+    "youth": 22175,
+    "adults": 18258,
+    "children": 10754,
+    "seniors": 2780,
+    "housing_total": 11812,
+    "owned": 4698,
+    "rented": 7114
+  },
+  "الشهداء": {
+    "total": 29573,
+    "saudi": 11350,
+    "non_saudi": 18223,
+    "pct_saudi": 38,
+    "youth": 13368,
+    "adults": 10281,
+    "children": 4926,
+    "seniors": 998,
+    "housing_total": 6786,
+    "owned": 1711,
+    "rented": 5075
+  },
+  "السلام": {
+    "total": 50067,
+    "saudi": 31331,
+    "non_saudi": 18736,
+    "pct_saudi": 63,
+    "youth": 19458,
+    "adults": 15153,
+    "children": 12825,
+    "seniors": 2631,
+    "housing_total": 10822,
+    "owned": 3693,
+    "rented": 7129
+  },
+  "الزاهر": {
+    "total": 250,
+    "saudi": 0,
+    "non_saudi": 250,
+    "pct_saudi": 0,
+    "youth": 141,
+    "adults": 109,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 235,
+    "owned": 176,
+    "rented": 59
+  },
+  "العارض": {
+    "total": 81509,
+    "saudi": 49732,
+    "non_saudi": 31777,
+    "pct_saudi": 61,
+    "youth": 35905,
+    "adults": 25090,
+    "children": 18345,
+    "seniors": 2169,
+    "housing_total": 16318,
+    "owned": 7693,
+    "rented": 8625
+  },
+  "السويدي الغربي": {
+    "total": 42342,
+    "saudi": 31015,
+    "non_saudi": 11327,
+    "pct_saudi": 73,
+    "youth": 17250,
+    "adults": 12672,
+    "children": 9761,
+    "seniors": 2659,
+    "housing_total": 8754,
+    "owned": 3993,
+    "rented": 4761
+  },
+  "عتيقة": {
+    "total": 28975,
+    "saudi": 7705,
+    "non_saudi": 21270,
+    "pct_saudi": 27,
+    "youth": 11901,
+    "adults": 10456,
+    "children": 5372,
+    "seniors": 1246,
+    "housing_total": 7476,
+    "owned": 723,
+    "rented": 6753
+  },
+  "السحاب": {
+    "total": 517,
+    "saudi": 0,
+    "non_saudi": 517,
+    "pct_saudi": 0,
+    "youth": 265,
+    "adults": 252,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 237,
+    "owned": 17,
+    "rented": 220
+  },
+  "الملك فيصل": {
+    "total": 53554,
+    "saudi": 29404,
+    "non_saudi": 24150,
+    "pct_saudi": 55,
+    "youth": 20575,
+    "adults": 17320,
+    "children": 13015,
+    "seniors": 2644,
+    "housing_total": 12916,
+    "owned": 3595,
+    "rented": 9321
+  },
+  "الرفيعة": {
+    "total": 11518,
+    "saudi": 5612,
+    "non_saudi": 5906,
+    "pct_saudi": 49,
+    "youth": 4054,
+    "adults": 4299,
+    "children": 2493,
+    "seniors": 672,
+    "housing_total": 2676,
+    "owned": 951,
+    "rented": 1725
+  },
+  "منطقة عسكرية": {
+    "total": 349,
+    "saudi": 0,
+    "non_saudi": 349,
+    "pct_saudi": 0,
+    "youth": 147,
+    "adults": 202,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 108,
+    "owned": 6,
+    "rented": 102
+  },
+  "الفيحاء": {
+    "total": 58107,
+    "saudi": 30584,
+    "non_saudi": 27523,
+    "pct_saudi": 53,
+    "youth": 22956,
+    "adults": 18408,
+    "children": 14623,
+    "seniors": 2120,
+    "housing_total": 13561,
+    "owned": 3634,
+    "rented": 9927
+  },
+  "ديراب": {
+    "total": 26930,
+    "saudi": 22329,
+    "non_saudi": 4601,
+    "pct_saudi": 83,
+    "youth": 10705,
+    "adults": 6661,
+    "children": 8438,
+    "seniors": 1126,
+    "housing_total": 5346,
+    "owned": 2984,
+    "rented": 2362
+  },
+  "السعادة": {
+    "total": 83187,
+    "saudi": 38624,
+    "non_saudi": 44563,
+    "pct_saudi": 46,
+    "youth": 36290,
+    "adults": 26337,
+    "children": 18242,
+    "seniors": 2318,
+    "housing_total": 19525,
+    "owned": 4003,
+    "rented": 15522
+  },
+  "الياسمين": {
+    "total": 107229,
+    "saudi": 71153,
+    "non_saudi": 36076,
+    "pct_saudi": 66,
+    "youth": 43307,
+    "adults": 34748,
+    "children": 25327,
+    "seniors": 3847,
+    "housing_total": 23396,
+    "owned": 11143,
+    "rented": 12253
+  },
+  "الصحافة": {
+    "total": 52120,
+    "saudi": 31438,
+    "non_saudi": 20682,
+    "pct_saudi": 60,
+    "youth": 21701,
+    "adults": 17523,
+    "children": 10503,
+    "seniors": 2393,
+    "housing_total": 11864,
+    "owned": 4881,
+    "rented": 6983
+  },
+  "السلي": {
+    "total": 42510,
+    "saudi": 2238,
+    "non_saudi": 40272,
+    "pct_saudi": 5,
+    "youth": 20190,
+    "adults": 20678,
+    "children": 857,
+    "seniors": 785,
+    "housing_total": 7427,
+    "owned": 610,
+    "rented": 6817
+  },
+  "الربيع": {
+    "total": 35047,
+    "saudi": 18935,
+    "non_saudi": 16112,
+    "pct_saudi": 54,
+    "youth": 13767,
+    "adults": 12968,
+    "children": 6881,
+    "seniors": 1431,
+    "housing_total": 8203,
+    "owned": 3097,
+    "rented": 5106
+  },
+  "المصيف": {
+    "total": 42594,
+    "saudi": 17594,
+    "non_saudi": 25000,
+    "pct_saudi": 41,
+    "youth": 16912,
+    "adults": 15122,
+    "children": 7950,
+    "seniors": 2610,
+    "housing_total": 10167,
+    "owned": 2666,
+    "rented": 7501
+  },
+  "الفلاح": {
+    "total": 24761,
+    "saudi": 12614,
+    "non_saudi": 12147,
+    "pct_saudi": 51,
+    "youth": 10253,
+    "adults": 9378,
+    "children": 4044,
+    "seniors": 1086,
+    "housing_total": 5450,
+    "owned": 2084,
+    "rented": 3366
+  },
+  "سلطانة": {
+    "total": 23951,
+    "saudi": 8622,
+    "non_saudi": 15329,
+    "pct_saudi": 36,
+    "youth": 9964,
+    "adults": 8348,
+    "children": 4446,
+    "seniors": 1193,
+    "housing_total": 5182,
+    "owned": 1047,
+    "rented": 4135
+  },
+  "النزهة": {
+    "total": 27402,
+    "saudi": 11931,
+    "non_saudi": 15471,
+    "pct_saudi": 44,
+    "youth": 10961,
+    "adults": 9601,
+    "children": 5127,
+    "seniors": 1713,
+    "housing_total": 7893,
+    "owned": 2092,
+    "rented": 5801
+  },
+  "جبرة": {
+    "total": 8027,
+    "saudi": 54,
+    "non_saudi": 7973,
+    "pct_saudi": 1,
+    "youth": 2735,
+    "adults": 3601,
+    "children": 1345,
+    "seniors": 346,
+    "housing_total": 2700,
+    "owned": 73,
+    "rented": 2627
+  },
+  "المربع": {
+    "total": 58068,
+    "saudi": 4052,
+    "non_saudi": 54016,
+    "pct_saudi": 7,
+    "youth": 23599,
+    "adults": 23461,
+    "children": 9020,
+    "seniors": 1988,
+    "housing_total": 15618,
+    "owned": 822,
+    "rented": 14796
+  },
+  "الدحو": {
+    "total": 443,
+    "saudi": 0,
+    "non_saudi": 443,
+    "pct_saudi": 0,
+    "youth": 186,
+    "adults": 236,
+    "children": 0,
+    "seniors": 21,
+    "housing_total": 201,
+    "owned": 9,
+    "rented": 192
+  },
+  "الشفا": {
+    "total": 70513,
+    "saudi": 40606,
+    "non_saudi": 29907,
+    "pct_saudi": 58,
+    "youth": 29001,
+    "adults": 21585,
+    "children": 15893,
+    "seniors": 4034,
+    "housing_total": 14663,
+    "owned": 5293,
+    "rented": 9370
+  },
+  "الندى": {
+    "total": 18998,
+    "saudi": 12689,
+    "non_saudi": 6309,
+    "pct_saudi": 67,
+    "youth": 7255,
+    "adults": 6329,
+    "children": 4740,
+    "seniors": 674,
+    "housing_total": 4378,
+    "owned": 2145,
+    "rented": 2233
+  },
+  "العقيق": {
+    "total": 53471,
+    "saudi": 25138,
+    "non_saudi": 28333,
+    "pct_saudi": 47,
+    "youth": 21893,
+    "adults": 18100,
+    "children": 11438,
+    "seniors": 2040,
+    "housing_total": 13764,
+    "owned": 3183,
+    "rented": 10581
+  },
+  "ثليم": {
+    "total": 34337,
+    "saudi": 1017,
+    "non_saudi": 33320,
+    "pct_saudi": 3,
+    "youth": 15281,
+    "adults": 15886,
+    "children": 2014,
+    "seniors": 1156,
+    "housing_total": 11975,
+    "owned": 302,
+    "rented": 11673
+  },
+  "صلاح الدين": {
+    "total": 9072,
+    "saudi": 3243,
+    "non_saudi": 5829,
+    "pct_saudi": 36,
+    "youth": 3345,
+    "adults": 3615,
+    "children": 1385,
+    "seniors": 727,
+    "housing_total": 2739,
+    "owned": 726,
+    "rented": 2013
+  },
+  "السويدي": {
+    "total": 58475,
+    "saudi": 31982,
+    "non_saudi": 26493,
+    "pct_saudi": 55,
+    "youth": 23096,
+    "adults": 18765,
+    "children": 13109,
+    "seniors": 3505,
+    "housing_total": 12266,
+    "owned": 4158,
+    "rented": 8108
+  },
+  "الغنامية": {
+    "total": 4655,
+    "saudi": 3510,
+    "non_saudi": 1145,
+    "pct_saudi": 75,
+    "youth": 1833,
+    "adults": 1260,
+    "children": 1393,
+    "seniors": 169,
+    "housing_total": 875,
+    "owned": 399,
+    "rented": 476
+  },
+  "عريض": {
+    "total": 831,
+    "saudi": 190,
+    "non_saudi": 641,
+    "pct_saudi": 23,
+    "youth": 397,
+    "adults": 264,
+    "children": 170,
+    "seniors": 0,
+    "housing_total": 135,
+    "owned": 48,
+    "rented": 87
+  },
+  "العمل": {
+    "total": 20476,
+    "saudi": 589,
+    "non_saudi": 19887,
+    "pct_saudi": 3,
+    "youth": 8273,
+    "adults": 9092,
+    "children": 2296,
+    "seniors": 815,
+    "housing_total": 7199,
+    "owned": 221,
+    "rented": 6978
+  },
+  "لبن": {
+    "total": 33179,
+    "saudi": 21429,
+    "non_saudi": 11750,
+    "pct_saudi": 65,
+    "youth": 12299,
+    "adults": 9995,
+    "children": 9482,
+    "seniors": 1403,
+    "housing_total": 7566,
+    "owned": 2611,
+    "rented": 4955
+  },
+  "الهدا": {
+    "total": 6391,
+    "saudi": 2337,
+    "non_saudi": 4054,
+    "pct_saudi": 37,
+    "youth": 2255,
+    "adults": 2762,
+    "children": 737,
+    "seniors": 637,
+    "housing_total": 1707,
+    "owned": 489,
+    "rented": 1218
+  },
+  "جامعة الملك سعود": {
+    "total": 15154,
+    "saudi": 8612,
+    "non_saudi": 6542,
+    "pct_saudi": 57,
+    "youth": 6095,
+    "adults": 5454,
+    "children": 3164,
+    "seniors": 441,
+    "housing_total": 2179,
+    "owned": 413,
+    "rented": 1766
+  },
+  "الخالدية": {
+    "total": 58269,
+    "saudi": 6625,
+    "non_saudi": 51644,
+    "pct_saudi": 11,
+    "youth": 23692,
+    "adults": 23232,
+    "children": 8639,
+    "seniors": 2706,
+    "housing_total": 14651,
+    "owned": 881,
+    "rented": 13770
+  },
+  "الفرسان": {
+    "total": 85,
+    "saudi": 0,
+    "non_saudi": 85,
+    "pct_saudi": 0,
+    "youth": 39,
+    "adults": 46,
+    "children": 0,
+    "seniors": 0,
+    "housing_total": 31,
+    "owned": 3,
+    "rented": 28
+  },
+  "الوسيطا": {
+    "total": 3369,
+    "saudi": 49,
+    "non_saudi": 3320,
+    "pct_saudi": 1,
+    "youth": 1285,
+    "adults": 1496,
+    "children": 481,
+    "seniors": 107,
+    "housing_total": 1044,
+    "owned": 29,
+    "rented": 1015
+  },
+  "مطار الملك خالد": {
+    "total": 16999,
+    "saudi": 5648,
+    "non_saudi": 11351,
+    "pct_saudi": 33,
+    "youth": 7139,
+    "adults": 7170,
+    "children": 2397,
+    "seniors": 293,
+    "housing_total": 2213,
+    "owned": 393,
+    "rented": 1820
+  },
+  "القدس": {
+    "total": 41615,
+    "saudi": 23883,
+    "non_saudi": 17732,
+    "pct_saudi": 57,
+    "youth": 17398,
+    "adults": 13498,
+    "children": 7994,
+    "seniors": 2725,
+    "housing_total": 10158,
+    "owned": 3485,
+    "rented": 6673
+  },
+  "الديرة": {
+    "total": 22104,
+    "saudi": 535,
+    "non_saudi": 21569,
+    "pct_saudi": 2,
+    "youth": 8910,
+    "adults": 10773,
+    "children": 1512,
+    "seniors": 909,
+    "housing_total": 6019,
+    "owned": 209,
+    "rented": 5810
+  },
+  "المنصورة (خنشليلة)": {
+    "total": 68835,
+    "saudi": 18557,
+    "non_saudi": 50278,
+    "pct_saudi": 27,
+    "youth": 25559,
+    "adults": 21568,
+    "children": 17890,
+    "seniors": 3818,
+    "housing_total": 15002,
+    "owned": 2496,
+    "rented": 12506
+  },
+  "الورود": {
+    "total": 39241,
+    "saudi": 7825,
+    "non_saudi": 31416,
+    "pct_saudi": 20,
+    "youth": 14801,
+    "adults": 18092,
+    "children": 4017,
+    "seniors": 2331,
+    "housing_total": 13378,
+    "owned": 1952,
+    "rented": 11426
+  },
+  "المرقب": {
+    "total": 27431,
+    "saudi": 1071,
+    "non_saudi": 26360,
+    "pct_saudi": 4,
+    "youth": 11914,
+    "adults": 13108,
+    "children": 1435,
+    "seniors": 974,
+    "housing_total": 10061,
+    "owned": 297,
+    "rented": 9764
+  },
+  "المدينة الصناعية الجديدة": {
+    "total": 102141,
+    "saudi": 670,
+    "non_saudi": 101471,
+    "pct_saudi": 1,
+    "youth": 48085,
+    "adults": 51760,
+    "children": 478,
+    "seniors": 1818,
+    "housing_total": 16650,
+    "owned": 997,
+    "rented": 15653
+  },
+  "الأندلس": {
+    "total": 34620,
+    "saudi": 20867,
+    "non_saudi": 13753,
+    "pct_saudi": 60,
+    "youth": 14037,
+    "adults": 11075,
+    "children": 7520,
+    "seniors": 1988,
+    "housing_total": 7935,
+    "owned": 2894,
+    "rented": 5041
+  },
+  "الملك عبدالله": {
+    "total": 17684,
+    "saudi": 8085,
+    "non_saudi": 9599,
+    "pct_saudi": 46,
+    "youth": 6557,
+    "adults": 7376,
+    "children": 3047,
+    "seniors": 704,
+    "housing_total": 4681,
+    "owned": 1512,
+    "rented": 3169
+  },
+  "النخيل": {
+    "total": 29535,
+    "saudi": 15275,
+    "non_saudi": 14260,
+    "pct_saudi": 52,
+    "youth": 11846,
+    "adults": 11726,
+    "children": 4079,
+    "seniors": 1884,
+    "housing_total": 7716,
+    "owned": 2870,
+    "rented": 4846
+  },
+  "الإسكان": {
+    "total": 32547,
+    "saudi": 20330,
+    "non_saudi": 12217,
+    "pct_saudi": 62,
+    "youth": 13041,
+    "adults": 10634,
+    "children": 7233,
+    "seniors": 1639,
+    "housing_total": 8032,
+    "owned": 2905,
+    "rented": 5127
+  },
+  "شبرا": {
+    "total": 39331,
+    "saudi": 26138,
+    "non_saudi": 13193,
+    "pct_saudi": 66,
+    "youth": 15976,
+    "adults": 11833,
+    "children": 9122,
+    "seniors": 2400,
+    "housing_total": 7604,
+    "owned": 3369,
+    "rented": 4235
+  },
+  "الملقا": {
+    "total": 87918,
+    "saudi": 52247,
+    "non_saudi": 35671,
+    "pct_saudi": 59,
+    "youth": 39569,
+    "adults": 27655,
+    "children": 17592,
+    "seniors": 3102,
+    "housing_total": 19723,
+    "owned": 7880,
+    "rented": 11843
+  },
+  "العزيزية": {
+    "total": 175897,
+    "saudi": 68892,
+    "non_saudi": 107005,
+    "pct_saudi": 39,
+    "youth": 66625,
+    "adults": 56663,
+    "children": 45168,
+    "seniors": 7441,
+    "housing_total": 39920,
+    "owned": 8993,
+    "rented": 30927
+  },
+  "الخليج": {
+    "total": 98961,
+    "saudi": 62137,
+    "non_saudi": 36824,
+    "pct_saudi": 63,
+    "youth": 40136,
+    "adults": 29881,
+    "children": 24348,
+    "seniors": 4596,
+    "housing_total": 23472,
+    "owned": 7526,
+    "rented": 15946
+  },
+  "البيان": {
+    "total": 12251,
+    "saudi": 9145,
+    "non_saudi": 3106,
+    "pct_saudi": 75,
+    "youth": 5462,
+    "adults": 3083,
+    "children": 3504,
+    "seniors": 202,
+    "housing_total": 3367,
+    "owned": 1143,
+    "rented": 2224
+  },
+  "الندوة": {
+    "total": 43367,
+    "saudi": 28725,
+    "non_saudi": 14642,
+    "pct_saudi": 66,
+    "youth": 18120,
+    "adults": 10651,
+    "children": 13500,
+    "seniors": 1096,
+    "housing_total": 9718,
+    "owned": 2633,
+    "rented": 7085
+  },
+  "جامعة الإمام محمد بن سعود الإسلامية": {
+    "total": 6187,
+    "saudi": 4338,
+    "non_saudi": 1849,
+    "pct_saudi": 70,
+    "youth": 2581,
+    "adults": 1800,
+    "children": 1739,
+    "seniors": 67,
+    "housing_total": 1054,
+    "owned": 129,
+    "rented": 925
+  },
+  "خشم العان": {
+    "total": 35346,
+    "saudi": 29182,
+    "non_saudi": 6164,
+    "pct_saudi": 83,
+    "youth": 10610,
+    "adults": 10639,
+    "children": 13678,
+    "seniors": 419,
+    "housing_total": 3257,
+    "owned": 680,
+    "rented": 2577
+  },
+  "الجرادية": {
+    "total": 24858,
+    "saudi": 5288,
+    "non_saudi": 19570,
+    "pct_saudi": 21,
+    "youth": 9371,
+    "adults": 9761,
+    "children": 4585,
+    "seniors": 1141,
+    "housing_total": 7355,
+    "owned": 541,
+    "rented": 6814
+  },
+  "جرير": {
+    "total": 30972,
+    "saudi": 6892,
+    "non_saudi": 24080,
+    "pct_saudi": 22,
+    "youth": 11262,
+    "adults": 12595,
+    "children": 5449,
+    "seniors": 1666,
+    "housing_total": 8568,
+    "owned": 1183,
+    "rented": 7385
+  },
+  "أم الحمام الغربي": {
+    "total": 37663,
+    "saudi": 8889,
+    "non_saudi": 28774,
+    "pct_saudi": 24,
+    "youth": 13368,
+    "adults": 15671,
+    "children": 6326,
+    "seniors": 2298,
+    "housing_total": 10555,
+    "owned": 1331,
+    "rented": 9224
+  },
+  "الصناعية": {
+    "total": 12954,
+    "saudi": 643,
+    "non_saudi": 12311,
+    "pct_saudi": 5,
+    "youth": 4814,
+    "adults": 6951,
+    "children": 599,
+    "seniors": 590,
+    "housing_total": 2912,
+    "owned": 177,
+    "rented": 2735
+  },
+  "الواحة": {
+    "total": 17246,
+    "saudi": 10279,
+    "non_saudi": 6967,
+    "pct_saudi": 60,
+    "youth": 7025,
+    "adults": 6099,
+    "children": 2586,
+    "seniors": 1536,
+    "housing_total": 3927,
+    "owned": 2052,
+    "rented": 1875
+  },
+  "النور": {
+    "total": 6184,
+    "saudi": 104,
+    "non_saudi": 6080,
+    "pct_saudi": 2,
+    "youth": 2621,
+    "adults": 3343,
+    "children": 84,
+    "seniors": 136,
+    "housing_total": 1319,
+    "owned": 99,
+    "rented": 1220
+  },
+  "الوشام": {
+    "total": 16476,
+    "saudi": 1011,
+    "non_saudi": 15465,
+    "pct_saudi": 6,
+    "youth": 5878,
+    "adults": 6673,
+    "children": 3011,
+    "seniors": 914,
+    "housing_total": 4493,
+    "owned": 229,
+    "rented": 4264
+  },
+  "القيروان": {
+    "total": 39288,
+    "saudi": 21197,
+    "non_saudi": 18091,
+    "pct_saudi": 54,
+    "youth": 18053,
+    "adults": 13004,
+    "children": 7204,
+    "seniors": 1027,
+    "housing_total": 7049,
+    "owned": 3293,
+    "rented": 3756
+  },
+  "الخزامى": {
+    "total": 8914,
+    "saudi": 4898,
+    "non_saudi": 4016,
+    "pct_saudi": 55,
+    "youth": 3328,
+    "adults": 3459,
+    "children": 1403,
+    "seniors": 724,
+    "housing_total": 1898,
+    "owned": 840,
+    "rented": 1058
+  },
+  "المهدية": {
+    "total": 37054,
+    "saudi": 31319,
+    "non_saudi": 5735,
+    "pct_saudi": 85,
+    "youth": 14846,
+    "adults": 9319,
+    "children": 12049,
+    "seniors": 840,
+    "housing_total": 7989,
+    "owned": 4770,
+    "rented": 3219
+  },
+  "البرية": {
+    "total": 5369,
+    "saudi": 3674,
+    "non_saudi": 1695,
+    "pct_saudi": 68,
+    "youth": 1977,
+    "adults": 1846,
+    "children": 1499,
+    "seniors": 47,
+    "housing_total": 761,
+    "owned": 179,
+    "rented": 582
+  },
+  "النظيم": {
+    "total": 120695,
+    "saudi": 79077,
+    "non_saudi": 41618,
+    "pct_saudi": 66,
+    "youth": 46158,
+    "adults": 30489,
+    "children": 39261,
+    "seniors": 4787,
+    "housing_total": 22837,
+    "owned": 8927,
+    "rented": 13910
+  },
+  "الحزم": {
+    "total": 58431,
+    "saudi": 43637,
+    "non_saudi": 14794,
+    "pct_saudi": 75,
+    "youth": 23127,
+    "adults": 16392,
+    "children": 17238,
+    "seniors": 1674,
+    "housing_total": 12445,
+    "owned": 5650,
+    "rented": 6795
+  },
+  "الزهراء": {
+    "total": 18666,
+    "saudi": 2832,
+    "non_saudi": 15834,
+    "pct_saudi": 15,
+    "youth": 7753,
+    "adults": 8564,
+    "children": 1707,
+    "seniors": 642,
+    "housing_total": 6132,
+    "owned": 444,
+    "rented": 5688
+  },
+  "العليا": {
+    "total": 118753,
+    "saudi": 22694,
+    "non_saudi": 96059,
+    "pct_saudi": 19,
+    "youth": 44172,
+    "adults": 51802,
+    "children": 16190,
+    "seniors": 6589,
+    "housing_total": 32277,
+    "owned": 4667,
+    "rented": 27610
+  },
+  "حطين": {
+    "total": 35786,
+    "saudi": 21182,
+    "non_saudi": 14604,
+    "pct_saudi": 59,
+    "youth": 15200,
+    "adults": 11929,
+    "children": 6833,
+    "seniors": 1824,
+    "housing_total": 8260,
+    "owned": 3280,
+    "rented": 4980
+  },
+  "الفاخرية": {
+    "total": 6897,
+    "saudi": 1605,
+    "non_saudi": 5292,
+    "pct_saudi": 23,
+    "youth": 2421,
+    "adults": 2553,
+    "children": 1294,
+    "seniors": 629,
+    "housing_total": 1432,
+    "owned": 279,
+    "rented": 1153
+  },
+  "ظهرة لبن": {
+    "total": 237856,
+    "saudi": 163125,
+    "non_saudi": 74731,
+    "pct_saudi": 69,
+    "youth": 98038,
+    "adults": 63856,
+    "children": 69848,
+    "seniors": 6114,
+    "housing_total": 54493,
+    "owned": 18440,
+    "rented": 36053
+  },
+  "اليمامة": {
+    "total": 38382,
+    "saudi": 8456,
+    "non_saudi": 29926,
+    "pct_saudi": 22,
+    "youth": 15571,
+    "adults": 14153,
+    "children": 6864,
+    "seniors": 1794,
+    "housing_total": 9919,
+    "owned": 689,
+    "rented": 9230
+  },
+  "الملك فهد": {
+    "total": 34511,
+    "saudi": 11988,
+    "non_saudi": 22523,
+    "pct_saudi": 35,
+    "youth": 13794,
+    "adults": 12933,
+    "children": 5164,
+    "seniors": 2620,
+    "housing_total": 8754,
+    "owned": 2232,
+    "rented": 6522
+  },
+  "السليمانية": {
+    "total": 90252,
+    "saudi": 10930,
+    "non_saudi": 79322,
+    "pct_saudi": 12,
+    "youth": 31998,
+    "adults": 41667,
+    "children": 12605,
+    "seniors": 3982,
+    "housing_total": 24786,
+    "owned": 2511,
+    "rented": 22275
+  },
+  "الوزارات": {
+    "total": 65776,
+    "saudi": 2341,
+    "non_saudi": 63435,
+    "pct_saudi": 4,
+    "youth": 28306,
+    "adults": 27634,
+    "children": 8350,
+    "seniors": 1486,
+    "housing_total": 19121,
+    "owned": 564,
+    "rented": 18557
+  },
+  "الضباط": {
+    "total": 22432,
+    "saudi": 2728,
+    "non_saudi": 19704,
+    "pct_saudi": 12,
+    "youth": 7632,
+    "adults": 9826,
+    "children": 4089,
+    "seniors": 885,
+    "housing_total": 8054,
+    "owned": 470,
+    "rented": 7584
+  },
+  "أحد": {
+    "total": 20280,
+    "saudi": 15678,
+    "non_saudi": 4602,
+    "pct_saudi": 77,
+    "youth": 8852,
+    "adults": 4684,
+    "children": 6216,
+    "seniors": 528,
+    "housing_total": 3455,
+    "owned": 1789,
+    "rented": 1666
+  },
+  "المعذر": {
+    "total": 16515,
+    "saudi": 2298,
+    "non_saudi": 14217,
+    "pct_saudi": 14,
+    "youth": 6136,
+    "adults": 7643,
+    "children": 1876,
+    "seniors": 860,
+    "housing_total": 5056,
+    "owned": 434,
+    "rented": 4622
+  },
+  "الفاروق": {
+    "total": 6083,
+    "saudi": 1194,
+    "non_saudi": 4889,
+    "pct_saudi": 20,
+    "youth": 2225,
+    "adults": 2595,
+    "children": 971,
+    "seniors": 292,
+    "housing_total": 1696,
+    "owned": 209,
+    "rented": 1487
+  },
+  "منفوحة الجديدة": {
+    "total": 51221,
+    "saudi": 3476,
+    "non_saudi": 47745,
+    "pct_saudi": 7,
+    "youth": 22055,
+    "adults": 21600,
+    "children": 5788,
+    "seniors": 1778,
+    "housing_total": 16848,
+    "owned": 680,
+    "rented": 16168
+  },
+  "الشميسي": {
+    "total": 32056,
+    "saudi": 1547,
+    "non_saudi": 30509,
+    "pct_saudi": 5,
+    "youth": 13693,
+    "adults": 14995,
+    "children": 2214,
+    "seniors": 1154,
+    "housing_total": 9964,
+    "owned": 390,
+    "rented": 9574
+  },
+  "المنصورية": {
+    "total": 2487,
+    "saudi": 46,
+    "non_saudi": 2441,
+    "pct_saudi": 2,
+    "youth": 850,
+    "adults": 1580,
+    "children": 30,
+    "seniors": 27,
+    "housing_total": 494,
+    "owned": 49,
+    "rented": 445
+  },
+  "الغدير": {
+    "total": 21295,
+    "saudi": 10966,
+    "non_saudi": 10329,
+    "pct_saudi": 51,
+    "youth": 8613,
+    "adults": 7898,
+    "children": 3584,
+    "seniors": 1200,
+    "housing_total": 4380,
+    "owned": 1748,
+    "rented": 2632
+  },
+  "المشاعل": {
+    "total": 21031,
+    "saudi": 447,
+    "non_saudi": 20584,
+    "pct_saudi": 2,
+    "youth": 10710,
+    "adults": 9806,
+    "children": 269,
+    "seniors": 246,
+    "housing_total": 4120,
+    "owned": 244,
+    "rented": 3876
+  },
+  "النسيم الشرقي": {
+    "total": 139943,
+    "saudi": 72067,
+    "non_saudi": 67876,
+    "pct_saudi": 51,
+    "youth": 55996,
+    "adults": 42606,
+    "children": 36137,
+    "seniors": 5204,
+    "housing_total": 31798,
+    "owned": 7630,
+    "rented": 24168
+  },
+  "معكال": {
+    "total": 2618,
+    "saudi": 0,
+    "non_saudi": 2618,
+    "pct_saudi": 0,
+    "youth": 1209,
+    "adults": 1091,
+    "children": 224,
+    "seniors": 94,
+    "housing_total": 612,
+    "owned": 18,
+    "rented": 594
+  },
+  "المرجان": {
+    "total": 1610,
+    "saudi": 304,
+    "non_saudi": 1306,
+    "pct_saudi": 19,
+    "youth": 759,
+    "adults": 715,
+    "children": 115,
+    "seniors": 21,
+    "housing_total": 527,
+    "owned": 78,
+    "rented": 449
+  },
+  "الإزدهار": {
+    "total": 35497,
+    "saudi": 13783,
+    "non_saudi": 21714,
+    "pct_saudi": 39,
+    "youth": 14433,
+    "adults": 13088,
+    "children": 6570,
+    "seniors": 1406,
+    "housing_total": 10200,
+    "owned": 2101,
+    "rented": 8099
+  },
+  "إشبيلية": {
+    "total": 96370,
+    "saudi": 63240,
+    "non_saudi": 33130,
+    "pct_saudi": 66,
+    "youth": 38560,
+    "adults": 29357,
+    "children": 25118,
+    "seniors": 3335,
+    "housing_total": 21049,
+    "owned": 7627,
+    "rented": 13422
+  },
+  "أم الحمام الشرقي": {
+    "total": 34372,
+    "saudi": 5944,
+    "non_saudi": 28428,
+    "pct_saudi": 17,
+    "youth": 13199,
+    "adults": 14614,
+    "children": 4509,
+    "seniors": 2050,
+    "housing_total": 9056,
+    "owned": 654,
+    "rented": 8402
+  },
+  "العريجاء الغربي": {
+    "total": 104688,
+    "saudi": 76895,
+    "non_saudi": 27793,
+    "pct_saudi": 73,
+    "youth": 41282,
+    "adults": 30710,
+    "children": 26653,
+    "seniors": 6043,
+    "housing_total": 20688,
+    "owned": 8852,
+    "rented": 11836
+  },
+  "المرسلات": {
+    "total": 20327,
+    "saudi": 6168,
+    "non_saudi": 14159,
+    "pct_saudi": 30,
+    "youth": 8114,
+    "adults": 8383,
+    "children": 2589,
+    "seniors": 1241,
+    "housing_total": 6414,
+    "owned": 1314,
+    "rented": 5100
+  },
+  "النرجس": {
+    "total": 82775,
+    "saudi": 60481,
+    "non_saudi": 22294,
+    "pct_saudi": 73,
+    "youth": 35718,
+    "adults": 23795,
+    "children": 20789,
+    "seniors": 2473,
+    "housing_total": 18535,
+    "owned": 8486,
+    "rented": 10049
+  },
+  "المنار": {
+    "total": 26577,
+    "saudi": 14050,
+    "non_saudi": 12527,
+    "pct_saudi": 53,
+    "youth": 10215,
+    "adults": 9290,
+    "children": 5759,
+    "seniors": 1313,
+    "housing_total": 6291,
+    "owned": 1900,
+    "rented": 4391
+  },
+  "صياح": {
+    "total": 2670,
+    "saudi": 184,
+    "non_saudi": 2486,
+    "pct_saudi": 7,
+    "youth": 885,
+    "adults": 1016,
+    "children": 614,
+    "seniors": 155,
+    "housing_total": 637,
+    "owned": 37,
+    "rented": 600
+  },
+  "الدريهمية": {
+    "total": 12069,
+    "saudi": 6188,
+    "non_saudi": 5881,
+    "pct_saudi": 51,
+    "youth": 4544,
+    "adults": 3804,
+    "children": 3165,
+    "seniors": 556,
+    "housing_total": 2425,
+    "owned": 900,
+    "rented": 1525
+  },
+  "المعذر الشمالي": {
+    "total": 15908,
+    "saudi": 5180,
+    "non_saudi": 10728,
+    "pct_saudi": 33,
+    "youth": 5949,
+    "adults": 7102,
+    "children": 1697,
+    "seniors": 1160,
+    "housing_total": 4475,
+    "owned": 1121,
+    "rented": 3354
+  },
+  "الرماية": {
+    "total": 13381,
+    "saudi": 4364,
+    "non_saudi": 9017,
+    "pct_saudi": 33,
+    "youth": 4925,
+    "adults": 5937,
+    "children": 2347,
+    "seniors": 172,
+    "housing_total": 1796,
+    "owned": 202,
+    "rented": 1594
+  },
+  "الوادي": {
+    "total": 42112,
+    "saudi": 20908,
+    "non_saudi": 21204,
+    "pct_saudi": 50,
+    "youth": 18102,
+    "adults": 13824,
+    "children": 8723,
+    "seniors": 1463,
+    "housing_total": 9761,
+    "owned": 3022,
+    "rented": 6739
+  },
+  "العريجاء": {
+    "total": 9121,
+    "saudi": 3734,
+    "non_saudi": 5387,
+    "pct_saudi": 41,
+    "youth": 3436,
+    "adults": 3088,
+    "children": 2107,
+    "seniors": 490,
+    "housing_total": 2016,
+    "owned": 431,
+    "rented": 1585
+  },
+  "الزهرة": {
+    "total": 45834,
+    "saudi": 31411,
+    "non_saudi": 14423,
+    "pct_saudi": 69,
+    "youth": 18528,
+    "adults": 14390,
+    "children": 10045,
+    "seniors": 2871,
+    "housing_total": 9187,
+    "owned": 3989,
+    "rented": 5198
+  },
+  "عليشة": {
+    "total": 8146,
+    "saudi": 2321,
+    "non_saudi": 5825,
+    "pct_saudi": 28,
+    "youth": 2804,
+    "adults": 3170,
+    "children": 1657,
+    "seniors": 515,
+    "housing_total": 1966,
+    "owned": 352,
+    "rented": 1614
+  },
+  "طويق": {
+    "total": 282854,
+    "saudi": 227432,
+    "non_saudi": 55422,
+    "pct_saudi": 80,
+    "youth": 112464,
+    "adults": 72805,
+    "children": 87848,
+    "seniors": 9737,
+    "housing_total": 56808,
+    "owned": 27887,
+    "rented": 28921
+  }
+};
+
+// ══ AUTOCOMPLETE ══
+function buildHoodsList(){
+  const dl=document.getElementById('hoods_list');
+  Object.keys(HOODS_DATA).sort().forEach(h=>{
+    const opt=document.createElement('option');
+    opt.value=h; dl.appendChild(opt);
+  });
+}
+
+function onHoodInput(val){
+  const d=HOODS_DATA[val];
+  const st=document.getElementById('hood_st');
+  const prev=document.getElementById('pop_preview');
+  const quick=document.getElementById('pop_quick');
+  if(d){
+    st.textContent='✅ الحي موجود في قاعدة البيانات';
+    st.className='st show ok';
+    prev.style.display='block';
+    quick.innerHTML=`
+      إجمالي السكان: <b>${d.total.toLocaleString('ar')}</b> نسمة &nbsp;|&nbsp;
+      نسبة السعوديين: <b>${d.pct_saudi}٪</b><br>
+      الشباب 15-34: <b>${d.youth.toLocaleString('ar')}</b> &nbsp;|&nbsp;
+      إجمالي المساكن: <b>${d.housing_total.toLocaleString('ar')}</b>
+    `;
+  } else {
+    st.textContent='';
+    st.className='st';
+    prev.style.display='none';
+  }
+}
+
+// ══ FETCH COMPETITORS ══
+const SERP='15640d8d22926e1e705c68051417e63bf2fecc78413747bf2941b1935baa4bd8';
+let _competitors=[];
+
+async function fetchCompetitors(){
+  const hood=document.getElementById('hood_input').value.trim();
+  const type=document.getElementById('biz_type').value;
+  if(!hood||!type){showFetchSt('اختر نوع النشاط وأدخل اسم الحي أولاً','err');return;}
+  const btn=document.getElementById('fetch_btn');
+  btn.disabled=true;
+  document.getElementById('fetch_ico').innerHTML='<span class="spin"></span>';
+  document.getElementById('fetch_txt').textContent='جاري البحث...';
+  showFetchSt('يبحث عن المنافسين في '+hood+'...','load');
+
+  const q=encodeURIComponent(type+' '+hood+' الرياض');
+  const url=`https://serpapi.com/search.json?engine=google_maps&q=${q}&location=Riyadh,Saudi+Arabia&hl=ar&gl=sa&api_key=${SERP}`;
+  try{
+    const r=await fetch(url);
+    const data=await r.json();
+    if(data.error)throw new Error(data.error);
+    const places=(data.local_results||[]).slice(0,8);
+    _competitors=places.map(p=>({
+      name:p.title||'—',
+      rating:p.rating||0,
+      reviews:p.reviews||0,
+      type:p.type||type,
+      address:p.address||'',
+    }));
+    showFetchSt(`✅ وجدنا ${_competitors.length} منافس في ${hood}`,'ok');
+    renderCompPreview();
+  }catch(e){
+    _competitors=[];
+    showFetchSt('تعذر الجلب — '+e.message,'err');
+  }
+  btn.disabled=false;
+  document.getElementById('fetch_ico').textContent='🔍';
+  document.getElementById('fetch_txt').textContent='جلب المنافسين تلقائياً';
+}
+
+function showFetchSt(m,t){const el=document.getElementById('fetch_st');el.textContent=m;el.className='st show '+t;}
+
+function renderCompPreview(){
+  const div=document.getElementById('comp_list_preview');
+  div.innerHTML=_competitors.map((c,i)=>`
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gm);font-size:11px">
+      <span style="font-weight:600">${i+1}. ${c.name}</span>
+      <span style="color:var(--gold);font-weight:700">${c.rating?c.rating+'⭐':''} (${(c.reviews||0).toLocaleString('ar')})</span>
+    </div>`).join('');
+  document.getElementById('comp_preview').style.display='block';
+}
+
+// ══ CALCULATE SCORE ══
+function calcScore(d){
+  // ١. الكثافة (25)
+  const s1=d.total>=200000?25:d.total>=100000?20:d.total>=50000?14:d.total>=20000?8:3;
+  // ٢. القوة الشرائية (25)
+  const pct=d.pct_saudi/100;
+  const s2=pct>=0.75?25:pct>=0.6?20:pct>=0.45?14:pct>=0.3?8:4;
+  // ٣. الشريحة العمرية (25)
+  const activeRatio=(d.youth+d.adults)/d.total;
+  const s3=activeRatio>=0.6?25:activeRatio>=0.45?18:activeRatio>=0.3?12:6;
+  // ٤. استقرار السكان (25)
+  const ownRatio=d.housing_total>0?d.owned/d.housing_total:0;
+  const s4=ownRatio>=0.6?25:ownRatio>=0.45?18:ownRatio>=0.3?12:6;
+  return {s1,s2,s3,s4,total:s1+s2+s3+s4};
+}
+
+// ══ GENERATE REPORT ══
+let _reportData=null;
+function generateReport(){
+  const hood=document.getElementById('hood_input').value.trim();
+  const type=document.getElementById('biz_type').value;
+  const client=document.getElementById('client_name').value||'—';
+  const notes=document.getElementById('analyst_notes').value;
+
+  if(!hood||!type){alert('أدخل نوع النشاط واسم الحي أولاً');return;}
+  const d=HOODS_DATA[hood];
+  if(!d){alert('الحي غير موجود في قاعدة البيانات');return;}
+
+  const sc=calcScore(d);
+  const T=sc.total;
+  const col=T>=85?'#22C55E':T>=70?'#1BA8B8':T>=55?'#F97316':'#EF4444';
+  const lbl=T>=85?'ممتاز ★★★★★':T>=70?'جيد جداً ★★★★':T>=55?'جيد ★★★':T>=40?'متوسط ★★':'ضعيف ★';
+  const rec=T>=85?'موقع استثنائي — افتح بثقة':T>=70?'موقع واعد — يستحق الاستثمار':T>=55?'موقع مقبول — ادرس المنافسين أولاً':T>=40?'يحتاج دراسة أعمق — قارن بأحياء بديلة':'غير موصى به — اختر موقعاً آخر';
+
+  // تحليل المنافسة
+  const compCount=_competitors.length;
+  const avgRating=compCount>0?(_competitors.reduce((s,c)=>s+c.rating,0)/compCount).toFixed(1):0;
+  const compAnalysis=compCount===0?'لم يتم جلب بيانات المنافسين':
+    compCount<=3?`منافسة منخفضة — ${compCount} منافسين فقط`:
+    compCount<=6?`منافسة متوسطة — ${compCount} منافسين`:
+    `منافسة عالية — ${compCount} منافسين`;
+
+  // فرص التحسين
+  const opps=[];
+  if(sc.s1<20) opps.push({t:'الكثافة السكانية',v:sc.s1,m:25,d:'الحي يحتاج حجم حركة أكبر — ركز على التسويق الرقمي للوصول لعملاء أبعد'});
+  if(sc.s2<20) opps.push({t:'القوة الشرائية',v:sc.s2,m:25,d:'نسبة السعوديين أقل من المثالي — فكر في منتج يناسب شريحة أوسع'});
+  if(sc.s3<20) opps.push({t:'الشريحة العمرية',v:sc.s3,m:25,d:'نسبة الشباب والبالغين متوسطة — الطلب قد يكون موسمياً'});
+  if(sc.s4<20) opps.push({t:'استقرار السكان',v:sc.s4,m:25,d:'نسبة الإيجار مرتفعة — دوران العملاء أعلى، ركز على بناء الولاء'});
+  if(compCount>=7) opps.push({t:'المنافسة العالية',v:0,m:0,d:`${compCount} منافسين في الحي — تحتاج ميزة تنافسية واضحة`});
+
+  _reportData={hood,type,client,notes,T,lbl,rec,col,sc,d,compCount,avgRating,compAnalysis,opps,date:new Date().toLocaleDateString('ar-SA')};
+
+  // ══ تحديث الواجهة ══
+  document.getElementById('r_client').textContent=`${client} — ${type} — ${hood}`;
+  document.getElementById('r_date').textContent=_reportData.date+' | الرياض';
+  document.getElementById('score_num').textContent=T;
+  document.getElementById('score_lbl').textContent=lbl;
+  document.getElementById('score_box').style.background=col;
+  document.getElementById('score_rec').textContent=rec;
+
+  document.getElementById('mini_grid').innerHTML=[
+    ['السكان',d.total.toLocaleString('ar'),col],
+    ['% سعودي',d.pct_saudi+'٪',sc.s2>=20?'#22C55E':'#F97316'],
+    ['المساكن',d.housing_total.toLocaleString('ar'),col],
+    ['منافسين',compCount||'؟','#6C757D'],
+  ].map(([l,v,c])=>`<div class="mini-item"><div class="mini-n" style="color:${c}">${v}</div><div class="mini-l">${l}</div></div>`).join('');
+
+  // بيانات السكان
+  document.getElementById('pop_rows').innerHTML=[
+    ['إجمالي السكان',d.total.toLocaleString('ar')+' نسمة'],
+    ['السعوديون',d.saudi.toLocaleString('ar')+` نسمة (${d.pct_saudi}٪)`],
+    ['غير السعوديين',d.non_saudi.toLocaleString('ar')+` نسمة (${100-d.pct_saudi}٪)`],
+    ['الشباب 15-34',d.youth.toLocaleString('ar')+' نسمة'],
+    ['البالغين 35-59',d.adults.toLocaleString('ar')+' نسمة'],
+    ['الأطفال 0-14',d.children.toLocaleString('ar')+' نسمة'],
+    ['إجمالي المساكن',d.housing_total.toLocaleString('ar')+' مسكن'],
+    ['مساكن مملوكة',d.owned.toLocaleString('ar')+` (${d.housing_total>0?Math.round(d.owned/d.housing_total*100):0}٪)`],
+    ['مساكن مستأجرة',d.rented.toLocaleString('ar')],
+  ].map(([l,v],i)=>`
+    <div class="data-row" style="background:${i%2===0?'#fff':'var(--gl)'}">
+      <span class="lbl">${l}</span>
+      <span class="val">${v}</span>
+    </div>`).join('');
+
+  // المعايير
+  document.getElementById('crit_wrap').innerHTML=[
+    ['الكثافة السكانية',sc.s1,25,'#1BA8B8'],
+    ['القوة الشرائية — نسبة السعوديين',sc.s2,25,'#F5C518'],
+    ['الشريحة العمرية — شباب وبالغين',sc.s3,25,'#22C55E'],
+    ['استقرار السكان — ملكية المساكن',sc.s4,25,'#F97316'],
+  ].map(([n,s,m,c])=>`
+    <div class="crit-item">
+      <div class="crit-top">
+        <span class="crit-name">${n}</span>
+        <span class="crit-score" style="color:${c}">${s}/${m}</span>
+      </div>
+      <div class="crit-bar"><div class="crit-fill" style="width:${Math.round(s/m*100)}%;background:${c}"></div></div>
+    </div>`).join('');
+
+  // المنافسون
+  document.getElementById('comp_summary').innerHTML=
+    `<b>${compAnalysis}</b> | متوسط التقييم: <b style="color:var(--gold)">${avgRating||'—'}⭐</b> | نوع النشاط: <b>${type}</b> | الحي: <b>${hood}</b>`;
+  document.getElementById('comp_list').innerHTML=_competitors.length?
+    _competitors.map((c,i)=>`
+      <div class="comp-item">
+        <div class="comp-rank">${i+1}</div>
+        <div class="comp-info" style="flex:1">
+          <div class="name">${c.name}</div>
+          <div class="meta">${c.address||''}</div>
+        </div>
+        <div class="comp-rating">${c.rating?c.rating+'⭐':''}<br><span style="font-size:10px;color:var(--gd)">(${(c.reviews||0).toLocaleString('ar')})</span></div>
+      </div>`).join(''):
+    '<div style="font-size:12px;color:var(--gd);padding:8px">لم يتم جلب بيانات المنافسين — اضغط "جلب المنافسين" أولاً</div>';
+
+  // فرص التحسين
+  document.getElementById('opps').innerHTML=opps.length?
+    opps.map((o,i)=>`
+      <div class="opp-item">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div class="opp-num">0${i+1}</div>
+          <div>
+            <div class="opp-title">${o.t}${o.m?` — ${o.v}/${o.m}`:''}</div>
+            <div class="opp-text">${o.d}</div>
+          </div>
+        </div>
+      </div>`).join(''):
+    '<div style="font-size:12px;color:#22C55E;padding:8px">✅ لا توجد مخاطر رئيسية — الموقع ممتاز</div>';
+
+  // الملاحظات
+  if(notes){
+    document.getElementById('notes_section').style.display='block';
+    document.getElementById('notes_content').textContent=notes;
+  }
+
+  // التوصية
+  const recColors={
+    '✅':['#D1FAE5','#065F46'],
+    '⚠️':['#FEF3C7','#92400E'],
+    '❌':['#FEE2E2','#991B1B'],
+  };
+  const recIcon=T>=70?'✅':T>=40?'⚠️':'❌';
+  const [recBg,recFg]=recColors[recIcon];
+  document.getElementById('rec_box').innerHTML=`
+    <div style="background:${recBg};border-radius:8px;padding:20px;text-align:center;margin:14px 18px">
+      <div style="font-size:28px;margin-bottom:8px">${recIcon}</div>
+      <div style="font-size:16px;font-weight:700;color:${recFg};margin-bottom:6px">${rec}</div>
+      <div style="font-size:12px;color:${recFg};opacity:0.8;line-height:1.7">
+        ${T>=70?`حي ${hood} مناسب لفتح ${type} — الكثافة السكانية والقوة الشرائية تدعم النجاح`:
+          T>=40?`يُنصح بدراسة المنافسين وتحديد الميزة التنافسية قبل اتخاذ القرار`:
+          `ننصح بالبحث عن موقع بديل — الحي الحالي لا يوفر شروط النجاح المثالية لـ${type}`}
+      </div>
+    </div>`;
+
+  document.getElementById('rep').classList.add('show');
+  document.getElementById('ph').style.display='none';
+}
+
+// ══ PRINT ══
+function printReport(){
+  if(!_reportData){return;}
+  const d=_reportData;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;background:#fff;direction:rtl;padding:0}
+.page{width:210mm;min-height:297mm;display:flex;flex-direction:column}
+.gold-bar{background:#F5C518;padding:6px;text-align:center}
+.gold-bar span{font-size:9px;font-weight:700;color:#1B2B5E;direction:ltr;display:inline-block}
+.header{background:#1B2B5E;padding:13px 20px;display:flex;justify-content:space-between;align-items:center}
+.h-logo{font-size:20px;font-weight:700;color:#fff}
+.h-teal{font-size:10px;color:#1BA8B8;margin-top:2px}
+.h-right{text-align:left}
+.h-client{font-size:12px;font-weight:700;color:#fff}
+.h-date{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
+.score-sec{padding:14px 20px;display:flex;gap:12px;border-bottom:2px solid #E4E8EF}
+.score-box{border-radius:8px;width:85px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px;background:${d.col}}
+.score-n{font-size:34px;font-weight:700;color:#fff;line-height:1}
+.score-100{font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px}
+.score-l{font-size:10px;font-weight:700;color:#fff;margin-top:5px;text-align:center}
+.score-right{flex:1;background:#F5F7FA;border-radius:8px;padding:11px 13px}
+.sr-title{font-size:10px;font-weight:700;color:#1B2B5E;margin-bottom:5px}
+.sr-rec{font-size:11px;color:#555;line-height:1.7;margin-bottom:8px}
+.mini-g{display:flex;gap:6px;flex-wrap:wrap}
+.mini-i{background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:4px 8px;text-align:center}
+.mini-n{font-size:10px;font-weight:700}
+.mini-l{font-size:9px;color:#9AA0A6;margin-top:1px}
+.sec-hdr{background:#1B2B5E;padding:9px 20px}
+.sec-hdr span{color:#F5C518;font-weight:700;font-size:11px}
+.data-row{display:flex;justify-content:space-between;padding:8px 20px;border-bottom:1px solid #E4E8EF;font-size:11px}
+.data-row .l{color:#6C757D}
+.data-row .v{font-weight:700;color:#1B2B5E}
+.crit-sec{padding:12px 20px}
+.crit-item{margin-bottom:10px}
+.crit-top{display:flex;justify-content:space-between;margin-bottom:3px}
+.crit-name{font-size:11px;font-weight:600;color:#1B2B5E}
+.crit-score{font-size:11px;font-weight:700}
+.crit-bar{background:#E4E8EF;border-radius:3px;height:7px}
+.crit-fill{border-radius:3px;height:7px}
+.comp-item{display:flex;gap:10px;align-items:flex-start;background:#F5F7FA;border-radius:7px;padding:9px 12px;margin-bottom:7px}
+.comp-rank{font-size:16px;font-weight:700;color:#1BA8B8;min-width:22px;flex-shrink:0}
+.comp-name{font-size:11px;font-weight:700;color:#1B2B5E}
+.comp-meta{font-size:10px;color:#9AA0A6}
+.comp-rating{font-size:11px;font-weight:700;color:#F5C518;flex-shrink:0}
+.opp-item{background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:8px}
+.opp-n{font-size:16px;font-weight:700;color:#F5C518}
+.opp-t{font-size:11px;font-weight:700;color:#1B2B5E;margin-bottom:2px}
+.opp-d{font-size:10px;color:#555;line-height:1.6}
+.rec-sec{flex:1;padding:14px 20px}
+.rec-box{border-radius:8px;padding:16px;text-align:center;margin-bottom:14px}
+.footer{background:#1B2B5E;padding:9px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.f-logo{font-size:12px;font-weight:700;color:#F5C518;letter-spacing:1px;direction:ltr;display:inline-block}
+.f-mid{font-size:9px;color:rgba(255,255,255,0.4)}
+.f-url{font-size:9px;color:rgba(255,255,255,0.4);direction:ltr;display:inline-block}
+@media print{@page{size:A4;margin:0}body,html{width:210mm;height:297mm}}
+</style></head><body><div class="page">
+<div class="gold-bar"><span>MAWATH · مَوْقِع | mawath.com | تقرير تحليل الجدوى التجارية</span></div>
+<div class="header">
+  <div><div class="h-logo">مَوْقِع</div><div class="h-teal">تقرير تحليل الجدوى التجارية</div></div>
+  <div class="h-right"><div class="h-client">${d.client} — ${d.type} — ${d.hood}</div><div class="h-date">${d.date} | الرياض</div></div>
+</div>
+<div class="score-sec">
+  <div class="score-box"><div class="score-n">${d.T}</div><div class="score-100">/ 100</div><div class="score-l">${d.lbl}</div></div>
+  <div class="score-right">
+    <div class="sr-title">ملخص الجدوى</div>
+    <div class="sr-rec">${d.rec}</div>
+    <div class="mini-g">
+      <div class="mini-i"><div class="mini-n" style="color:${d.col}">${d.d.total.toLocaleString('ar')}</div><div class="mini-l">السكان</div></div>
+      <div class="mini-i"><div class="mini-n" style="color:${d.sc.s2>=20?'#22C55E':'#F97316'}">${d.d.pct_saudi}٪</div><div class="mini-l">% سعودي</div></div>
+      <div class="mini-i"><div class="mini-n" style="color:#6C757D">${d.compCount||'؟'}</div><div class="mini-l">منافسين</div></div>
+      <div class="mini-i"><div class="mini-n" style="color:#F5C518">${d.avgRating||'—'}</div><div class="mini-l">متوسط تقييم</div></div>
+    </div>
+  </div>
+</div>
+<div class="sec-hdr"><span>📊 بيانات السكان — تعداد 2022</span></div>
+${[['إجمالي السكان',d.d.total.toLocaleString('ar')+' نسمة'],['السعوديون',d.d.saudi.toLocaleString('ar')+' ('+d.d.pct_saudi+'٪)'],
+  ['غير السعوديين',d.d.non_saudi.toLocaleString('ar')],['الشباب 15-34',d.d.youth.toLocaleString('ar')],
+  ['البالغين 35-59',d.d.adults.toLocaleString('ar')],['المساكن الكلية',d.d.housing_total.toLocaleString('ar')],
+  ['ملكية',d.d.owned.toLocaleString('ar')],['إيجار',d.d.rented.toLocaleString('ar')]].map(([l,v],i)=>`
+<div class="data-row" style="background:${i%2?'#F5F7FA':'#fff'}"><span class="l">${l}</span><span class="v">${v}</span></div>`).join('')}
+<div class="sec-hdr"><span>🎯 درجة الجدوى</span></div>
+<div class="crit-sec">
+${[['الكثافة السكانية',d.sc.s1,25,'#1BA8B8'],['القوة الشرائية',d.sc.s2,25,'#F5C518'],
+  ['الشريحة العمرية',d.sc.s3,25,'#22C55E'],['استقرار السكان',d.sc.s4,25,'#F97316']].map(([n,s,m,c])=>`
+<div class="crit-item">
+  <div class="crit-top"><span class="crit-name">${n}</span><span class="crit-score" style="color:${c}">${s}/${m}</span></div>
+  <div class="crit-bar"><div class="crit-fill" style="width:${Math.round(s/m*100)}%;background:${c}"></div></div>
+</div>`).join('')}
+</div>
+<div class="sec-hdr"><span>🏪 المنافسون (${d.compCount} منشأة — متوسط ${d.avgRating}⭐)</span></div>
+<div style="padding:12px 20px">
+${_competitors.map((c,i)=>`<div class="comp-item">
+  <div class="comp-rank">${i+1}</div>
+  <div style="flex:1"><div class="comp-name">${c.name}</div><div class="comp-meta">${c.address}</div></div>
+  <div class="comp-rating">${c.rating?c.rating+'⭐':''} <span style="font-size:9px;color:#9AA0A6">(${(c.reviews||0).toLocaleString('ar')})</span></div>
+</div>`).join('')||'<div style="font-size:11px;color:#9AA0A6">لم يتم جلب بيانات المنافسين</div>'}
+</div>
+<div class="rec-sec">
+${d.opps.length?`<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:700;color:#6C757D;margin-bottom:8px">💡 نقاط تحتاج انتباه</div>
+${d.opps.map((o,i)=>`<div class="opp-item"><div style="display:flex;gap:8px"><div class="opp-n">0${i+1}</div><div><div class="opp-t">${o.t}</div><div class="opp-d">${o.d}</div></div></div></div>`).join('')}</div>`:''}
+<div class="rec-box" style="background:${d.T>=70?'#D1FAE5':d.T>=40?'#FEF3C7':'#FEE2E2'}">
+  <div style="font-size:22px;margin-bottom:6px">${d.T>=70?'✅':d.T>=40?'⚠️':'❌'}</div>
+  <div style="font-size:14px;font-weight:700;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};margin-bottom:4px">${d.rec}</div>
+  <div style="font-size:11px;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};opacity:0.8;line-height:1.7">
+  ${d.T>=70?`حي ${d.hood} مناسب لفتح ${d.type}`:d.T>=40?'ادرس المنافسين وحدد ميزتك التنافسية قبل القرار':'ننصح بالبحث عن موقع بديل'}
+  </div>
+  ${d.notes?`<div style="margin-top:10px;font-size:10px;color:#555;border-top:1px solid rgba(0,0,0,0.1);padding-top:8px;text-align:right"><b>ملاحظات المحلل:</b> ${d.notes}</div>`:''}
+</div>
+</div>
+<div class="footer">
+  <span class="f-logo">MAWATH · مَوْقِع</span>
+  <span class="f-mid">تقرير سري — للاستخدام الداخلي فقط</span>
+  <span class="f-url">mawath.com</span>
+</div>
+</div>
+<script>window.onload=function(){window.print();}<\/script>
+</body></html>`);
+  w.document.close();
+}
+
+// ══ COPY WA ══
+function copyWA(){
+  if(!_reportData)return;
+  const d=_reportData;
+  const txt=`📍 تقرير جدوى الموقع — مَوْقِع / MAWATH
+━━━━━━━━━━━━━━━━
+👤 العميل: ${d.client}
+🏪 النشاط: ${d.type}
+📍 الحي: ${d.hood}
+📅 التاريخ: ${d.date}
+
+🎯 درجة الجدوى: ${d.T}/100
+${d.lbl}
+
+📊 بيانات الحي (تعداد 2022):
+• إجمالي السكان: ${d.d.total.toLocaleString('ar')} نسمة
+• نسبة السعوديين: ${d.d.pct_saudi}٪
+• الشباب 15-34: ${d.d.youth.toLocaleString('ar')} نسمة
+• المساكن: ${d.d.housing_total.toLocaleString('ar')} مسكن
+
+🏪 المنافسون: ${d.compCount||'لم يجلب'} منشأة | متوسط التقييم: ${d.avgRating||'—'}⭐
+
+${d.opps.length?'⚠️ نقاط تحتاج انتباه:\n'+d.opps.map((o,i)=>`${i+1}. ${o.t}`).join('\n'):'✅ لا توجد مخاطر رئيسية'}
+
+📋 التوصية: ${d.T>=70?'✅':'⚠️'} ${d.rec}
+━━━━━━━━━━━━━━━━
+MAWATH · مَوْقِع | mawath.com`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    event.target.textContent='✅ تم النسخ!';
+    setTimeout(()=>event.target.textContent='📋 نسخ للواتساب',2000);
+  });
+}
+</script>
+</body>
+</html>
