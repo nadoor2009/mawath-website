@@ -144,66 +144,68 @@ nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-c
           <select id="biz_type">
             <option value="">اختر نوع النشاط...</option>
             <optgroup label="🍽️ مطاعم وكافيهات">
-              <option value="مطعم">مطعم</option>
-              <option value="كافيه">كافيه / قهوة</option>
-              <option value="مطعم شاورما">شاورما وسندوتشات</option>
-              <option value="مطعم برجر">برجر</option>
-              <option value="مطعم مأكولات بحرية">مأكولات بحرية</option>
-              <option value="مخبز">مخبز وحلويات</option>
-              <option value="عصير">محل عصائر</option>
-              <option value="مطعم مشويات">مشويات</option>
+              <option value="مطعم" data-t="youth_adults">مطعم</option>
+              <option value="كافيه" data-t="youth_adults">كافيه / قهوة</option>
+              <option value="مطعم شاورما" data-t="youth_adults">شاورما وسندوتشات</option>
+              <option value="مطعم برجر" data-t="youth_adults">برجر</option>
+              <option value="مطعم مأكولات بحرية" data-t="all">مأكولات بحرية</option>
+              <option value="مخبز" data-t="all">مخبز وحلويات</option>
+              <option value="عصير" data-t="youth_adults">محل عصائر</option>
+              <option value="مطعم مشويات" data-t="all">مشويات</option>
             </optgroup>
             <optgroup label="🛒 تجزئة وسوبرماركت">
-              <option value="بقالة">بقالة</option>
-              <option value="سوبرماركت">سوبرماركت</option>
-              <option value="محل ملابس">محل ملابس</option>
-              <option value="محل اكسسوارات">اكسسوارات وإكسسوارات</option>
-              <option value="محل عطور">عطور</option>
-              <option value="محل الكترونيات">إلكترونيات</option>
-              <option value="محل ألعاب أطفال">ألعاب أطفال</option>
-              <option value="محل هدايا">هدايا وتذكارات</option>
+              <option value="بقالة" data-t="all">بقالة</option>
+              <option value="سوبرماركت" data-t="all">سوبرماركت</option>
+              <option value="محل ملابس" data-t="youth_adults">محل ملابس</option>
+              <option value="محل اكسسوارات" data-t="youth_adults">اكسسوارات</option>
+              <option value="محل عطور" data-t="youth_adults">عطور</option>
+              <option value="محل الكترونيات" data-t="youth_adults">إلكترونيات</option>
+              <option value="محل ألعاب أطفال" data-t="children">ألعاب أطفال</option>
+              <option value="محل هدايا" data-t="all">هدايا وتذكارات</option>
             </optgroup>
             <optgroup label="💇 صالونات وتجميل">
-              <option value="صالون رجالي">صالون رجالي / حلاقة</option>
-              <option value="صالون نسائي">صالون نسائي</option>
-              <option value="مركز تجميل">مركز تجميل</option>
-              <option value="صالون أطفال">صالون أطفال</option>
-              <option value="مساج وسبا">مساج وسبا</option>
+              <option value="صالون رجالي" data-t="youth_adults">صالون رجالي / حلاقة</option>
+              <option value="صالون نسائي" data-t="youth_adults">صالون نسائي</option>
+              <option value="مركز تجميل" data-t="youth_adults">مركز تجميل</option>
+              <option value="صالون أطفال" data-t="children">صالون أطفال</option>
+              <option value="مساج وسبا" data-t="adults">مساج وسبا</option>
             </optgroup>
             <optgroup label="🏥 صحة وطب">
-              <option value="عيادة عامة">عيادة طب عام</option>
-              <option value="عيادة أسنان">عيادة أسنان</option>
-              <option value="صيدلية">صيدلية</option>
-              <option value="عيادة نساء وولادة">نساء وولادة</option>
-              <option value="عيادة أطفال">طب أطفال</option>
-              <option value="مركز علاج طبيعي">علاج طبيعي</option>
-              <option value="مركز بصريات">بصريات</option>
+              <option value="عيادة عامة" data-t="all">عيادة طب عام</option>
+              <option value="عيادة أسنان" data-t="all">عيادة أسنان</option>
+              <option value="صيدلية" data-t="all">صيدلية</option>
+              <option value="عيادة نساء وولادة" data-t="youth_adults">نساء وولادة</option>
+              <option value="عيادة أطفال" data-t="children">طب أطفال</option>
+              <option value="مركز علاج طبيعي" data-t="adults_seniors">علاج طبيعي</option>
+              <option value="مركز بصريات" data-t="all">بصريات</option>
+              <option value="دار رعاية مسنين" data-t="seniors">دار رعاية مسنين</option>
             </optgroup>
             <optgroup label="🚗 سيارات">
-              <option value="غسيل سيارات">غسيل سيارات</option>
-              <option value="ورشة سيارات">ورشة وصيانة</option>
-              <option value="بنشر وتغيير زيت">بنشر وتغيير زيت</option>
-              <option value="محل قطع غيار">قطع غيار</option>
-              <option value="تلميع سيارات">تلميع وتغليف</option>
+              <option value="غسيل سيارات" data-t="youth_adults">غسيل سيارات</option>
+              <option value="ورشة سيارات" data-t="youth_adults">ورشة وصيانة</option>
+              <option value="بنشر وتغيير زيت" data-t="youth_adults">بنشر وتغيير زيت</option>
+              <option value="محل قطع غيار" data-t="youth_adults">قطع غيار</option>
+              <option value="تلميع سيارات" data-t="youth_adults">تلميع وتغليف</option>
             </optgroup>
             <optgroup label="🏋️ رياضة ولياقة">
-              <option value="نادي رياضي">نادي رياضي / جيم</option>
-              <option value="ملعب كرة قدم">ملعب كرة قدم</option>
-              <option value="مركز يوغا وبيلاتس">يوغا وبيلاتس</option>
+              <option value="نادي رياضي" data-t="youth">نادي رياضي / جيم</option>
+              <option value="ملعب كرة قدم" data-t="youth">ملعب كرة قدم</option>
+              <option value="مركز يوغا وبيلاتس" data-t="youth_adults">يوغا وبيلاتس</option>
             </optgroup>
             <optgroup label="📚 تعليم وتدريب">
-              <option value="مركز تحفيظ قرآن">مركز تحفيظ قرآن</option>
-              <option value="مركز تعليمي">مركز تعليمي / تدريب</option>
-              <option value="روضة أطفال">روضة وتمهيدي</option>
-              <option value="مركز لغات">مركز لغات</option>
+              <option value="مركز تحفيظ قرآن" data-t="children">مركز تحفيظ قرآن</option>
+              <option value="مركز تعليمي" data-t="youth_adults">مركز تعليمي / تدريب</option>
+              <option value="روضة أطفال" data-t="children">روضة وتمهيدي</option>
+              <option value="مركز لغات" data-t="youth_adults">مركز لغات</option>
+              <option value="مدرسة خاصة" data-t="children">مدرسة خاصة</option>
             </optgroup>
             <optgroup label="🔧 خدمات">
-              <option value="مغسلة ملابس">مغسلة ملابس</option>
-              <option value="محل تصوير ومطبوعات">تصوير ومطبوعات</option>
-              <option value="محل اتصالات">اتصالات وجوالات</option>
-              <option value="محل كمبيوتر">كمبيوتر وصيانة</option>
-              <option value="خياطة وتفصيل">خياطة وتفصيل</option>
-              <option value="خدمات عامة">خدمات عامة</option>
+              <option value="مغسلة ملابس" data-t="all">مغسلة ملابس</option>
+              <option value="محل تصوير ومطبوعات" data-t="youth_adults">تصوير ومطبوعات</option>
+              <option value="محل اتصالات" data-t="youth_adults">اتصالات وجوالات</option>
+              <option value="محل كمبيوتر" data-t="youth_adults">كمبيوتر وصيانة</option>
+              <option value="خياطة وتفصيل" data-t="youth_adults">خياطة وتفصيل</option>
+              <option value="خدمات عامة" data-t="all">خدمات عامة</option>
             </optgroup>
           </select>
         </div>
@@ -2656,20 +2658,43 @@ function renderCompPreview(){
   document.getElementById('comp_preview').style.display='block';
 }
 
+// ══ TARGET SEGMENT MAP ══
+const TARGET_MAP = {
+  'all':           {label:'جميع السكان',       fn: d => d.total},
+  'youth':         {label:'الشباب 15-34',      fn: d => d.youth},
+  'youth_adults':  {label:'الشباب والبالغين 15-59', fn: d => d.youth+d.adults},
+  'adults':        {label:'البالغين 35-59',    fn: d => d.adults},
+  'adults_seniors':{label:'البالغين وكبار السن 35+', fn: d => d.adults+d.seniors},
+  'children':      {label:'الأطفال 0-14',      fn: d => d.children},
+  'seniors':       {label:'كبار السن 60+',     fn: d => d.seniors},
+};
+
+function getTarget(){
+  const sel = document.getElementById('biz_type');
+  const opt = sel.options[sel.selectedIndex];
+  return opt ? (opt.getAttribute('data-t') || 'all') : 'all';
+}
+
 // ══ CALCULATE SCORE ══
-function calcScore(d){
-  // ١. الكثافة (25)
+function calcScore(d, targetKey){
+  const tgt = TARGET_MAP[targetKey] || TARGET_MAP['all'];
+  const targetPop = tgt.fn(d);
+
+  // ١. الكثافة السكانية الكلية (25) — حجم الحي
   const s1=d.total>=200000?25:d.total>=100000?20:d.total>=50000?14:d.total>=20000?8:3;
-  // ٢. القوة الشرائية (25)
-  const pct=d.pct_saudi/100;
-  const s2=pct>=0.75?25:pct>=0.6?20:pct>=0.45?14:pct>=0.3?8:4;
-  // ٣. الشريحة العمرية (25)
-  const activeRatio=(d.youth+d.adults)/d.total;
-  const s3=activeRatio>=0.6?25:activeRatio>=0.45?18:activeRatio>=0.3?12:6;
-  // ٤. استقرار السكان (25)
+
+  // ٢. حجم الشريحة المستهدفة (25) — الأهم
+  const targetRatio = targetPop/d.total;
+  const s2 = targetPop>=50000?25:targetPop>=20000?20:targetPop>=10000?14:targetPop>=5000?8:3;
+
+  // ٣. نشاط السوق — نسبة الشريحة من السكان (25)
+  const s3 = targetRatio>=0.6?25:targetRatio>=0.45?18:targetRatio>=0.3?12:targetRatio>=0.15?7:3;
+
+  // ٤. استقرار السكان — ملكية المساكن (25)
   const ownRatio=d.housing_total>0?d.owned/d.housing_total:0;
   const s4=ownRatio>=0.6?25:ownRatio>=0.45?18:ownRatio>=0.3?12:6;
-  return {s1,s2,s3,s4,total:s1+s2+s3+s4};
+
+  return {s1,s2,s3,s4,total:s1+s2+s3+s4,targetPop,targetRatio,targetLabel:tgt.label};
 }
 
 // ══ GENERATE REPORT ══
@@ -2684,11 +2709,14 @@ function generateReport(){
   const d=HOODS_DATA[hood];
   if(!d){alert('الحي غير موجود في قاعدة البيانات');return;}
 
-  const sc=calcScore(d);
+  const target=getTarget();
+  const sc=calcScore(d,target);
   const T=sc.total;
   const col=T>=85?'#22C55E':T>=70?'#1BA8B8':T>=55?'#F97316':'#EF4444';
   const lbl=T>=85?'ممتاز ★★★★★':T>=70?'جيد جداً ★★★★':T>=55?'جيد ★★★':T>=40?'متوسط ★★':'ضعيف ★';
   const rec=T>=85?'موقع استثنائي — افتح بثقة':T>=70?'موقع واعد — يستحق الاستثمار':T>=55?'موقع مقبول — ادرس المنافسين أولاً':T>=40?'يحتاج دراسة أعمق — قارن بأحياء بديلة':'غير موصى به — اختر موقعاً آخر';
+  const targetLabel=sc.targetLabel;
+  const targetCount=sc.targetCount;
 
   // تحليل المنافسة
   const compCount=_competitors.length;
@@ -2706,8 +2734,8 @@ function generateReport(){
   if(sc.s1<14) opps.push({t:'كثافة سكانية منخفضة',d:`الحي يضم ${d.total.toLocaleString('ar')} نسمة فقط — يحتاج ${type} حركة أعلى. ننصح بالتسويق الرقمي لاستقطاب عملاء من الأحياء المجاورة.`});
   else if(sc.s1<20) opps.push({t:'كثافة سكانية متوسطة',d:`${d.total.toLocaleString('ar')} نسمة — كافية لـ ${type} لكن ليست مثالية. احرص على موقع على الشارع الرئيسي لزيادة الظهور.`});
 
-  if(sc.s2<14) opps.push({t:'قوة شرائية محدودة',d:`${d.pct_saudi}٪ فقط سعوديون في الحي — القوة الشرائية أقل من المثالي لـ ${type}. فكر في تسعير يناسب شريحة أوسع أو استهداف أحياء ذات نسبة أعلى.`});
-  else if(sc.s2<20) opps.push({t:'قوة شرائية متوسطة',d:`${d.pct_saudi}٪ سعوديون — مقبولة لـ ${type} لكن تحتاج تسعيراً مرناً.`});
+  if(sc.s2<8) opps.push({t:'الشريحة المستهدفة صغيرة',d:`${targetLabel} في الحي ${targetCount.toLocaleString('ar')} فقط — حجم صغير لـ ${type}. فكر في أحياء ذات كثافة أعلى للشريحة نفسها.`});
+  else if(sc.s2<14) opps.push({t:'الشريحة المستهدفة متوسطة',d:`${targetLabel}: ${targetCount.toLocaleString('ar')} شخص — مقبول لـ ${type} لكن يحتاج تسويقاً نشطاً للوصول لأكبر عدد منهم.`});
 
   if(sc.s4<14) opps.push({t:'استقرار سكاني ضعيف',d:`${ownPct2}٪ ملكية فقط — دوران العملاء مرتفع. لـ ${type} هذا يعني ضعف الولاء. ركز على برامج عروض وعضويات لتثبيت قاعدة العملاء.`});
   else if(sc.s4<20) opps.push({t:'استقرار سكاني متوسط',d:`${ownPct2}٪ من المساكن مملوكة — الحي يمزج بين ساكنين مستقرين ومستأجرين، مما يوفر تنوعاً في قاعدة العملاء.`});
@@ -2716,7 +2744,7 @@ function generateReport(){
   else if(compCount>=5) opps.push({t:'منافسة متوسطة',d:`${compCount} من نتائج قوقل بمتوسط ${avgRating}⭐ — المنافسة إيجابية وتدل على وجود طلب. ركز على ما يميزك.`});
   else if(compCount<=2) opps.push({t:'فرصة سوقية',d:`${compCount} فقط في نتائج قوقل — فرصة ممتازة لـ ${type}. الطلب موجود والعرض محدود.`});
 
-  _reportData={hood,type,client,notes,T,lbl,rec,col,sc,d,compCount,avgRating,compAnalysis,opps,date:new Date().toLocaleDateString('ar-SA')};
+  _reportData={hood,type,client,notes,T,lbl,rec,col,sc,d,compCount,avgRating,compAnalysis,opps,targetLabel,targetCount,date:new Date().toLocaleDateString('ar-SA')};
 
   // ══ تحديث الواجهة ══
   document.getElementById('r_client').textContent=`${client} — ${type} — ${hood}`;
@@ -2728,22 +2756,23 @@ function generateReport(){
 
   document.getElementById('mini_grid').innerHTML=[
     ['السكان',d.total.toLocaleString('ar'),col],
-    ['% سعودي',d.pct_saudi+'٪',sc.s2>=20?'#22C55E':'#F97316'],
+    [targetLabel.split(' ')[0],targetCount.toLocaleString('ar'),sc.s2>=20?'#22C55E':'#F97316'],
     ['المساكن',d.housing_total.toLocaleString('ar'),col],
     ['في قوقل',compCount||'؟','#6C757D'],
   ].map(([l,v,c])=>`<div class="mini-item"><div class="mini-n" style="color:${c}">${v}</div><div class="mini-l">${l}</div></div>`).join('');
 
   // بيانات السكان
+  const ownPctDisp = d.housing_total>0?Math.round(d.owned/d.housing_total*100):0;
   document.getElementById('pop_rows').innerHTML=[
     ['إجمالي السكان',d.total.toLocaleString('ar')+' نسمة'],
-    ['السعوديون',d.saudi.toLocaleString('ar')+` نسمة (${d.pct_saudi}٪)`],
-    ['غير السعوديين',d.non_saudi.toLocaleString('ar')+` نسمة (${100-d.pct_saudi}٪)`],
+    ['🎯 '+targetLabel+' (المستهدفون)',targetCount.toLocaleString('ar')+' نسمة ('+Math.round(sc.targetRatio*100)+'٪ من الحي)'],
+    ['الأطفال 0-14',d.children.toLocaleString('ar')+' نسمة'],
     ['الشباب 15-34',d.youth.toLocaleString('ar')+' نسمة'],
     ['البالغين 35-59',d.adults.toLocaleString('ar')+' نسمة'],
-    ['الأطفال 0-14',d.children.toLocaleString('ar')+' نسمة'],
+    ['كبار السن 60+',d.seniors.toLocaleString('ar')+' نسمة'],
     ['إجمالي المساكن',d.housing_total.toLocaleString('ar')+' مسكن'],
-    ['مساكن مملوكة',d.owned.toLocaleString('ar')+` (${d.housing_total>0?Math.round(d.owned/d.housing_total*100):0}٪)`],
-    ['مساكن مستأجرة',d.rented.toLocaleString('ar')],
+    ['ملكية',d.owned.toLocaleString('ar')+' ('+ownPctDisp+'٪)'],
+    ['إيجار',d.rented.toLocaleString('ar')],
   ].map(([l,v],i)=>`
     <div class="data-row" style="background:${i%2===0?'#fff':'var(--gl)'}">
       <span class="lbl">${l}</span>
@@ -2752,9 +2781,9 @@ function generateReport(){
 
   // المعايير
   document.getElementById('crit_wrap').innerHTML=[
-    ['الكثافة السكانية',sc.s1,25,'#1BA8B8'],
-    ['القوة الشرائية — نسبة السعوديين',sc.s2,25,'#F5C518'],
-    ['الشريحة العمرية — شباب وبالغين',sc.s3,25,'#22C55E'],
+    ['الكثافة السكانية الكلية',sc.s1,25,'#1BA8B8'],
+    ['حجم الشريحة المستهدفة — '+targetLabel,sc.s2,25,'#F5C518'],
+    ['تركّز الشريحة المستهدفة في الحي',sc.s3,25,'#22C55E'],
     ['استقرار السكان — ملكية المساكن',sc.s4,25,'#F97316'],
   ].map(([n,s,m,c])=>`
     <div class="crit-item">
@@ -2828,9 +2857,9 @@ function printReport(){
   if(!_reportData){return;}
   const d=_reportData;
   let recDetail='';
-  if(d.T>=70) recDetail='حي '+d.hood+' مناسب لفتح '+d.type+' — السكان '+d.d.total.toLocaleString('ar')+' نسمة، '+d.d.pct_saudi+'٪ سعوديون، '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐';
-  else if(d.T>=40) recDetail='حي '+d.hood+' يحتاج دراسة أعمق — نسبة السعوديين '+d.d.pct_saudi+'٪ والمنافسة '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐. ادرس المنافسين وحدد ميزتك التنافسية قبل القرار';
-  else recDetail='حي '+d.hood+' لا يُنصح به لـ '+d.type+' حالياً — '+d.d.pct_saudi+'٪ سعوديون و'+d.compCount+' منافسين. ننصح بأحياء بديلة ذات كثافة وقوة شرائية أعلى';
+  if(d.T>=70) recDetail='حي '+d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' شخص، السكان الكلي: '+d.d.total.toLocaleString('ar')+' نسمة، '+d.compCount+' منافسين في قوقل بمتوسط '+d.avgRating+'⭐';
+  else if(d.T>=40) recDetail='حي '+d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' شخص ('+Math.round(d.sc.targetRatio*100)+'٪) والمنافسة '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐';
+  else recDetail='حي '+d.hood+' لا يُنصح به لـ '+d.type+' حالياً — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' فقط ('+Math.round(d.sc.targetRatio*100)+'٪). ننصح بأحياء بديلة ذات شريحة مستهدفة أكبر';
 
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
@@ -2900,22 +2929,24 @@ body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;background:#fff;directi
     <div class="sr-rec">${d.rec}</div>
     <div class="mini-g">
       <div class="mini-i"><div class="mini-n" style="color:${d.col}">${d.d.total.toLocaleString('ar')}</div><div class="mini-l">السكان</div></div>
-      <div class="mini-i"><div class="mini-n" style="color:${d.sc.s2>=20?'#22C55E':'#F97316'}">${d.d.pct_saudi}٪</div><div class="mini-l">% سعودي</div></div>
+      <div class="mini-i"><div class="mini-n" style="color:${d.sc.s2>=20?'#22C55E':'#F97316'}">${d.targetCount.toLocaleString('ar')}</div><div class="mini-l">${d.targetLabel.split(' ')[0]}</div></div>
       <div class="mini-i"><div class="mini-n" style="color:#6C757D">${d.compCount||'؟'}</div><div class="mini-l">في قوقل</div></div>
       <div class="mini-i"><div class="mini-n" style="color:#F5C518">${d.avgRating||'—'}</div><div class="mini-l">متوسط تقييم</div></div>
     </div>
   </div>
 </div>
 <div class="sec-hdr"><span>📊 بيانات السكان — تعداد 2022</span></div>
-${[['إجمالي السكان',d.d.total.toLocaleString('ar')+' نسمة'],['السعوديون',d.d.saudi.toLocaleString('ar')+' ('+d.d.pct_saudi+'٪)'],
-  ['غير السعوديين',d.d.non_saudi.toLocaleString('ar')],['الشباب 15-34',d.d.youth.toLocaleString('ar')],
-  ['البالغين 35-59',d.d.adults.toLocaleString('ar')],['المساكن الكلية',d.d.housing_total.toLocaleString('ar')],
+${[['إجمالي السكان',d.d.total.toLocaleString('ar')+' نسمة'],
+  ['🎯 '+d.targetLabel+' (المستهدفون)',d.targetCount.toLocaleString('ar')+' ('+Math.round(d.sc.targetRatio*100)+'٪)'],
+  ['الأطفال 0-14',d.d.children.toLocaleString('ar')],['الشباب 15-34',d.d.youth.toLocaleString('ar')],
+  ['البالغين 35-59',d.d.adults.toLocaleString('ar')],['كبار السن 60+',d.d.seniors.toLocaleString('ar')],
+  ['المساكن الكلية',d.d.housing_total.toLocaleString('ar')],
   ['ملكية',d.d.owned.toLocaleString('ar')],['إيجار',d.d.rented.toLocaleString('ar')]].map(([l,v],i)=>`
 <div class="data-row" style="background:${i%2?'#F5F7FA':'#fff'}"><span class="l">${l}</span><span class="v">${v}</span></div>`).join('')}
 <div class="sec-hdr"><span>🎯 درجة الجدوى</span></div>
 <div class="crit-sec">
-${[['الكثافة السكانية',d.sc.s1,25,'#1BA8B8'],['القوة الشرائية',d.sc.s2,25,'#F5C518'],
-  ['الشريحة العمرية',d.sc.s3,25,'#22C55E'],['استقرار السكان',d.sc.s4,25,'#F97316']].map(([n,s,m,c])=>`
+${[['الكثافة السكانية الكلية',d.sc.s1,25,'#1BA8B8'],['حجم الشريحة المستهدفة',d.sc.s2,25,'#F5C518'],
+  ['تركّز الشريحة في الحي',d.sc.s3,25,'#22C55E'],['استقرار السكان',d.sc.s4,25,'#F97316']].map(([n,s,m,c])=>`
 <div class="crit-item">
   <div class="crit-top"><span class="crit-name">${n}</span><span class="crit-score" style="color:${c}">${s}/${m}</span></div>
   <div class="crit-bar"><div class="crit-fill" style="width:${Math.round(s/m*100)}%;background:${c}"></div></div>
