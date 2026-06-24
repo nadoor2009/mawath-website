@@ -2649,17 +2649,17 @@ function generateReport(){
 
   // فرص التحسين
   const opps=[];
-  const ownPct2 = d.totalHousing>0?Math.round(d.owned/d.totalHousing*100):0;
+  const ownPct2 = d.housing_total>0?Math.round(d.owned/d.housing_total*100):0;
   const yaPct2  = Math.round((d.youth+d.adults)/d.total*100);
 
   if(sc.s1<14) opps.push({t:'كثافة سكانية منخفضة',d:`الحي يضم ${d.total.toLocaleString('ar')} نسمة فقط — يحتاج ${type} حركة أعلى. ننصح بالتسويق الرقمي لاستقطاب عملاء من الأحياء المجاورة.`});
   else if(sc.s1<20) opps.push({t:'كثافة سكانية متوسطة',d:`${d.total.toLocaleString('ar')} نسمة — كافية لـ ${type} لكن ليست مثالية. احرص على موقع على الشارع الرئيسي لزيادة الظهور.`});
 
-  if(sc.s2<14) opps.push({t:'قوة شرائية محدودة',d:`${d.pctSaudi}٪ فقط سعوديون في الحي — القوة الشرائية أقل من المثالي لـ ${type}. فكر في تسعير يناسب شريحة أوسع أو استهداف أحياء ذات نسبة أعلى.`});
-  else if(sc.s2<20) opps.push({t:'قوة شرائية متوسطة',d:`${d.pctSaudi}٪ سعوديون — مقبولة لـ ${type} لكن تحتاج تسعيراً مرناً.`});
+  if(sc.s2<14) opps.push({t:'قوة شرائية محدودة',d:`${d.pct_saudi}٪ فقط سعوديون في الحي — القوة الشرائية أقل من المثالي لـ ${type}. فكر في تسعير يناسب شريحة أوسع أو استهداف أحياء ذات نسبة أعلى.`});
+  else if(sc.s2<20) opps.push({t:'قوة شرائية متوسطة',d:`${d.pct_saudi}٪ سعوديون — مقبولة لـ ${type} لكن تحتاج تسعيراً مرناً.`});
 
-  if(sc.s4<14) opps.push({t:'استقرار سكاني ضعيف',d:`${100-ownPct2}٪ من المساكن بالإيجار — دوران عملاء مرتفع. لـ ${type} هذا يعني ضعف الولاء. ركز على برامج عروض وعضويات لتثبيت قاعدة العملاء.`});
-  else if(sc.s4<20) opps.push({t:'استقرار سكاني متوسط',d:`${ownPct2}٪ ملكية — مقبول. الحي يمزج بين ساكنين ومستأجرين، مما يوفر تنوعاً في قاعدة العملاء.`});
+  if(sc.s4<14) opps.push({t:'استقرار سكاني ضعيف',d:`${ownPct2}٪ ملكية فقط — دوران عملاء مرتفع — دوران عملاء مرتفع. لـ ${type} هذا يعني ضعف الولاء. ركز على برامج عروض وعضويات لتثبيت قاعدة العملاء.`});
+  else if(sc.s4<20) opps.push({t:'استقرار سكاني متوسط',d:`${ownPct2}٪ من المساكن مملوكة — الحي يمزج بين ساكنين مستقرين ومستأجرين، مما يوفر تنوعاً في قاعدة العملاء.`});
 
   if(compCount>=8) opps.push({t:'منافسة عالية',d:`${compCount} منافسين بمتوسط تقييم ${avgRating}⭐ — لتميّز ${type} تحتاج: جودة أعلى أو سعر أفضل أو تجربة مختلفة. حلل أضعف منافس (أقل تقييماً) وابنِ عليه.`});
   else if(compCount>=5) opps.push({t:'منافسة متوسطة',d:`${compCount} منافسين بمتوسط ${avgRating}⭐ — المنافسة إيجابية وتدل على وجود طلب. ركز على ما يميزك.`});
@@ -2880,7 +2880,7 @@ ${d.opps.map((o,i)=>`<div class="opp-item"><div style="display:flex;gap:8px"><di
   <div style="font-size:22px;margin-bottom:6px">${d.T>=70?'✅':d.T>=40?'⚠️':'❌'}</div>
   <div style="font-size:14px;font-weight:700;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};margin-bottom:4px">${d.rec}</div>
   <div style="font-size:11px;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};opacity:0.8;line-height:1.7">
-  ${d.T>=70?`حي ${d.hood} مناسب لفتح ${d.type} — السكان ${d.d.total.toLocaleString('ar')} نسمة، ${d.d.pctSaudi}٪ سعوديون، ${d.compCount} منافسين بمتوسط ${d.avgRating}⭐`:d.T>=40?`حي ${d.hood} يحتاج دراسة أعمق — نسبة السعوديين ${d.d.pctSaudi}٪ والمنافسة ${d.compCount} منافسين بمتوسط ${d.avgRating}⭐. ادرس المنافسين وحدد ميزتك التنافسية قبل القرار`:`حي ${d.hood} لا يُنصح به لـ ${d.type} حالياً — ${d.d.pctSaudi}٪ سعوديون و${d.compCount} منافسين. ننصح بأحياء بديلة ذات كثافة وقوة شرائية أعلى`}
+  ${d.T>=70?`حي ${d.hood} مناسب لفتح ${d.type} — السكان ${d.d.total.toLocaleString('ar')} نسمة، ${d.d.pct_saudi}٪ سعوديون، ${d.compCount} منافسين بمتوسط ${d.avgRating}⭐`:d.T>=40?`حي ${d.hood} يحتاج دراسة أعمق — نسبة السعوديين ${d.d.pct_saudi}٪ والمنافسة ${d.compCount} منافسين بمتوسط ${d.avgRating}⭐. ادرس المنافسين وحدد ميزتك التنافسية قبل القرار`:`حي ${d.hood} لا يُنصح به لـ ${d.type} حالياً — ${d.d.pct_saudi}٪ سعوديون و${d.compCount} منافسين. ننصح بأحياء بديلة ذات كثافة وقوة شرائية أعلى`}
   </div>
   ${d.notes?`<div style="margin-top:10px;font-size:10px;color:#555;border-top:1px solid rgba(0,0,0,0.1);padding-top:8px;text-align:right"><b>ملاحظات المحلل:</b> ${d.notes}</div>`:''}
 </div>
