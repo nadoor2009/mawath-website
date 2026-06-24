@@ -148,10 +148,10 @@ nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-c
               <option value="كافيه" data-t="youth_adults">كافيه / قهوة</option>
               <option value="مطعم شاورما" data-t="youth_adults">شاورما وسندوتشات</option>
               <option value="مطعم برجر" data-t="youth_adults">برجر</option>
-              <option value="مطعم مأكولات بحرية" data-t="all">مأكولات بحرية</option>
-              <option value="مخبز" data-t="all">مخبز وحلويات</option>
+              <option value="مطعم مأكولات بحرية" data-t="youth_adults">مأكولات بحرية</option>
+              <option value="مخبز" data-t="youth_adults">مخبز وحلويات</option>
               <option value="عصير" data-t="youth_adults">محل عصائر</option>
-              <option value="مطعم مشويات" data-t="all">مشويات</option>
+              <option value="مطعم مشويات" data-t="youth_adults">مشويات</option>
             </optgroup>
             <optgroup label="🛒 تجزئة وسوبرماركت">
               <option value="بقالة" data-t="all">بقالة</option>
@@ -161,7 +161,7 @@ nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-c
               <option value="محل عطور" data-t="youth_adults">عطور</option>
               <option value="محل الكترونيات" data-t="youth_adults">إلكترونيات</option>
               <option value="محل ألعاب أطفال" data-t="children">ألعاب أطفال</option>
-              <option value="محل هدايا" data-t="all">هدايا وتذكارات</option>
+              <option value="محل هدايا" data-t="youth_adults">هدايا وتذكارات</option>
             </optgroup>
             <optgroup label="💇 صالونات وتجميل">
               <option value="صالون رجالي" data-t="youth_adults">صالون رجالي / حلاقة</option>
@@ -200,7 +200,7 @@ nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-c
               <option value="مدرسة خاصة" data-t="children">مدرسة خاصة</option>
             </optgroup>
             <optgroup label="🔧 خدمات">
-              <option value="مغسلة ملابس" data-t="all">مغسلة ملابس</option>
+              <option value="مغسلة ملابس" data-t="youth_adults">مغسلة ملابس</option>
               <option value="محل تصوير ومطبوعات" data-t="youth_adults">تصوير ومطبوعات</option>
               <option value="محل اتصالات" data-t="youth_adults">اتصالات وجوالات</option>
               <option value="محل كمبيوتر" data-t="youth_adults">كمبيوتر وصيانة</option>
@@ -2858,9 +2858,9 @@ function printReport(){
   const d=_reportData;
 
   let recDetail='';
-  if(d.T>=70) recDetail='حي '+d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص ('+Math.round(d.sc.targetRatio*100)+'٪)، '+d.compCount+' منافسين في قوقل بمتوسط '+d.avgRating+'⭐';
-  else if(d.T>=40) recDetail='حي '+d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص ('+Math.round(d.sc.targetRatio*100)+'٪) والمنافسة '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐';
-  else recDetail='حي '+d.hood+' لا يُنصح به لـ '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' فقط ('+Math.round(d.sc.targetRatio*100)+'٪). ننصح بأحياء بديلة ذات شريحة مستهدفة أكبر';
+  if(d.T>=70) recDetail=d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص، السكان الكلي: '+String(d.d.total.toLocaleString('ar'))+' نسمة، '+String(d.compCount)+' منافسين بمتوسط '+String(d.avgRating)+'⭐';
+  else if(d.T>=40) recDetail=d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص ('+String(Math.round(d.sc.targetRatio*100))+'٪)، المنافسة: '+String(d.compCount)+' في قوقل بمتوسط '+String(d.avgRating)+'⭐';
+  else recDetail=d.hood+' لا يُنصح به لـ '+d.type+' — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص فقط ('+String(Math.round(d.sc.targetRatio*100))+'٪). ننصح بأحياء بديلة ذات شريحة أكبر';
 
   const recCol = d.T>=70?'#D1FAE5':d.T>=40?'#FEF3C7':'#FEE2E2';
   const recTextCol = d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B';
