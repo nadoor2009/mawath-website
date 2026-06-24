@@ -2565,7 +2565,7 @@ async function fetchCompetitors(){
   document.getElementById('fetch_txt').textContent='جاري البحث...';
   showFetchSt('يبحث عن المنافسين في '+hood+'...','load');
 
-  const q=encodeURIComponent(bizType+' حي '+hood+' الرياض');
+  const q=encodeURIComponent(type+' حي '+hood+' الرياض');
   const url='https://broken-art-c72a.throbbing-brook-70e9.workers.dev?q='+q;
   try{
     const ctrl=new AbortController();
