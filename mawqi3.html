@@ -2566,8 +2566,7 @@ async function fetchCompetitors(){
   showFetchSt('يبحث عن المنافسين في '+hood+'...','load');
 
   const q=encodeURIComponent(bizType+' حي '+hood+' الرياض');
-  const loc=encodeURIComponent('Riyadh,Saudi Arabia');
-  const url='https://broken-art-c72a.throbbing-brook-70e9.workers.dev?q='+q+'&location='+loc;
+  const url='https://broken-art-c72a.throbbing-brook-70e9.workers.dev?q='+q;
   try{
     const ctrl=new AbortController();
     const timer=setTimeout(()=>ctrl.abort(),15000);
