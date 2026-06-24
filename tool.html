@@ -265,7 +265,7 @@ async function fetchData(){
   document.getElementById('ftxt').textContent='جاري الجلب...';
   showSt('يبحث في خرائط قوقل...','load');
   const city=document.getElementById('city').value;
-  const url=`https://serpapi.com/search.json?engine=google_maps&q=${encodeURIComponent(name)}&location=${encodeURIComponent(city+',Saudi Arabia')}&hl=ar&gl=sa&api_key=${SERP}`;
+  const url=`https://broken-art-c72a.throbbing-brook-70e9.workers.dev/`;
   try{
     const r=await fetch(url);
     const d=await r.json();
