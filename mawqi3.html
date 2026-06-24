@@ -2716,7 +2716,7 @@ function generateReport(){
   const lbl=T>=85?'ممتاز ★★★★★':T>=70?'جيد جداً ★★★★':T>=55?'جيد ★★★':T>=40?'متوسط ★★':'ضعيف ★';
   const rec=T>=85?'موقع استثنائي — افتح بثقة':T>=70?'موقع واعد — يستحق الاستثمار':T>=55?'موقع مقبول — ادرس المنافسين أولاً':T>=40?'يحتاج دراسة أعمق — قارن بأحياء بديلة':'غير موصى به — اختر موقعاً آخر';
   const targetLabel=sc.targetLabel;
-  const targetCount=sc.targetCount;
+  const targetCount=sc.targetPop;
 
   // تحليل المنافسة
   const compCount=_competitors.length;
@@ -2857,9 +2857,9 @@ function printReport(){
   if(!_reportData){return;}
   const d=_reportData;
   let recDetail='';
-  if(d.T>=70) recDetail='حي '+d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' شخص، السكان الكلي: '+d.d.total.toLocaleString('ar')+' نسمة، '+d.compCount+' منافسين في قوقل بمتوسط '+d.avgRating+'⭐';
-  else if(d.T>=40) recDetail='حي '+d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' شخص ('+Math.round(d.sc.targetRatio*100)+'٪) والمنافسة '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐';
-  else recDetail='حي '+d.hood+' لا يُنصح به لـ '+d.type+' حالياً — '+d.sc.targetLabel+': '+d.sc.targetCount.toLocaleString('ar')+' فقط ('+Math.round(d.sc.targetRatio*100)+'٪). ننصح بأحياء بديلة ذات شريحة مستهدفة أكبر';
+  if(d.T>=70) recDetail='حي '+d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص، السكان الكلي: '+d.d.total.toLocaleString('ar')+' نسمة، '+d.compCount+' منافسين في قوقل بمتوسط '+d.avgRating+'⭐';
+  else if(d.T>=40) recDetail='حي '+d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص ('+Math.round(d.sc.targetRatio*100)+'٪) والمنافسة '+d.compCount+' من نتائج قوقل بمتوسط '+d.avgRating+'⭐';
+  else recDetail='حي '+d.hood+' لا يُنصح به لـ '+d.type+' حالياً — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' فقط ('+Math.round(d.sc.targetRatio*100)+'٪). ننصح بأحياء بديلة ذات شريحة مستهدفة أكبر';
 
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
