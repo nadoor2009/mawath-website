@@ -2935,7 +2935,7 @@ ${d.opps.map((o,i)=>`<div class="opp-item"><div style="display:flex;gap:8px"><di
 <div class="rec-box" style="background:${d.T>=70?'#D1FAE5':d.T>=40?'#FEF3C7':'#FEE2E2'}">
   <div style="font-size:22px;margin-bottom:6px">${d.T>=70?'✅':d.T>=40?'⚠️':'❌'}</div>
   <div style="font-size:14px;font-weight:700;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};margin-bottom:4px">${d.rec}</div>
-  <div style="font-size:11px;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};opacity:0.8;line-height:1.7">
+  <div style="font-size:11px;color:${d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B'};opacity:0.8;line-height:1.7;direction:rtl;text-align:right;unicode-bidi:plaintext">
   ${recDetail}
   </div>
   ${d.notes?`<div style="margin-top:10px;font-size:10px;color:#555;border-top:1px solid rgba(0,0,0,0.1);padding-top:8px;text-align:right"><b>ملاحظات المحلل:</b> ${d.notes}</div>`:''}
