@@ -2565,10 +2565,14 @@ async function fetchCompetitors(){
   document.getElementById('fetch_txt').textContent='جاري البحث...';
   showFetchSt('يبحث عن المنافسين في '+hood+'...','load');
 
-  const q=encodeURIComponent(type+' '+hood+' الرياض');
-  const url=`https://broken-art-c72a.throbbing-brook-70e9.workers.dev?q=${q}&location=${loc}`;
+  const q=encodeURIComponent(bizType+' حي '+hood+' الرياض');
+  const loc=encodeURIComponent('Riyadh,Saudi Arabia');
+  const url='https://broken-art-c72a.throbbing-brook-70e9.workers.dev?q='+q+'&location='+loc;
   try{
-    const r=await fetch(url);
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),15000);
+    const r=await fetch(url,{signal:ctrl.signal});
+    clearTimeout(timer);
     const data=await r.json();
     if(data.error)throw new Error(data.error);
     const places=(data.local_results||[]).slice(0,8);
