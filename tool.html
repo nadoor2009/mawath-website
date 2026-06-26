@@ -473,7 +473,7 @@ function buildReport(){
 
   // التوصيات
   const recs = [];
-    if(d.unclaimed) recs.push({t:'⚠️ الملف غير مطالب به',d:'الملف غير مُفعَّل باسمك — فعّله فوراً للتحكم في بياناته',type:'info-red'});
+  if(d.unclaimed) recs.push({t:'⚠️ الملف غير مطالب به',d:'الملف غير مُفعَّل باسمك — فعّله فوراً للتحكم في بياناته وتحسين ظهوره',type:'info-red'});
   if(!d.phone) recs.push({t:'أضف رقم الهاتف',d:'رقم الهاتف يزيد التواصل المباشر مع العملاء — أضفه فوراً',type:'info-red'});
   if(!d.website) recs.push({t:'أضف الموقع الإلكتروني',d:'الموقع يزيد مصداقية النشاط ويحسن الظهور في البحث',type:'info-gold'});
   if(!d.description) recs.push({t:'اكتب وصفاً للنشاط',d:'الوصف الجيد يحسن الظهور في نتائج البحث المحلي',type:'info-red'});
@@ -503,7 +503,7 @@ function printReport(){
   const css = '<style>'
     +'*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
     +'body{font-family:"IBM Plex Sans Arabic",Arial,sans-serif;direction:rtl;background:#fff}'
-    +'@media print{@page{size:A4;margin:0}thead{display:table-header-group}tfoot{display:table-footer-group}}'
+    +'@media print{@page{size:A4;margin:0}thead{display:table-header-group}tfoot{display:table-footer-group}.sec{page-break-inside:avoid}.pg{page-break-inside:avoid}}'
     +'table.pg{width:210mm;border-collapse:collapse}'
     +'td{padding:0;vertical-align:top}'
     +'.sec{background:#1B2B5E;padding:7px 18px}'
