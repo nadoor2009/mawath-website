@@ -2854,225 +2854,209 @@ function generateReport(){
 
 // ══ PRINT ══
 function printReport(){
-  if(!_reportData){return;}
-  const d=_reportData;
+  if(!_reportData) return;
+  const d = _reportData;
 
-  let recDetail='';
-  if(d.T>=70) recDetail=d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص، السكان الكلي: '+String(d.d.total.toLocaleString('ar'))+' نسمة، '+String(d.compCount)+' منافسين بمتوسط '+String(d.avgRating)+'⭐';
-  else if(d.T>=40) recDetail=d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص ('+String(Math.round(d.sc.targetRatio*100))+'٪)، المنافسة: '+String(d.compCount)+' في قوقل بمتوسط '+String(d.avgRating)+'⭐';
-  else recDetail=d.hood+' لا يُنصح به لـ '+d.type+' — '+d.sc.targetLabel+': '+String(d.sc.targetPop.toLocaleString('ar'))+' شخص فقط ('+String(Math.round(d.sc.targetRatio*100))+'٪). ننصح بأحياء بديلة ذات شريحة أكبر';
-
-  const recCol = d.T>=70?'#D1FAE5':d.T>=40?'#FEF3C7':'#FEE2E2';
-  const recTextCol = d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B';
-  const recIcon = d.T>=70?'✅':d.T>=40?'⚠️':'❌';
   const scoreCol = d.T>=85?'#22C55E':d.T>=70?'#1BA8B8':d.T>=55?'#F97316':'#EF4444';
+  const recCol   = d.T>=70?'#D1FAE5':d.T>=40?'#FEF3C7':'#FEE2E2';
+  const recText  = d.T>=70?'#065F46':d.T>=40?'#92400E':'#991B1B';
+  const recIcon  = d.T>=70?'✅':d.T>=40?'⚠️':'❌';
+  const ownPct   = d.d.housing_total>0 ? Math.round(d.d.owned/d.d.housing_total*100) : 0;
+  const tPct     = Math.round(d.sc.targetRatio*100);
 
-  // رسم دائرة النسبة كـ SVG
-  function donut(pct, color, size=60){
-    const r=22, cx=30, cy=30;
-    const circ=2*Math.PI*r;
-    const dash=circ*(pct/100);
-    return `<svg width="${size}" height="${size}" viewBox="0 0 60 60">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#E4E8EF" stroke-width="7"/>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="7"
-        stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ*0.25}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
-      <text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="10" font-weight="700" fill="${color}" font-family="Arial">${pct}٪</text>
-    </svg>`;
+  let rec2 = '';
+  if(d.T>=70) rec2 = d.hood+' مناسب لفتح '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص ('+tPct+'٪)، '+d.compCount+' منافسين بمتوسط '+d.avgRating+'⭐';
+  else if(d.T>=40) rec2 = d.hood+' يحتاج دراسة أعمق — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' شخص ('+tPct+'٪)، المنافسة: '+d.compCount+' في قوقل بمتوسط '+d.avgRating+'⭐';
+  else rec2 = d.hood+' لا يُنصح به لـ '+d.type+' — '+d.sc.targetLabel+': '+d.sc.targetPop.toLocaleString('ar')+' فقط ('+tPct+'٪)';
+
+  // بناء HTML المنافسين بـ string عادية
+  let compRows = '';
+  if(_competitors.length){
+    _competitors.forEach((comp,i)=>{
+      compRows += '<tr style="background:'+(i%2===0?'#F5F7FA':'#fff')+'">'
+        +'<td style="padding:7px 10px;font-weight:700;color:#1BA8B8;width:28px">'+(i+1)+'</td>'
+        +'<td style="padding:7px 10px;font-weight:700;color:#1B2B5E">'+(comp.name||'')+'</td>'
+        +'<td style="padding:7px 10px;color:#9AA0A6;font-size:10px">'+(comp.address||'')+'</td>'
+        +'<td style="padding:7px 10px;font-weight:700;color:#F5C518;text-align:center;white-space:nowrap">'+(comp.rating?comp.rating+'⭐':'-')+'</td>'
+        +'<td style="padding:7px 10px;color:#9AA0A6;text-align:center;font-size:10px">('+(comp.reviews||0).toLocaleString('ar')+')</td>'
+        +'</tr>';
+    });
+  } else {
+    compRows = '<tr><td colspan="5" style="padding:12px;color:#9AA0A6;text-align:center">لم يتم جلب المنافسين</td></tr>';
   }
 
-  // أشرطة المعايير
-  function bar(label,score,max,color){
-    const pct=Math.round(score/max*100);
-    return `<div style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-        <span style="font-size:11px;font-weight:600;color:#1B2B5E">${label}</span>
-        <span style="font-size:11px;font-weight:700;color:${color}">${score}/${max}</span>
-      </div>
-      <div style="background:#E4E8EF;border-radius:4px;height:10px;overflow:hidden">
-        <div style="background:${color};height:10px;width:${pct}%;border-radius:4px"></div>
-      </div>
-    </div>`;
+  // بناء نقاط التحسين
+  let oppsHTML = '';
+  d.opps.forEach((o,i)=>{
+    oppsHTML += '<div style="background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:7px">'
+      +'<div style="display:flex;gap:8px">'
+      +'<div style="font-size:14px;font-weight:700;color:#F5C518;min-width:24px">0'+(i+1)+'</div>'
+      +'<div><div style="font-size:11px;font-weight:700;color:#1B2B5E;margin-bottom:2px">'+o.t+'</div>'
+      +'<div style="font-size:10px;color:#555;line-height:1.6">'+o.d+'</div></div>'
+      +'</div></div>';
+  });
+  if(!oppsHTML) oppsHTML = '<div style="color:#22C55E;padding:8px">✅ لا توجد مخاطر رئيسية</div>';
+
+  // SVG دائرة
+  function donut(pct, col){
+    const r=22, circ=2*Math.PI*r, dash=circ*(pct/100);
+    return '<svg width="60" height="60" viewBox="0 0 60 60">'
+      +'<circle cx="30" cy="30" r="'+r+'" fill="none" stroke="#E4E8EF" stroke-width="7"/>'
+      +'<circle cx="30" cy="30" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="7"'
+      +' stroke-dasharray="'+dash.toFixed(1)+' '+circ.toFixed(1)+'"'
+      +' stroke-linecap="round" transform="rotate(-90 30 30)"/>'
+      +'<text x="30" y="34" text-anchor="middle" font-size="10" font-weight="700" fill="'+col+'" font-family="Arial">'+pct+'%</text>'
+      +'</svg>';
   }
 
-  const compHTML = _competitors.length?
-    _competitors.map((comp,i)=>
-    '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:'+(i%2?'#fff':'#F5F7FA')+';border-bottom:1px solid #E4E8EF">'+
-      '<div style="font-size:15px;font-weight:700;color:#1BA8B8;min-width:22px;flex-shrink:0">'+(i+1)+'</div>'+
-      '<div style="flex:1;min-width:0">'+
-        '<div style="font-size:11px;font-weight:700;color:#1B2B5E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+comp.name+'</div>'+
-        '<div style="font-size:10px;color:#9AA0A6">'+(comp.address||'')+'</div>'+
-      '</div>'+
-      '<div style="text-align:center;flex-shrink:0">'+
-        '<div style="font-size:12px;font-weight:700;color:#F5C518">'+(comp.rating?comp.rating+'⭐':'')+'</div>'+
-        '<div style="font-size:9px;color:#9AA0A6">'+'('+((comp.reviews||0).toLocaleString('ar'))+')'+'</div>'+
-      '</div>'+
-    '</div>').join('')
-    :'<div style="padding:12px;font-size:11px;color:#9AA0A6">لم يتم جلب المنافسين</div>';
+  // شريط معيار
+  function bar(label, score, max, col){
+    const pct = Math.round(score/max*100);
+    return '<div style="margin-bottom:9px">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:3px">'
+      +'<span style="font-size:11px;font-weight:600;color:#1B2B5E">'+label+'</span>'
+      +'<span style="font-size:11px;font-weight:700;color:'+col+'">'+score+'/'+max+'</span>'
+      +'</div>'
+      +'<div style="background:#E4E8EF;border-radius:4px;height:9px">'
+      +'<div style="background:'+col+';height:9px;width:'+pct+'%;border-radius:4px"></div>'
+      +'</div></div>';
+  }
 
-  const ownPct=d.d.housing_total>0?Math.round(d.d.owned/d.d.housing_total*100):0;
-  const targetPct=Math.round(d.sc.targetRatio*100);
+  // ══ بناء HTML الصفحتين ══
+  const hdr1 = '<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between">'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">MAWATH · مَوْقِع | mawath.com | info@mawath.com</span>'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">تقرير تحليل جدوى الموقع التجاري</span></div>'
+    +'<div style="background:#1B2B5E;padding:12px 18px;display:flex;justify-content:space-between;align-items:center">'
+    +'<div><div style="font-size:20px;font-weight:700;color:#fff">مَوْقِع</div>'
+    +'<div style="font-size:9px;color:#1BA8B8">تقرير تحليل جدوى الموقع التجاري</div></div>'
+    +'<div style="text-align:left"><div style="font-size:12px;font-weight:700;color:#fff">'+d.client+' | '+d.type+' | حي '+d.hood+'</div>'
+    +'<div style="font-size:9px;color:rgba(255,255,255,0.5)">'+d.date+' | الرياض</div></div></div>';
 
-  // هيدر ثابت لكل الصفحات
-  const HDR1 = `<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between;width:100%">
-    <span style="font-size:8px;font-weight:700;color:#1B2B5E">MAWATH · مَوْقِع | mawath.com | info@mawath.com</span>
-    <span style="font-size:8px;font-weight:700;color:#1B2B5E">تقرير تحليل جدوى الموقع التجاري</span>
-  </div>
-  <div style="background:#1B2B5E;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;width:100%">
-    <div>
-      <div style="font-size:20px;font-weight:700;color:#fff">مَوْقِع</div>
-      <div style="font-size:9px;color:#1BA8B8;margin-top:2px">تقرير تحليل جدوى الموقع التجاري</div>
-    </div>
-    <div style="text-align:left">
-      <div style="font-size:12px;font-weight:700;color:#fff">${d.client} | ${d.type} | حي ${d.hood}</div>
-      <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">${d.date} | الرياض</div>
-    </div>
-  </div>`;
+  const ftr1 = '<div style="background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center">'
+    +'<span style="font-size:11px;font-weight:700;color:#F5C518">MAWATH · مَوْقِع</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">بناءً على تحليل MAWATH للتعداد السكاني | سري</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">١ / ٢</span></div>';
 
-  const FTR1 = `<div style="background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center;width:100%">
-    <span style="font-size:11px;font-weight:700;color:#F5C518">MAWATH · مَوْقِع</span>
-    <span style="font-size:8px;color:rgba(255,255,255,0.4)">بناءً على تحليل MAWATH للتعداد السكاني | سري — للاستخدام الداخلي</span>
-    <span style="font-size:8px;color:rgba(255,255,255,0.4)">١ / ٢</span>
-  </div>`;
+  const hdr2 = '<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between">'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">'+d.client+' — '+d.type+' — حي '+d.hood+'</span>'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">'+d.date+' | الرياض</span></div>';
 
-  const HDR2 = `<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between;width:100%">
-    <span style="font-size:8px;font-weight:700;color:#1B2B5E">MAWATH · مَوْقِع | ${d.client} — ${d.type} — حي ${d.hood}</span>
-    <span style="font-size:8px;font-weight:700;color:#1B2B5E">${d.date} | الرياض</span>
-  </div>`;
+  const ftr2 = '<div style="background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center">'
+    +'<span style="font-size:11px;font-weight:700;color:#F5C518">MAWATH · مَوْقِع</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">تقرير سري — للاستخدام الداخلي فقط</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">٢ / ٢</span></div>';
 
-  const FTR2 = `<div style="background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center;width:100%">
-    <span style="font-size:11px;font-weight:700;color:#F5C518">MAWATH · مَوْقِع</span>
-    <span style="font-size:8px;color:rgba(255,255,255,0.4)">تقرير سري — للاستخدام الداخلي فقط</span>
-    <span style="font-size:8px;color:rgba(255,255,255,0.4)">٢ / ٢</span>
-  </div>`;
+  const p1body =
+    // الدرجة
+    '<div style="padding:12px 18px;display:flex;gap:12px;border-bottom:2px solid #E4E8EF">'
+    +'<div style="width:82px;flex-shrink:0;border-radius:10px;background:'+scoreCol+';display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px">'
+    +'<div style="font-size:36px;font-weight:700;color:#fff;line-height:1">'+d.T+'</div>'
+    +'<div style="font-size:8px;color:rgba(255,255,255,0.7)">/ 100</div>'
+    +'<div style="font-size:9px;font-weight:700;color:#fff;margin-top:4px;text-align:center">'+d.lbl+'</div></div>'
+    +'<div style="flex:1;background:#F5F7FA;border-radius:8px;padding:10px 12px">'
+    +'<div style="font-size:10px;font-weight:700;color:#1B2B5E;margin-bottom:5px">ملخص الجدوى</div>'
+    +'<div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:8px">'+d.rec+'</div>'
+    +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;font-weight:700;color:'+scoreCol+'">'+d.d.total.toLocaleString('ar')+'</div><div style="font-size:8px;color:#9AA0A6">السكان</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;font-weight:700;color:'+(d.sc.s2>=20?'#22C55E':'#F97316')+'">'+d.sc.targetPop.toLocaleString('ar')+'</div><div style="font-size:8px;color:#9AA0A6">'+d.sc.targetLabel.split(' ')[0]+'</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;font-weight:700;color:#6C757D">'+(d.compCount||'؟')+'</div><div style="font-size:8px;color:#9AA0A6">في قوقل</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 8px;text-align:center"><div style="font-size:10px;font-weight:700;color:#F5C518">'+(d.avgRating||'—')+'⭐</div><div style="font-size:8px;color:#9AA0A6">متوسط تقييم</div></div>'
+    +'</div></div></div>'
+    // معايير
+    +'<div style="background:#1B2B5E;padding:7px 18px;margin-top:0"><span style="color:#F5C518;font-weight:700;font-size:11px">🎯 تفصيل درجة الجدوى</span></div>'
+    +'<div style="padding:12px 18px">'
+    +bar('الكثافة السكانية الكلية', d.sc.s1, 25, '#1BA8B8')
+    +bar('حجم الشريحة — '+d.sc.targetLabel, d.sc.s2, 25, '#F5C518')
+    +bar('نسبة المستهدفين ('+tPct+'٪)', d.sc.s3, 25, '#22C55E')
+    +bar('استقرار السكان — ملكية ('+ownPct+'٪)', d.sc.s4, 25, '#F97316')
+    +'</div>'
+    // دوائر
+    +'<div style="padding:0 18px 12px;display:flex;justify-content:center">'
+    +'<div style="flex:1;background:#F5F7FA;border-radius:8px;padding:12px;display:flex;justify-content:space-around">'
+    +'<div style="text-align:center">'+donut(tPct,'#1BA8B8')+'<div style="font-size:9px;color:#555;margin-top:3px">'+d.sc.targetLabel.split(' ')[0]+'</div></div>'
+    +'<div style="text-align:center">'+donut(ownPct,'#22C55E')+'<div style="font-size:9px;color:#555;margin-top:3px">ملكية المساكن</div></div>'
+    +'<div style="text-align:center">'+donut(d.T,scoreCol)+'<div style="font-size:9px;color:#555;margin-top:3px">الدرجة الكلية</div></div>'
+    +'</div></div>'
+    // بيانات السكان
+    +'<div style="background:#1B2B5E;padding:7px 18px"><span style="color:#F5C518;font-weight:700;font-size:11px">👥 بيانات السكان</span></div>'
+    +'<div style="padding:10px 18px">'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px">'
+    +'<div style="background:#F5F7FA;border-radius:6px;padding:8px 10px;border-right:3px solid #1B2B5E"><div style="font-size:9px;color:#6C757D">إجمالي السكان</div><div style="font-size:11px;font-weight:700;color:#1B2B5E">'+d.d.total.toLocaleString('ar')+' نسمة</div></div>'
+    +'<div style="background:#EBF9FA;border-radius:6px;padding:8px 10px;border-right:3px solid #1BA8B8"><div style="font-size:9px;color:#6C757D">🎯 '+d.sc.targetLabel+'</div><div style="font-size:11px;font-weight:700;color:#1BA8B8">'+d.sc.targetPop.toLocaleString('ar')+' ('+tPct+'٪)</div></div>'
+    +'<div style="background:#F5F7FA;border-radius:6px;padding:8px 10px;border-right:3px solid #1B2B5E"><div style="font-size:9px;color:#6C757D">إجمالي المساكن</div><div style="font-size:11px;font-weight:700;color:#1B2B5E">'+d.d.housing_total.toLocaleString('ar')+' مسكن</div></div>'
+    +'<div style="background:#D1FAE5;border-radius:6px;padding:8px 10px;border-right:3px solid #22C55E"><div style="font-size:9px;color:#6C757D">ملكية المساكن</div><div style="font-size:11px;font-weight:700;color:#22C55E">'+d.d.owned.toLocaleString('ar')+' ('+ownPct+'٪)</div></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:6px;padding:8px 10px"><div style="font-size:9px;color:#6C757D">الأطفال 0-14</div><div style="font-size:11px;font-weight:700;color:#6C757D">'+d.d.children.toLocaleString('ar')+'</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:6px;padding:8px 10px"><div style="font-size:9px;color:#6C757D">الشباب 15-34</div><div style="font-size:11px;font-weight:700;color:#1BA8B8">'+d.d.youth.toLocaleString('ar')+'</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:6px;padding:8px 10px"><div style="font-size:9px;color:#6C757D">البالغين 35-59</div><div style="font-size:11px;font-weight:700;color:#F97316">'+d.d.adults.toLocaleString('ar')+'</div></div>'
+    +'<div style="background:#fff;border:1px solid #E4E8EF;border-radius:6px;padding:8px 10px"><div style="font-size:9px;color:#6C757D">كبار السن 60+</div><div style="font-size:11px;font-weight:700;color:#9AA0A6">'+((d.d.seniors||0).toLocaleString('ar'))+'</div></div>'
+    +'</div></div>';
 
-  const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-html,body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;direction:rtl;background:#fff;color:#1A1A2E}
-@media print{
-  @page{size:A4;margin:0}
-  thead{display:table-header-group}
-  tfoot{display:table-footer-group}
-  .pb{page-break-after:always}
-}
-table.layout{width:210mm;border-collapse:collapse}
-table.layout td{padding:0}
-.sec-hdr{background:#1B2B5E;padding:7px 18px}
-.sec-hdr span{color:#F5C518;font-weight:700;font-size:11px}
-.tag{background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 10px;text-align:center;display:inline-block;min-width:70px}
-.opp{background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:7px}
-</style></head><body>
+  const p2body =
+    // المنافسون
+    '<div style="background:#1B2B5E;padding:7px 18px;margin-top:12px"><span style="color:#F5C518;font-weight:700;font-size:11px">🏪 المنافسون على خرائط قوقل — '+d.type+' في حي '+d.hood+'</span></div>'
+    +'<div style="padding:10px 18px">'
+    +'<div style="background:#F5F7FA;border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:11px">'
+    +'<b>'+(d.compCount||0)+' منافس</b> في نتائج قوقل | متوسط التقييمات: <b style="color:#F5C518">'+(d.avgRating||'—')+'⭐</b> | '
+    +'المنافسة: <b style="color:'+(d.compCount>=8?'#EF4444':d.compCount>=5?'#F97316':'#22C55E')+'">'+(d.compCount>=8?'عالية':d.compCount>=5?'متوسطة':'منخفضة')+'</b></div>'
+    +'<table style="width:100%;border-collapse:collapse;border:1px solid #E4E8EF;border-radius:6px;overflow:hidden;font-family:Arial,sans-serif">'
+    +'<thead><tr style="background:#1B2B5E">'
+    +'<th style="padding:6px 10px;color:#F5C518;font-size:10px;text-align:right">#</th>'
+    +'<th style="padding:6px 10px;color:#F5C518;font-size:10px;text-align:right">الاسم</th>'
+    +'<th style="padding:6px 10px;color:#F5C518;font-size:10px;text-align:right">العنوان</th>'
+    +'<th style="padding:6px 10px;color:#F5C518;font-size:10px;text-align:center">التقييم</th>'
+    +'<th style="padding:6px 10px;color:#F5C518;font-size:10px;text-align:center">عدد</th>'
+    +'</tr></thead>'
+    +'<tbody>'+compRows+'</tbody></table></div>'
+    // نقاط التحسين
+    +'<div style="background:#1B2B5E;padding:7px 18px"><span style="color:#F5C518;font-weight:700;font-size:11px">💡 نقاط تحتاج انتباه</span></div>'
+    +'<div style="padding:10px 18px">'+oppsHTML+'</div>'
+    // التوصية
+    +'<div style="padding:10px 18px">'
+    +'<div style="background:'+recCol+';border-radius:8px;padding:16px;text-align:center">'
+    +'<div style="font-size:22px;margin-bottom:5px">'+recIcon+'</div>'
+    +'<div style="font-size:15px;font-weight:700;color:'+recText+';margin-bottom:6px">'+d.rec+'</div>'
+    +'<div style="font-size:11px;color:'+recText+';line-height:1.8;direction:rtl;text-align:center">'+rec2+'</div>'
+    +'</div></div>';
 
-<!-- ══ صفحة ١ ══ -->
-<table class="layout pb">
-  <thead><tr><td>${HDR1}</td></tr></thead>
-  <tfoot><tr><td>${FTR1}</td></tr></tfoot>
-  <tbody><tr><td style="padding:0 18px">
+  // ══ كتابة HTML في نافذة جديدة ══
+  const css = '<style>'
+    +'*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'body{font-family:"IBM Plex Sans Arabic",Arial,sans-serif;direction:rtl;background:#fff}'
+    +'@media print{'
+    +'@page{size:A4;margin:0}'
+    +'thead{display:table-header-group}'
+    +'tfoot{display:table-footer-group}'
+    +'.no-print{display:none}'
+    +'}'
+    +'table.pg{width:210mm;border-collapse:collapse}'
+    +'thead.hdr td,tfoot.ftr td{padding:0}'
+    +'td.body{padding:0;vertical-align:top}'
+    +'</style>';
 
-    <!-- الدرجة + ملخص -->
-    <div style="padding:12px 0;display:flex;gap:12px;border-bottom:2px solid #E4E8EF">
-      <div style="width:82px;flex-shrink:0;border-radius:10px;background:${scoreCol};display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 6px">
-        <div style="font-size:36px;font-weight:700;color:#fff;line-height:1">${d.T}</div>
-        <div style="font-size:8px;color:rgba(255,255,255,0.7);margin-top:2px">/ 100</div>
-        <div style="font-size:9px;font-weight:700;color:#fff;margin-top:4px;text-align:center">${d.lbl}</div>
-      </div>
-      <div style="flex:1;background:#F5F7FA;border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;font-weight:700;color:#1B2B5E;margin-bottom:5px">ملخص الجدوى</div>
-        <div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:8px">${d.rec}</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <div class="tag"><div style="font-size:10px;font-weight:700;color:${scoreCol}">${d.d.total.toLocaleString('ar')}</div><div style="font-size:8px;color:#9AA0A6">السكان</div></div>
-          <div class="tag"><div style="font-size:10px;font-weight:700;color:${d.sc.s2>=20?'#22C55E':'#F97316'}">${d.sc.targetPop.toLocaleString('ar')}</div><div style="font-size:8px;color:#9AA0A6">${d.sc.targetLabel.split(' ')[0]}</div></div>
-          <div class="tag"><div style="font-size:10px;font-weight:700;color:#6C757D">${d.compCount||'؟'}</div><div style="font-size:8px;color:#9AA0A6">في قوقل</div></div>
-          <div class="tag"><div style="font-size:10px;font-weight:700;color:#F5C518">${d.avgRating||'—'}⭐</div><div style="font-size:8px;color:#9AA0A6">متوسط تقييم</div></div>
-        </div>
-      </div>
-    </div>
+  const pg1 = '<table class="pg" style="page-break-after:always">'
+    +'<thead class="hdr"><tr><td>'+hdr1+'</td></tr></thead>'
+    +'<tfoot class="ftr"><tr><td>'+ftr1+'</td></tr></tfoot>'
+    +'<tbody><tr><td class="body">'+p1body+'</td></tr></tbody>'
+    +'</table>';
 
-    <!-- درجة الجدوى -->
-    <div class="sec-hdr" style="margin:12px -18px 10px"><span>🎯 تفصيل درجة الجدوى من 100</span></div>
-    ${bar('الكثافة السكانية الكلية',d.sc.s1,25,'#1BA8B8')}
-    ${bar('حجم الشريحة المستهدفة — '+d.sc.targetLabel,d.sc.s2,25,'#F5C518')}
-    ${bar('نسبة المستهدفين من إجمالي السكان ('+targetPct+'٪)',d.sc.s3,25,'#22C55E')}
-    ${bar('استقرار السكان — ملكية المساكن ('+ownPct+'٪)',d.sc.s4,25,'#F97316')}
+  const pg2 = '<table class="pg">'
+    +'<thead class="hdr"><tr><td>'+hdr2+'</td></tr></thead>'
+    +'<tfoot class="ftr"><tr><td>'+ftr2+'</td></tr></tfoot>'
+    +'<tbody><tr><td class="body">'+p2body+'</td></tr></tbody>'
+    +'</table>';
 
-    <!-- دوائر -->
-    <div style="margin:12px 0;background:#F5F7FA;border-radius:8px;padding:12px;display:flex;justify-content:space-around;align-items:center">
-      <div style="text-align:center">${donut(targetPct,'#1BA8B8',70)}<div style="font-size:9px;color:#555;margin-top:4px">${d.sc.targetLabel.split(' ')[0]}</div></div>
-      <div style="text-align:center">${donut(ownPct,'#22C55E',70)}<div style="font-size:9px;color:#555;margin-top:4px">ملكية المساكن</div></div>
-      <div style="text-align:center">${donut(d.T,scoreCol,70)}<div style="font-size:9px;color:#555;margin-top:4px">الدرجة الكلية</div></div>
-    </div>
+  const html = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">'
+    +'<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'
+    +css+'</head><body>'+pg1+pg2+'</body></html>';
 
-    <!-- بيانات السكان -->
-    <div class="sec-hdr" style="margin:0 -18px 10px"><span>👥 بيانات السكان</span></div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px">
-      ${[
-        ['إجمالي السكان', d.d.total.toLocaleString('ar')+' نسمة', '#1B2B5E'],
-        ['🎯 '+d.sc.targetLabel, d.sc.targetPop.toLocaleString('ar')+' ('+targetPct+'٪)', '#1BA8B8'],
-        ['إجمالي المساكن', d.d.housing_total.toLocaleString('ar')+' مسكن', '#1B2B5E'],
-        ['ملكية المساكن', d.d.owned.toLocaleString('ar')+' ('+ownPct+'٪)', '#22C55E'],
-      ].map(([l,v,col])=>`<div style="background:#F5F7FA;border-radius:6px;padding:8px 10px;border-right:3px solid ${col}"><div style="font-size:9px;color:#6C757D;margin-bottom:2px">${l}</div><div style="font-size:11px;font-weight:700;color:${col}">${v}</div></div>`).join('')}
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding-bottom:12px">
-      ${[
-        ['الأطفال 0-14', d.d.children.toLocaleString('ar'), '#6C757D'],
-        ['الشباب 15-34', d.d.youth.toLocaleString('ar'), '#1BA8B8'],
-        ['البالغين 35-59', d.d.adults.toLocaleString('ar'), '#F97316'],
-        ['كبار السن 60+', (d.d.seniors||0).toLocaleString('ar'), '#9AA0A6'],
-      ].map(([l,v,col])=>`<div style="background:#fff;border:1px solid #E4E8EF;border-radius:6px;padding:8px 10px"><div style="font-size:9px;color:#6C757D;margin-bottom:2px">${l}</div><div style="font-size:11px;font-weight:700;color:${col}">${v}</div></div>`).join('')}
-    </div>
-
-  </td></tr></tbody>
-</table>
-
-<!-- ══ صفحة ٢ ══ -->
-<table class="layout">
-  <thead><tr><td>${HDR2}</td></tr></thead>
-  <tfoot><tr><td>${FTR2}</td></tr></tfoot>
-  <tbody><tr><td style="padding:0 18px">
-
-    <!-- المنافسون -->
-    <div class="sec-hdr" style="margin:12px -18px 8px"><span>🏪 المنافسون على خرائط قوقل — ${d.type} في حي ${d.hood}</span></div>
-    <div style="background:#F5F7FA;border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:11px">
-      <b>${d.compCount||0} منافس</b> في نتائج قوقل | متوسط التقييمات: <b style="color:#F5C518">${d.avgRating||'—'}⭐</b> |
-      المنافسة: <b style="color:${d.compCount>=8?'#EF4444':d.compCount>=5?'#F97316':'#22C55E'}">${d.compCount>=8?'عالية':d.compCount>=5?'متوسطة':'منخفضة'}</b>
-    </div>
-    <div style="border:1px solid #E4E8EF;border-radius:6px;overflow:hidden;margin-bottom:12px">
-      ${compHTML}
-    </div>
-
-    <!-- نقاط التحسين -->
-    <div class="sec-hdr" style="margin:0 -18px 10px"><span>💡 نقاط تحتاج انتباه</span></div>
-    ${d.opps.length?d.opps.map((o,i)=>`
-    <div class="opp">
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <div style="font-size:14px;font-weight:700;color:#F5C518;flex-shrink:0;min-width:24px">0${i+1}</div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:#1B2B5E;margin-bottom:3px">${o.t}</div>
-          <div style="font-size:10px;color:#555;line-height:1.6">${o.d}</div>
-        </div>
-      </div>
-    </div>`).join(''):'<div style="color:#22C55E;font-size:11px;padding:8px">✅ لا توجد مخاطر رئيسية</div>'}
-
-    <!-- التوصية -->
-    <div style="margin:12px 0">
-      <div style="background:${recCol};border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:24px;margin-bottom:5px">${recIcon}</div>
-        <div style="font-size:15px;font-weight:700;color:${recTextCol};margin-bottom:6px">${d.rec}</div>
-        <div style="font-size:11px;color:${recTextCol};line-height:1.8;direction:rtl;text-align:center;unicode-bidi:plaintext">${recDetail}</div>
-              </div>
-    </div>
-
-  </td></tr></tbody>
-</table>
-
-
-</body></html>`);
+  const w = window.open('','_blank');
+  w.document.open();
+  w.document.write(html);
   w.document.close();
-  setTimeout(()=>w.print(), 800);
+  setTimeout(()=>w.print(), 900);
 }
-
 
 // ══ COPY WA ══
 function copyWA(){
