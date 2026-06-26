@@ -3,483 +3,602 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة تقييم الأداء — MAWATH</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<title>MAWATH — تقييم الملف التجاري على قوقل</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;background:#F5F7FA;color:#1B2B5E;direction:rtl}
-nav{background:#1B2B5E;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100}
-.logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:2px}
-.logo span{color:#1BA8B8}
-.wrap{max-width:1000px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:420px 1fr;gap:16px}
-.card{background:#fff;border-radius:12px;border:1px solid #E4E8EF;overflow:hidden}
-.ch{background:#1B2B5E;padding:11px 16px}
-.ch span{color:#F5C518;font-weight:600;font-size:13px}
+:root{--navy:#1B2B5E;--teal:#1BA8B8;--gold:#F5C518;--gl:#F5F7FA;--gm:#E4E8EF;--gd:#6C757D;--green:#22C55E;--red:#EF4444;--orange:#F97316;--white:#fff}
+body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;background:var(--gl);color:var(--navy);min-height:100vh}
+
+/* LOCK */
+#lock{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:14px}
+.lbox{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:28px;width:280px;text-align:center}
+#pw{width:100%;padding:10px;border-radius:7px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:15px;text-align:center;letter-spacing:4px;outline:none;font-family:inherit;margin-bottom:10px}
+.lbtn{width:100%;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+
+/* NAV */
+nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Readex Pro',sans-serif;font-size:16px;font-weight:700;color:#fff}
+.logo span{color:var(--teal)}
+.logo small{font-size:10px;color:var(--gold);margin-right:6px}
+
+/* LAYOUT */
+.app{max-width:960px;margin:20px auto;padding:0 16px 60px;display:grid;grid-template-columns:340px 1fr;gap:16px}
+@media(max-width:750px){.app{grid-template-columns:1fr}}
+
+/* CARD */
+.card{background:#fff;border-radius:12px;border:1px solid var(--gm);overflow:hidden;margin-bottom:14px}
+.ch{background:var(--navy);padding:11px 16px;display:flex;align-items:center;gap:8px}
+.ch span{color:var(--gold);font-weight:600;font-size:12px}
 .cb{padding:16px}
-.f{margin-bottom:11px}
-.f label{display:block;font-size:11px;color:#6C757D;margin-bottom:4px;font-weight:600}
-.f input,.f select{width:100%;padding:8px 10px;border:1.5px solid #E4E8EF;border-radius:7px;font-family:inherit;font-size:13px;color:#1B2B5E;outline:none}
-.f input:focus,.f select:focus{border-color:#1BA8B8}
-.f input.auto{background:#EBF9FA;border-color:#1BA8B8;color:#1BA8B8;font-weight:600}
-.gr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ab{font-size:9px;background:#1BA8B8;color:#fff;padding:1px 5px;border-radius:3px;margin-right:3px}
-.mb{font-size:9px;background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:3px;margin-right:3px}
-.fb{width:100%;padding:9px;background:#1BA8B8;color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px}
-.fb:disabled{background:#E4E8EF;color:#9AA0A6;cursor:not-allowed}
-.st{font-size:11px;padding:6px 10px;border-radius:6px;margin-bottom:10px;display:none}
+label{display:block;font-size:11px;font-weight:700;color:var(--navy);margin-bottom:5px}
+input[type=text],input[type=url]{width:100%;padding:9px 11px;border:1.5px solid var(--gm);border-radius:7px;font-family:inherit;font-size:12px;outline:none;transition:border .2s;margin-bottom:12px}
+input:focus{border-color:var(--teal)}
+
+/* BUTTONS */
+.btn-main{width:100%;padding:11px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:8px}
+.btn-main:hover{background:#158f9d}
+.btn-main:disabled{background:var(--gm);color:var(--gd);cursor:not-allowed}
+.btn-navy{width:100%;padding:11px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+
+/* STATUS */
+.st{font-size:11px;padding:7px 11px;border-radius:6px;margin-bottom:10px;display:none}
 .st.show{display:block}
 .st.ok{background:#D1FAE5;color:#065F46}
 .st.err{background:#FEE2E2;color:#991B1B}
-.st.load{background:#EBF9FA;color:#1BA8B8}
-.calc-btn{width:100%;padding:12px;background:#1B2B5E;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px}
-.ph{border:1px solid #E4E8EF;border-radius:12px;padding:60px 20px;text-align:center;background:#fff;color:#9AA0A6;font-size:13px}
-.rac{padding:14px 16px;display:flex;gap:8px;border-top:1px solid #E4E8EF}
-.rbtn{flex:1;padding:10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all 0.2s}
-.rpdf{background:#1B2B5E;color:#fff;border-color:#1B2B5E}
-.rwa{background:#fff;color:#25D366;border-color:#25D366}
-#lock{position:fixed;inset:0;background:#1B2B5E;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
-.lbox{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:28px;width:280px;text-align:center}
-#pw{width:100%;padding:10px;border-radius:7px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:15px;text-align:center;letter-spacing:4px;outline:none;font-family:inherit;margin-bottom:10px}
-#pw_err{color:#EF4444;font-size:11px;margin-bottom:8px;display:none}
-.lbtn{width:100%;padding:10px;background:#1BA8B8;color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.st.load{background:#EBF9FA;color:var(--teal)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 
-/* ── PRINT CSS ── */
-@media print {
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  #lock,nav,.wrap>div:first-child,.rac,#ph{display:none!important}
-  html,body{height:100%!important;margin:0!important;padding:0!important;background:#fff!important}
-  .wrap{display:block!important;padding:0!important;margin:0!important;max-width:100%!important;height:100%!important}
-  #rep_card{
-    display:flex!important;
-    flex-direction:column!important;
-    border:none!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    min-height:100vh!important;
-    page-break-inside:avoid!important;
-  }
-  #rep_card > div:nth-child(3){flex:1!important}
-  .card{border:none!important;border-radius:0!important}
+/* REPORT */
+#rep{display:none}
+#rep.show{display:block}
+#ph{border:1px solid var(--gm);border-radius:12px;padding:50px 20px;text-align:center;background:#fff;color:var(--gd);font-size:13px}
 
-  /* إجبار ظهور ألوان الأشرطة */
-  #crit_bars > div > div:last-child > div:first-child{background:#E4E8EF!important}
-  #crit_bars > div > div:last-child > div:last-child{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
-  
-  /* إصلاح direction للنصوص الإنجليزية في الطباعة */
-  [style*="letter-spacing:2px"]{direction:ltr!important;unicode-bidi:plaintext!important}
+/* SCORE */
+.score-wrap{padding:14px 16px;display:flex;gap:12px;border-bottom:1px solid var(--gm)}
+.score-circle{width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.score-num{font-family:'Readex Pro',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1}
+.score-sub{font-size:9px;color:rgba(255,255,255,.7)}
+.score-info{flex:1;background:var(--gl);border-radius:8px;padding:10px 12px}
+.biz-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.biz-type{font-size:11px;color:var(--teal);margin-bottom:6px}
+.biz-addr{font-size:10px;color:var(--gd);margin-bottom:6px}
+.stars{color:var(--gold);font-size:12px}
 
-  /* توسيع المعايير وفرص التحسين لملء الصفحة */
-  #crit_bars > div{margin-bottom:18px!important}
-  #crit_bars > div > div:first-child{margin-bottom:6px!important}
-  #crit_bars > div > div:last-child > div:last-child{height:10px!important}
-  #opps > div{padding:14px 13px!important;margin-bottom:12px!important}
-  #opps > div > div > div:last-child > div:first-child{font-size:12px!important;margin-bottom:4px!important}
-  #opps > div > div > div:last-child > div:last-child{font-size:11px!important;line-height:1.7!important}
+/* CRITERIA */
+.crit-sec{padding:12px 16px;border-bottom:1px solid var(--gm)}
+.crit-t{font-size:10px;font-weight:700;color:var(--gd);margin-bottom:8px;letter-spacing:.5px}
+.crit-row{margin-bottom:9px}
+.crit-head{display:flex;justify-content:space-between;margin-bottom:3px}
+.crit-lbl{font-size:12px;font-weight:600;color:var(--navy)}
+.crit-val{font-size:12px;font-weight:700}
+.bar-bg{background:var(--gm);border-radius:3px;height:8px}
+.bar-fg{border-radius:3px;height:8px;transition:width .8s ease}
+.crit-note{font-size:10px;color:var(--gd);margin-top:3px;line-height:1.5}
 
-  /* تثبيت حجم صندوق الدرجة */
-  #score_box{min-width:80px!important;max-width:90px!important;padding:10px 8px!important;height:auto!important;min-height:0!important;flex:none!important}
-  #score_num{font-size:32px!important}
-  #score_lbl{font-size:10px!important}
-  /* منع تمدد القسم العلوي */
-  #rep_card > div:nth-child(3){flex:none!important}
-  #rep_card > div:nth-child(4){flex:1!important}
-}
+/* DETAILS */
+.detail-sec{padding:12px 16px;border-bottom:1px solid var(--gm)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.detail-item{background:var(--gl);border-radius:7px;padding:8px 10px}
+.detail-ico{font-size:14px;margin-bottom:3px}
+.detail-lbl{font-size:9px;color:var(--gd);margin-bottom:2px}
+.detail-val{font-size:11px;font-weight:700;color:var(--navy)}
+.detail-val.ok{color:var(--green)}
+.detail-val.warn{color:var(--orange)}
+.detail-val.bad{color:var(--red)}
+
+/* ACTIONS */
+.rep-actions{padding:12px 16px;display:flex;gap:8px}
+.act-btn{flex:1;padding:9px;border-radius:7px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .2s}
+.act-print{background:var(--navy);color:#fff;border-color:var(--navy)}
+.act-wa{background:#fff;color:#25D366;border-color:#25D366}
+
+/* INFO BOX */
+.info-box{padding:9px 12px;border-radius:7px;font-size:11px;line-height:1.7;margin-bottom:8px}
+.info-green{background:#D1FAE5;color:#065F46;border-right:4px solid var(--green)}
+.info-gold{background:#FEF8DC;color:#7A5800;border-right:4px solid var(--gold)}
+.info-red{background:#FEE2E2;color:#991B1B;border-right:4px solid var(--red)}
 </style>
 </head>
 <body>
 
+<!-- LOCK -->
 <div id="lock">
-  <div style="font-size:24px;font-weight:700;color:#F5C518;letter-spacing:3px">MAWATH</div>
+  <div style="font-family:'Readex Pro',sans-serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:2px">خرائط قوقل</div>
   <div class="lbox">
-    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px">أداة داخلية — خاصة</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:14px">MAWATH — أداة داخلية</div>
     <input id="pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()">
-    <div id="pw_err">كلمة المرور غير صحيحة</div>
+    <div id="pw_err" style="color:var(--red);font-size:11px;margin-bottom:8px;display:none">كلمة المرور غير صحيحة</div>
     <button class="lbtn" onclick="chk()">دخول ←</button>
   </div>
 </div>
 
 <nav>
-  <div class="logo">MAW<span>A</span>TH</div>
-  <div style="font-size:11px;color:rgba(255,255,255,0.4)">أداة تقييم الأداء</div>
+  <div class="logo"><small>MAWATH</small> خرائط <span>قوقل</span></div>
+  <div style="font-size:10px;color:rgba(255,255,255,.4)">أداة تقييم الملف التجاري</div>
 </nav>
 
-<div class="wrap">
+<div class="app">
 
-  <!-- ══ INPUT ══ -->
+  <!-- INPUT -->
   <div>
-    <!-- بيانات العميل -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="ch"><span>بيانات العميل</span></div>
+    <div class="card">
+      <div class="ch"><span class="ico">🔗</span><span>رابط الملف التجاري</span></div>
       <div class="cb">
-        <div class="f"><label>اسم النشاط التجاري *</label><input id="biz" placeholder="مطعم الأصالة — الملقا"></div>
-        <div class="f"><label>المدينة</label>
-          <select id="city"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة المكرمة</option><option>المدينة المنورة</option></select>
-        </div>
-        <button class="fb" onclick="fetchData()" id="fbtn">
-          <span id="fico">🔍</span><span id="ftxt">جلب البيانات من قوقل تلقائياً</span>
+        <label>اسم العميل</label>
+        <input type="text" id="client_name" placeholder="اسم صاحب النشاط">
+        <label>رابط Google Business Profile *</label>
+        <input type="url" id="gbp_url" placeholder="https://www.google.com/maps/place/...">
+        <button class="btn-main" onclick="analyzeGBP()" id="analyze_btn">
+          <span id="a_ico">🔍</span>
+          <span id="a_txt">تحليل الملف تلقائياً</span>
         </button>
-        <div class="st" id="fst"></div>
-        <div class="f"><label>اسم المحلل</label><input id="analyst" value="MAWATH"></div>
+        <div class="st" id="ast"></div>
       </div>
     </div>
 
-    <!-- المعيار ١ -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="ch"><span>المعيار ١ — اكتمال الملف (٢٥ نقطة)</span></div>
+    <!-- معلومات مستخرجة -->
+    <div class="card" id="info_card" style="display:none">
+      <div class="ch"><span class="ico">📍</span><span>بيانات مستخرجة من قوقل</span></div>
+      <div class="cb" id="info_body"></div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="ico">⚙️</span><span>إعدادات إضافية</span></div>
       <div class="cb">
-        <div class="gr">
-          <div class="f"><label><span class="ab">تلقائي</span>متوسط التقييم</label><input id="avg" type="number" min="0" max="5" step="0.1" placeholder="4.2" class="auto"></div>
-          <div class="f"><label><span class="ab">تلقائي</span>عدد التقييمات</label><input id="cnt" type="number" placeholder="65" class="auto"></div>
-        </div>
-        <div class="gr">
-          <div class="f"><label><span class="mb">يدوي</span>الوصف مكتمل؟</label><select id="desc"><option value="0">لا</option><option value="1">نعم</option></select></div>
-          <div class="f"><label><span class="mb">يدوي</span>الفئات محددة؟</label><select id="cats"><option value="0">لا</option><option value="1">نعم</option></select></div>
-        </div>
-        <div class="gr">
-          <div class="f"><label><span class="mb">يدوي</span>عدد الصور</label><input id="photos" type="number" placeholder="8"></div>
-          <div class="f"><label><span class="mb">يدوي</span>عدد المنتجات</label><input id="prods" type="number" placeholder="3"></div>
-        </div>
-        <div class="f"><label><span class="mb">يدوي</span>ساعات العمل مكتملة؟</label><select id="hours"><option value="0">لا</option><option value="1">نعم</option></select></div>
+        <label>ملاحظات إضافية (اختياري)</label>
+        <input type="text" id="notes" placeholder="أي ملاحظة عن الملف...">
+        <button class="btn-navy" onclick="buildReport()">أنشئ التقرير ←</button>
       </div>
     </div>
-
-    <!-- المعيار ٢ -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="ch"><span>المعيار ٢ — الردود والنشاط (٣٥ نقطة)</span></div>
-      <div class="cb">
-        <div class="gr">
-          <div class="f"><label><span class="mb">يدوي</span>نسبة الردود %</label><input id="rply" type="number" min="0" max="100" placeholder="60"></div>
-          <div class="f"><label><span class="mb">يدوي</span>رد على السلبية</label><select id="neg"><option value="0">لا شيء</option><option value="1">بعضها</option><option value="2">كلها</option></select></div>
-        </div>
-        <div class="gr">
-          <div class="f"><label><span class="mb">يدوي</span>تقييمات جديدة/شهر</label><input id="mrev" type="number" placeholder="3"></div>
-          <div class="f"><label><span class="mb">يدوي</span>آخر صورة (أشهر)</label><input id="lph" type="number" placeholder="2"></div>
-        </div>
-        <div class="f"><label><span class="mb">يدوي</span>آخر منشور (أسابيع)</label><input id="lpo" type="number" placeholder="5"></div>
-      </div>
-    </div>
-
-    <!-- المعيار ٣ -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="ch"><span>المعيار ٣ — الظهور في البحث (٤٠ نقطة)</span></div>
-      <div class="cb">
-        <div class="gr">
-          <div class="f"><label><span class="mb">يدوي</span>الفئة دقيقة؟</label><select id="cat"><option value="0">لا</option><option value="1">نعم</option></select></div>
-          <div class="f"><label><span class="mb">يدوي</span>كلمات مفتاحية محلية؟</label><select id="kw"><option value="0">لا</option><option value="1">نعم</option></select></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="calc-btn" onclick="calcScore()">احسب الدرجة وأنشئ التقرير ←</button>
   </div>
 
-  <!-- ══ REPORT ══ -->
+  <!-- REPORT -->
   <div>
-    <div class="card" id="rep_card" style="display:none">
-
-      <div style="background:#F5C518;padding:5px 16px;text-align:center">
-        <span style="font-size:9px;font-weight:700;color:#1B2B5E;letter-spacing:1px">MAWATH | mawath.com | info@mawath.com</span>
+    <div id="rep">
+      <!-- هيدر -->
+      <div style="background:var(--gold);padding:4px 16px;text-align:center;border-radius:12px 12px 0 0">
+        <span style="font-size:8px;font-weight:700;color:var(--navy)">MAWATH · خرائط قوقل | mawath.com</span>
       </div>
-
-      <div style="background:#1B2B5E;padding:12px 18px;display:flex;justify-content:space-between;align-items:center">
+      <div style="background:var(--navy);padding:10px 16px;display:flex;justify-content:space-between;align-items:center">
         <div>
-          <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:2px;direction:ltr;unicode-bidi:plaintext">MAWATH</div>
-          <div style="font-size:10px;color:#1BA8B8;margin-top:2px">تقرير تقييم الأداء</div>
+          <div style="font-family:'Readex Pro',sans-serif;font-size:16px;font-weight:700;color:#fff">خرائط قوقل</div>
+          <div style="font-size:9px;color:var(--teal);margin-top:1px">تقرير تقييم الملف التجاري</div>
         </div>
         <div style="text-align:left">
-          <div id="r_biz" style="font-size:13px;font-weight:700;color:#fff"></div>
-          <div id="r_date" style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px"></div>
+          <div id="r_client" style="font-size:12px;font-weight:700;color:#fff"></div>
+          <div id="r_date" style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px"></div>
         </div>
       </div>
 
-      <div style="padding:14px 18px;display:flex;gap:12px;align-items:stretch;border-bottom:1px solid #E4E8EF">
-        <div id="score_box" style="min-width:88px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;flex-shrink:0">
-          <div id="score_num" style="font-size:34px;font-weight:700;color:#fff;line-height:1"></div>
-          <div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px">/ 100</div>
-          <div id="score_lbl" style="font-size:10px;font-weight:700;color:#fff;margin-top:6px;text-align:center"></div>
+      <!-- الدرجة -->
+      <div class="score-wrap">
+        <div class="score-circle" id="score_box">
+          <div class="score-num" id="score_num">—</div>
+          <div class="score-sub">/ 100</div>
         </div>
-        <div style="flex:1;background:#F5F7FA;border-radius:8px;padding:10px 12px">
-          <div style="font-size:10px;font-weight:700;color:#1B2B5E;margin-bottom:5px">ملخص الأداء</div>
-          <div id="score_rec" style="font-size:11px;color:#555;line-height:1.7;margin-bottom:8px"></div>
-          <div id="mini_scores" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+        <div class="score-info">
+          <div class="biz-name" id="biz_name">—</div>
+          <div class="biz-type" id="biz_type">—</div>
+          <div class="biz-addr" id="biz_addr">—</div>
+          <div><span class="stars" id="stars">—</span> <span id="rating_txt" style="font-size:11px;color:var(--gd)"></span></div>
         </div>
       </div>
 
-      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EF">
-        <div style="font-size:10px;font-weight:700;color:#6C757D;margin-bottom:8px;letter-spacing:0.5px">تفصيل المعايير</div>
+      <!-- المعايير -->
+      <div class="crit-sec">
+        <div class="crit-t">تفصيل درجة التقييم</div>
         <div id="crit_bars"></div>
       </div>
 
-      <div style="padding:12px 18px;border-bottom:1px solid #E4E8EF">
-        <div style="font-size:10px;font-weight:700;color:#6C757D;margin-bottom:8px;letter-spacing:0.5px">أهم فرص التحسين</div>
-        <div id="opps"></div>
+      <!-- تفاصيل الملف -->
+      <div class="detail-sec">
+        <div class="crit-t">تفاصيل الملف</div>
+        <div class="detail-grid" id="detail_grid"></div>
       </div>
 
-      <div style="background:#1B2B5E;padding:8px 16px;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:12px;font-weight:700;color:#F5C518;letter-spacing:2px;direction:ltr;unicode-bidi:plaintext">MAWATH</div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.4)">تقرير سري — للاستخدام الداخلي فقط</div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.4);direction:ltr">mawath.com</div>
+      <!-- التوصيات -->
+      <div class="detail-sec">
+        <div class="crit-t">التوصيات</div>
+        <div id="recs"></div>
       </div>
 
-      <div class="rac">
-        <button class="rbtn rpdf" onclick="openPrint()">🖨️ طباعة / PDF</button>
-        <button class="rbtn rwa" onclick="copyWA()">📋 نسخ للواتساب</button>
+      <!-- أزرار -->
+      <div class="rep-actions">
+        <button class="act-btn act-print" onclick="printReport()">🖨️ طباعة / PDF</button>
+        <button class="act-btn act-wa" onclick="copyWA()">📋 نسخ للواتساب</button>
       </div>
     </div>
 
-    <div class="ph" id="ph">
-      <div style="font-size:40px;margin-bottom:12px">📊</div>
-      <div>التقرير سيظهر هنا</div>
-      <div style="font-size:11px;margin-top:6px;color:#BDC1C6">أدخل البيانات واضغط "احسب الدرجة"</div>
+    <div id="ph">
+      <div style="font-size:40px;margin-bottom:12px">🗺️</div>
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px">أدخل رابط الملف التجاري</div>
+      <div style="font-size:11px;color:var(--gd)">سيظهر التقرير هنا تلقائياً</div>
     </div>
   </div>
-
 </div>
 
 <script>
-const SERP='15640d8d22926e1e705c68051417e63bf2fecc78413747bf2941b1935baa4bd8';
-let _d=null;
+const WORKER = 'https://crimson-lab-a64c.throbbing-brook-70e9.workers.dev';
+let _data = null;
 
+// ── PASSWORD ──
+window.onload = () => {
+  if(sessionStorage.getItem('mg')==='1') document.getElementById('lock').style.display='none';
+};
 function chk(){
   if(document.getElementById('pw').value==='MAWATH2025'){
     document.getElementById('lock').style.display='none';
-    sessionStorage.setItem('ma','1');
+    sessionStorage.setItem('mg','1');
   } else {
     document.getElementById('pw_err').style.display='block';
     document.getElementById('pw').value='';
   }
 }
-window.onload=function(){
-  if(sessionStorage.getItem('ma')==='1') document.getElementById('lock').style.display='none';
-  document.getElementById('pw')&&document.getElementById('pw').focus();
+
+// ── استخراج data_id و place_id من الرابط ──
+function parseGBPUrl(url){
+  const result = {data_id: null, place_id: null, lat: null, lng: null};
+  // استخرج data_id
+  const dm = url.match(/!1s(0x[a-fA-F0-9]+:0x[a-fA-F0-9]+)/);
+  if(dm) result.data_id = dm[1];
+  // استخرج place_id (ChIJ...)
+  const pm = url.match(/place\/[^/]+\/@[^/]+\/.*?!1s(ChIJ[^!&]+)/);
+  if(pm) result.place_id = pm[1];
+  // استخرج الإحداثيات
+  const cm = url.match(/@([\d.]+),([\d.]+)/);
+  if(cm){ result.lat = cm[1]; result.lng = cm[2]; }
+  return result;
 }
 
-async function fetchData(){
-  const name=document.getElementById('biz').value.trim();
-  if(!name){showSt('أدخل اسم النشاط أولاً','err');return;}
-  const btn=document.getElementById('fbtn');
-  btn.disabled=true;
-  document.getElementById('fico').innerHTML='<span class="spin"></span>';
-  document.getElementById('ftxt').textContent='جاري الجلب...';
-  showSt('يبحث في خرائط قوقل...','load');
-  const city=document.getElementById('city').value;
-  const url=`https://broken-art-c72a.throbbing-brook-70e9.workers.dev/`;
-  try{
-    const r=await fetch(url);
-    const d=await r.json();
-    if(d.error)throw new Error(d.error);
-    const places=d.local_results||[];
-    if(!places.length)throw new Error('ما وجد الملف');
-    const p=places[0];
-    document.getElementById('avg').value=p.rating||'';
-    document.getElementById('cnt').value=p.reviews||'';
-    showSt(`✅ تم الجلب: ${p.title} — تقييم ${p.rating} (${p.reviews?.toLocaleString('ar')} تقييم)`,'ok');
-  }catch(e){
-    showSt('تعذر الجلب — أكمل يدوياً: '+e.message,'err');
+function showSt(msg, type){
+  const el = document.getElementById('ast');
+  el.textContent = msg;
+  el.className = 'st show ' + type;
+}
+
+// ── التحليل التلقائي ──
+async function analyzeGBP(){
+  const url = document.getElementById('gbp_url').value.trim();
+  if(!url){ showSt('أدخل رابط الملف أولاً','err'); return; }
+
+  const btn = document.getElementById('analyze_btn');
+  btn.disabled = true;
+  document.getElementById('a_ico').innerHTML = '<span class="spin"></span>';
+  document.getElementById('a_txt').textContent = 'جاري التحليل...';
+  showSt('يستخرج بيانات الملف من قوقل...','load');
+
+  const parsed = parseGBPUrl(url);
+  if(!parsed.data_id && !parsed.place_id){
+    showSt('❌ الرابط غير صحيح — تأكد أنه رابط Google Maps للملف التجاري','err');
+    btn.disabled = false;
+    document.getElementById('a_ico').textContent = '🔍';
+    document.getElementById('a_txt').textContent = 'تحليل الملف تلقائياً';
+    return;
   }
-  btn.disabled=false;
-  document.getElementById('fico').textContent='🔍';
-  document.getElementById('ftxt').textContent='جلب البيانات من قوقل تلقائياً';
+
+  try {
+    const param = parsed.place_id
+      ? 'place_id=' + encodeURIComponent(parsed.place_id)
+      : 'data_id=' + encodeURIComponent(parsed.data_id);
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(()=>ctrl.abort(), 20000);
+    const res = await fetch(WORKER + '/?' + param, {signal: ctrl.signal});
+    clearTimeout(timer);
+    const d = await res.json();
+
+    if(d.error){ throw new Error(d.error); }
+
+    const pr = d.place_results || {};
+    if(!pr.title){ throw new Error('لم يُعثر على بيانات الملف'); }
+
+    _data = {
+      raw: pr,
+      title: pr.title || '—',
+      type: pr.type || '—',
+      address: pr.address || '—',
+      phone: pr.phone || null,
+      website: pr.website || null,
+      rating: pr.rating || 0,
+      reviews: pr.reviews || 0,
+      description: pr.description || null,
+      hours: pr.hours || null,
+      open_state: pr.open_state || null,
+      images: pr.images || [],
+      thumbnail: pr.thumbnail || null,
+      extensions: pr.extensions || {},
+    };
+
+    showInfoCard(_data);
+    showSt('✅ تم جلب البيانات — جاري بناء التقرير...','ok');
+    setTimeout(()=>buildReport(), 300);
+
+  } catch(e){
+    showSt('❌ ' + e.message,'err');
+  }
+
+  btn.disabled = false;
+  document.getElementById('a_ico').textContent = '🔍';
+  document.getElementById('a_txt').textContent = 'تحليل الملف تلقائياً';
 }
 
-function showSt(m,t){const el=document.getElementById('fst');el.textContent=m;el.className='st show '+t;}
+function showInfoCard(d){
+  document.getElementById('info_card').style.display='block';
+  document.getElementById('info_body').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    + [
+        ['📛 الاسم', d.title],
+        ['📂 النوع', d.type],
+        ['📍 العنوان', d.address],
+        ['📞 الهاتف', d.phone||'غير مدخل'],
+        ['⭐ التقييم', d.rating + ' (' + d.reviews.toLocaleString('ar') + ' تقييم)'],
+        ['🕐 الحالة', d.open_state||'غير محدد'],
+        ['🌐 الموقع', d.website?'✅ موجود':'❌ غير مدخل'],
+        ['📸 الصور', d.images.length + ' صورة'],
+      ].map(([l,v])=>
+        '<div style="background:var(--gl);border-radius:6px;padding:7px 9px">'
+        +'<div style="font-size:9px;color:var(--gd);margin-bottom:2px">'+l+'</div>'
+        +'<div style="font-size:11px;font-weight:700;color:var(--navy);word-break:break-all">'+v+'</div>'
+        +'</div>'
+      ).join('')
+    + '</div>';
+}
 
-function calcScore(){
-  const biz=document.getElementById('biz').value||'غير محدد';
-  const avg=parseFloat(document.getElementById('avg').value)||0;
-  const cnt=parseInt(document.getElementById('cnt').value)||0;
-  const desc=+document.getElementById('desc').value;
-  const cats=+document.getElementById('cats').value;
-  const photos=parseInt(document.getElementById('photos').value)||0;
-  const prods=parseInt(document.getElementById('prods').value)||0;
-  const hours=+document.getElementById('hours').value;
-  const rply=parseInt(document.getElementById('rply').value)||0;
-  const neg=+document.getElementById('neg').value;
-  const mrev=parseInt(document.getElementById('mrev').value)||0;
-  const lph=parseInt(document.getElementById('lph').value)||99;
-  const lpo=parseInt(document.getElementById('lpo').value)||99;
-  const cat=+document.getElementById('cat').value;
-  const kw=+document.getElementById('kw').value;
+// ── حساب الدرجة ──
+function calcScore(d){
+  const criteria = [];
 
-  const S1=desc*5+cats*5+(photos>=10?5:photos>=5?3:photos>=1?1:0)+(prods>=5?5:prods>=2?3:prods>=1?1:0)+hours*5;
-  const S2=(avg>=4.5?5:avg>=4?4:avg>=3.5?2:avg>0?1:0)+(cnt>=100?5:cnt>=50?4:cnt>=20?2:cnt>0?1:0);
-  const S3=(rply>=90?10:rply>=50?6:rply>0?2:0)+(neg===2?7:neg===1?4:0)+(mrev>=5?3:mrev>=2?2:mrev>=1?1:0);
-  const S4=(lph<=1?7:lph<=3?4:1)+(lpo<=2?8:lpo<=4?4:0);
-  const S5=cat*15+kw*15;
-  const T=S1+S2+S3+S4+S5;
+  // ١. التقييم (20 نقطة)
+  const r = d.rating;
+  const s1 = r>=4.5?20: r>=4?16: r>=3.5?12: r>=3?8:4;
+  criteria.push({label:'التقييم والمصداقية', score:s1, max:20, color:'#1BA8B8',
+    note: r>=4.5?'ممتاز — تقييم عالٍ جداً': r>=4?'جيد — تقييم فوق المتوسط': r>=3?'متوسط — يحتاج تحسين':'ضعيف — يحتاج عمل جاد'});
 
-  const col=T>=85?'#22C55E':T>=65?'#1BA8B8':T>=45?'#F97316':'#EF4444';
-  const lbl=T>=85?'ممتاز ★★★★★':T>=65?'جيد ★★★★':T>=45?'متوسط ★★★':'ضعيف ★★';
-  const rec=T>=85?'ملفك في أفضل حالاته — حافظ على نفس المستوى.':T>=65?'أساس قوي، لكن فيه فرص تحسين واضحة.':T>=45?'ملفك يخسر عملاء يومياً — التحسين الآن ضروري.':'ملفك يحتاج تدخلاً عاجلاً — فرص كثيرة ضائعة.';
+  // ٢. عدد التقييمات (20 نقطة)
+  const rv = d.reviews;
+  const s2 = rv>=500?20: rv>=200?16: rv>=100?12: rv>=50?8: rv>=10?5:2;
+  criteria.push({label:'عدد التقييمات', score:s2, max:20, color:'#F5C518',
+    note: rv>=500?'قاعدة تقييمات ممتازة': rv>=100?'مقبول ويمكن تحسينه': rv>=10?'قليل — شجع العملاء على التقييم':'ضعيف جداً — يحتاج حملة تقييمات'});
 
-  const crit=[
-    {n:'اكتمال الملف',s:S1,m:25,c:'#1BA8B8',t:!desc?'أضف وصفاً 150+ حرف':!cats?'حدد فئة رئيسية وفرعيتان':photos<5?'ارفع المزيد من الصور':prods<5?'أضف ٥ منتجات بأسعارها':'أكمل ساعات العمل'},
-    {n:'جودة التقييمات',s:S2,m:10,c:'#F5C518',t:avg<4?`التقييم ${avg} منخفض — حسّن تجربة العميل`:cnt<20?'التقييمات قليلة — اطلب من عملائك تقييمك':'حافظ على الاستمرارية'},
-    {n:'الرد على التقييمات',s:S3,m:20,c:'#22C55E',t:rply<50?`نسبة ردودك ${rply}٪ — ارد على الجميع`:neg===0?'لم ترد على أي تقييم سلبي':mrev<2?'التقييمات الجديدة نادرة':'جودة الردود تحتاج تحسيناً'},
-    {n:'حداثة النشاط',s:S4,m:15,c:'#F97316',t:lpo>4?`آخر منشور منذ ${lpo} أسابيع`:lph>3?`آخر صورة منذ ${lph} أشهر`:'انتظم أكثر في النشر'},
-    {n:'الظهور في البحث',s:S5,m:30,c:'#1B2B5E',t:!cat?'الفئة غير دقيقة — غيّرها':!kw?'أضف كلمات مفتاحية محلية':'تحسين إضافي ممكن'},
-  ];
-  const sorted=[...crit].sort((a,b)=>a.s/a.m-b.s/b.m);
-  _d={biz,T,lbl,rec,col,S1,S2,S3,S4,S5,crit,sorted,date:new Date().toLocaleDateString('ar-SA'),city:document.getElementById('city').value};
+  // ٣. اكتمال المعلومات (20 نقطة)
+  let info_score = 0;
+  if(d.phone) info_score += 5;
+  if(d.website) info_score += 5;
+  if(d.description) info_score += 5;
+  if(d.hours) info_score += 5;
+  const s3 = info_score;
+  criteria.push({label:'اكتمال معلومات الملف', score:s3, max:20, color:'#22C55E',
+    note: s3>=20?'الملف مكتمل ✅': s3>=15?'شبه مكتمل — يحتاج إضافات صغيرة': s3>=10?'ناقص — أضف الهاتف أو الوصف أو المواقيت':'ناقص جداً — يحتاج تعبئة شاملة'});
 
-  document.getElementById('r_biz').textContent=biz;
-  document.getElementById('r_date').textContent=_d.date+' | '+_d.city;
-  document.getElementById('score_num').textContent=T;
-  document.getElementById('score_lbl').textContent=lbl;
-  document.getElementById('score_box').style.background=col;
-  document.getElementById('score_rec').textContent=rec;
+  // ٤. الصور (20 نقطة)
+  const imgs = d.images.length;
+  const s4 = imgs>=20?20: imgs>=10?16: imgs>=5?12: imgs>=2?7: imgs>=1?4:0;
+  criteria.push({label:'الصور والمحتوى المرئي', score:s4, max:20, color:'#F97316',
+    note: imgs>=20?'محتوى مرئي رائع': imgs>=10?'جيد — أضف المزيد': imgs>=5?'مقبول — الهدف 20+ صورة': imgs>=1?'قليل جداً — أضف صوراً للنشاط':'لا صور — أضف صوراً فوراً'});
 
-  document.getElementById('mini_scores').innerHTML=crit.map(cr=>`
-    <div style="background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:4px 7px;text-align:center;font-size:10px">
-      <div style="font-weight:700;color:${cr.c}">${cr.s}/${cr.m}</div>
-      <div style="color:#9AA0A6;margin-top:1px">${cr.n.split(' ')[0]}</div>
+  // ٥. الحضور والنشاط (20 نقطة)
+  let active_score = 10; // افتراضي
+  if(d.open_state && d.open_state.includes('مفتوح')) active_score = 15;
+  if(d.description && d.description.length > 100) active_score += 5;
+  const s5 = Math.min(active_score, 20);
+  criteria.push({label:'الحضور والنشاط', score:s5, max:20, color:'#8B5CF6',
+    note: s5>=18?'نشاط ممتاز على الملف': s5>=14?'جيد — أضف منشورات دورية': s5>=10?'متوسط — فعّل خاصية المنشورات':'ضعيف — الملف يحتاج نشاطاً أكبر'});
+
+  const total = s1+s2+s3+s4+s5;
+  return {criteria, total};
+}
+
+// ── بناء التقرير ──
+function buildReport(){
+  if(!_data){ alert('اضغط "تحليل الملف" أولاً'); return; }
+  const d = _data;
+  const client = document.getElementById('client_name').value || d.title;
+  const sc = calcScore(d);
+  const T = sc.total;
+
+  const col = T>=85?'#22C55E': T>=70?'#1BA8B8': T>=55?'#F97316':'#EF4444';
+  const lbl = T>=85?'ممتاز ★★★★★': T>=70?'جيد جداً ★★★★': T>=55?'جيد ★★★': T>=40?'متوسط ★★':'ضعيف ★';
+
+  // هيدر
+  document.getElementById('r_client').textContent = client;
+  document.getElementById('r_date').textContent = new Date().toLocaleDateString('ar-SA') + ' | تقرير الملف التجاري';
+
+  // الدرجة
+  document.getElementById('score_num').textContent = T;
+  document.getElementById('score_box').style.background = col;
+
+  // معلومات الملف
+  document.getElementById('biz_name').textContent = d.title;
+  document.getElementById('biz_type').textContent = d.type;
+  document.getElementById('biz_addr').textContent = d.address;
+  const starsEl = document.getElementById('stars');
+  const fullStars = Math.round(d.rating);
+  starsEl.textContent = '★'.repeat(fullStars) + '☆'.repeat(5-fullStars);
+  document.getElementById('rating_txt').textContent = d.rating + ' (' + d.reviews.toLocaleString('ar') + ' تقييم)';
+
+  // أشرطة المعايير
+  document.getElementById('crit_bars').innerHTML = sc.criteria.map(c=>`
+    <div class="crit-row">
+      <div class="crit-head">
+        <span class="crit-lbl">${c.label}</span>
+        <span class="crit-val" style="color:${c.color}">${c.score}/${c.max}</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fg" style="width:${Math.round(c.score/c.max*100)}%;background:${c.color}"></div></div>
+      <div class="crit-note">${c.note}</div>
     </div>`).join('');
 
-  document.getElementById('crit_bars').innerHTML=crit.map(cr=>`
-    <div style="margin-bottom:9px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-        <span style="font-size:11px;font-weight:600;color:#1B2B5E">${cr.n}</span>
-        <span style="font-size:11px;font-weight:700;color:${cr.c}">${cr.s}/${cr.m}</span>
-      </div>
-      <div style="background:#E4E8EF;border-radius:3px;height:6px">
-        <div style="background:${cr.c};border-radius:3px;height:6px;width:${Math.round(cr.s/cr.m*100)}%"></div>
-      </div>
+  // تفاصيل الملف
+  document.getElementById('detail_grid').innerHTML = [
+    ['📞','الهاتف', d.phone||'غير مدخل', d.phone?'ok':'bad'],
+    ['🌐','الموقع الإلكتروني', d.website?'✅ موجود':'❌ غير مدخل', d.website?'ok':'bad'],
+    ['📝','الوصف', d.description?'✅ مكتوب':'❌ غير مكتوب', d.description?'ok':'bad'],
+    ['⏰','مواقيت العمل', d.hours?'✅ محددة':'❌ غير محددة', d.hours?'ok':'bad'],
+    ['📸','الصور', d.images.length + ' صورة', d.images.length>=10?'ok': d.images.length>=5?'warn':'bad'],
+    ['⭐','التقييم', d.rating + '/5', d.rating>=4?'ok': d.rating>=3?'warn':'bad'],
+    ['💬','التقييمات', d.reviews.toLocaleString('ar') + ' تقييم', d.reviews>=100?'ok': d.reviews>=50?'warn':'bad'],
+    ['🔓','الحالة', d.open_state||'غير محدد', 'ok'],
+  ].map(([ico,lbl,val,cls])=>`
+    <div class="detail-item">
+      <div class="detail-ico">${ico}</div>
+      <div class="detail-lbl">${lbl}</div>
+      <div class="detail-val ${cls}">${val}</div>
     </div>`).join('');
 
-  document.getElementById('opps').innerHTML=sorted.slice(0,3).map((cr,i)=>`
-    <div style="background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:9px 11px;margin-bottom:7px">
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <div style="font-size:16px;font-weight:700;color:#F5C518;min-width:22px">0${i+1}</div>
-        <div>
-          <div style="font-size:11px;font-weight:700;color:#1B2B5E;margin-bottom:2px">${cr.n} — ${cr.s}/${cr.m} نقطة</div>
-          <div style="font-size:10px;color:#555;line-height:1.5">${cr.t}</div>
-        </div>
-      </div>
-    </div>`).join('');
+  // التوصيات
+  const recs = [];
+  if(!d.phone) recs.push({t:'أضف رقم الهاتف',d:'رقم الهاتف يزيد التواصل المباشر مع العملاء — أضفه فوراً',type:'info-red'});
+  if(!d.website) recs.push({t:'أضف الموقع الإلكتروني',d:'الموقع يزيد مصداقية النشاط ويحسن الظهور في البحث',type:'info-gold'});
+  if(!d.description) recs.push({t:'اكتب وصفاً للنشاط',d:'الوصف الجيد يحسن الظهور في نتائج البحث المحلي',type:'info-red'});
+  if(!d.hours) recs.push({t:'أضف مواقيت العمل',d:'العملاء يبحثون عن مواقيت العمل قبل الزيارة',type:'info-red'});
+  if(d.images.length < 10) recs.push({t:'أضف المزيد من الصور',d:`عندك ${d.images.length} صور فقط — الهدف 20+ صورة احترافية`,type:'info-gold'});
+  if(d.reviews < 50) recs.push({t:'اجمع المزيد من التقييمات',d:`${d.reviews} تقييم فقط — شجع العملاء على التقييم بعد كل زيارة`,type:'info-gold'});
+  if(d.rating < 4) recs.push({t:'حسّن تقييمك',d:`تقييمك ${d.rating} — اعمل على تحسين تجربة العملاء والرد على الملاحظات`,type:'info-red'});
+  if(recs.length === 0) recs.push({t:'✅ الملف في حالة ممتازة',d:'استمر في نشر المحتوى والرد على التقييمات',type:'info-green'});
 
-  document.getElementById('rep_card').style.display='block';
+  document.getElementById('recs').innerHTML = recs.map(r=>
+    `<div class="info-box ${r.type}"><strong>${r.t}</strong><br>${r.d}</div>`
+  ).join('');
+
+  // إظهار التقرير
+  document.getElementById('rep').classList.add('show');
   document.getElementById('ph').style.display='none';
+
+  // حفظ للطباعة
+  window._rep = {client, d, sc, T, lbl, col, recs};
 }
 
-function openPrint(){
-  if(!_d){alert('احسب الدرجة أولاً');return;}
-  var d=_d;
-  var colBg=d.col;
-  var critHTML=d.crit.map(function(cr){
-    var pct=Math.round(cr.s/cr.m*100);
-    return '<div class="crit">'+
-      '<div class="crit-row">'+
-        '<span class="crit-name">'+cr.n+'</span>'+
-        '<span class="crit-score" style="color:'+cr.c+'">'+cr.s+'/'+cr.m+'</span>'+
-      '</div>'+
-      '<div class="bar-bg"><div class="bar-fg" style="width:'+pct+'%;background:'+cr.c+'"></div></div>'+
-    '</div>';
-  }).join('');
+// ── الطباعة ──
+function printReport(){
+  if(!window._rep) return;
+  const {client, d, sc, T, lbl, col, recs} = window._rep;
 
-  var miniHTML=d.crit.map(function(cr){
-    return '<div class="mini-item"><div class="mini-n" style="color:'+cr.c+'">'+cr.s+'/'+cr.m+'</div><div class="mini-l">'+cr.n.split(' ')[0]+'</div></div>';
-  }).join('');
+  const css = '<style>'
+    +'*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'body{font-family:"IBM Plex Sans Arabic",Arial,sans-serif;direction:rtl;background:#fff}'
+    +'@media print{@page{size:A4;margin:0}thead{display:table-header-group}tfoot{display:table-footer-group}}'
+    +'table.pg{width:210mm;border-collapse:collapse}'
+    +'td{padding:0;vertical-align:top}'
+    +'.sec{background:#1B2B5E;padding:7px 18px}'
+    +'.sec span{color:#F5C518;font-weight:700;font-size:11px}'
+    +'</style>';
 
-  var oppsHTML=d.sorted.slice(0,3).map(function(cr,i){
-    return '<div class="opp">'+
-      '<div class="opp-n">0'+(i+1)+'</div>'+
-      '<div>'+
-        '<div class="opp-title">'+cr.n+' — '+cr.s+'/'+cr.m+' نقطة</div>'+
-        '<div class="opp-text">'+cr.t+'</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+  function bar(label,score,max,col){
+    const pct=Math.round(score/max*100);
+    return '<div style="margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:3px">'
+      +'<span style="font-size:11px;font-weight:600;color:#1B2B5E">'+label+'</span>'
+      +'<span style="font-size:11px;font-weight:700;color:'+col+'">'+score+'/'+max+'</span>'
+      +'</div>'
+      +'<div style="background:#E4E8EF;border-radius:4px;height:9px">'
+      +'<div style="background:'+col+';height:9px;width:'+pct+'%;border-radius:4px"></div>'
+      +'</div></div>';
+  }
 
-  var html='<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">'+
-  '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'+
-  '<style>'+
-  '*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}'+
-  'body{font-family:"IBM Plex Sans Arabic",Arial,sans-serif;background:#fff;direction:rtl}'+
-  '.page{width:210mm;min-height:297mm;display:flex;flex-direction:column}'+
-  '.top-bar{background:#F5C518;padding:7px;text-align:center;flex-shrink:0}'+
-  '.top-bar span{font-size:10px;font-weight:700;color:#1B2B5E;letter-spacing:1px;direction:ltr;display:inline-block}'+
-  '.header{background:#1B2B5E;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}'+
-  '.h-logo{font-size:20px;font-weight:700;color:#fff;letter-spacing:3px;direction:ltr;display:inline-block}'+
-  '.h-sub{font-size:10px;color:#1BA8B8;margin-top:3px}'+
-  '.h-biz{font-size:13px;font-weight:700;color:#fff;text-align:left}'+
-  '.h-date{font-size:9px;color:rgba(255,255,255,0.5);text-align:left;margin-top:2px}'+
-  '.score-sec{padding:16px 20px;display:flex;gap:14px;border-bottom:2px solid #E4E8EF;flex-shrink:0}'+
-  '.score-box{width:90px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;flex-shrink:0}'+
-  '.score-n{font-size:36px;font-weight:700;color:#fff;line-height:1}'+
-  '.score-100{font-size:9px;color:rgba(255,255,255,0.7);margin-top:2px}'+
-  '.score-l{font-size:10px;font-weight:700;color:#fff;margin-top:6px;text-align:center}'+
-  '.score-sum{flex:1;background:#F5F7FA;border-radius:8px;padding:12px 14px}'+
-  '.sum-title{font-size:11px;font-weight:700;color:#1B2B5E;margin-bottom:6px}'+
-  '.sum-rec{font-size:11px;color:#444;line-height:1.7;margin-bottom:10px}'+
-  '.mini-scores{display:flex;gap:6px;flex-wrap:wrap}'+
-  '.mini-item{background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:4px 8px;text-align:center}'+
-  '.mini-n{font-size:10px;font-weight:700}'+
-  '.mini-l{font-size:9px;color:#9AA0A6;margin-top:1px}'+
-  '.sec{padding:14px 20px;border-bottom:1px solid #E4E8EF;flex:1}'+
-  '.sec-last{padding:14px 20px;flex:1}'+
-  '.sec-title{font-size:10px;font-weight:700;color:#6C757D;margin-bottom:12px;letter-spacing:0.5px}'+
-  '.crit{margin-bottom:14px}'+
-  '.crit-row{display:flex;justify-content:space-between;margin-bottom:4px}'+
-  '.crit-name{font-size:12px;font-weight:600;color:#1B2B5E}'+
-  '.crit-score{font-size:12px;font-weight:700}'+
-  '.bar-bg{background:#E4E8EF;border-radius:4px;height:8px}'+
-  '.bar-fg{border-radius:4px;height:8px}'+
-  '.opp{display:flex;gap:10px;align-items:flex-start;background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:14px;margin-bottom:12px}'+
-  '.opp-n{font-size:20px;font-weight:700;color:#F5C518;min-width:28px;line-height:1.2;flex-shrink:0}'+
-  '.opp-title{font-size:12px;font-weight:700;color:#1B2B5E;margin-bottom:4px}'+
-  '.opp-text{font-size:11px;color:#555;line-height:1.7}'+
-  '.footer{background:#1B2B5E;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:auto;flex-shrink:0}'+
-  '.f-logo{font-size:13px;font-weight:700;color:#F5C518;letter-spacing:2px;direction:ltr;display:inline-block}'+
-  '.f-mid{font-size:9px;color:rgba(255,255,255,0.4)}'+
-  '.f-url{font-size:9px;color:rgba(255,255,255,0.4);direction:ltr;display:inline-block}'+
-  '@media print{@page{size:A4;margin:0}body,html{width:210mm;height:297mm}}'+
-  '</style></head><body>'+
-  '<div class="page">'+
-    '<div class="top-bar"><span>MAWATH | mawath.com | info@mawath.com</span></div>'+
-    '<div class="header">'+
-      '<div><div class="h-logo">MAWATH</div><div class="h-sub">تقرير تقييم الأداء</div></div>'+
-      '<div><div class="h-biz">'+d.biz+'</div><div class="h-date">'+d.date+' | '+d.city+'</div></div>'+
-    '</div>'+
-    '<div class="score-sec">'+
-      '<div class="score-box" style="background:'+colBg+'">'+
-        '<div class="score-n">'+d.T+'</div>'+
-        '<div class="score-100">/ 100</div>'+
-        '<div class="score-l">'+d.lbl+'</div>'+
-      '</div>'+
-      '<div class="score-sum">'+
-        '<div class="sum-title">ملخص الأداء</div>'+
-        '<div class="sum-rec">'+d.rec+'</div>'+
-        '<div class="mini-scores">'+miniHTML+'</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="sec">'+
-      '<div class="sec-title">تفصيل المعايير</div>'+
-      critHTML+
-    '</div>'+
-    '<div class="sec-last">'+
-      '<div class="sec-title">أهم فرص التحسين</div>'+
-      oppsHTML+
-    '</div>'+
-    '<div class="footer">'+
-      '<span class="f-logo">MAWATH</span>'+
-      '<span class="f-mid">تقرير سري — للاستخدام الداخلي فقط</span>'+
-      '<span class="f-url">mawath.com</span>'+
-    '</div>'+
-  '</div>'+
-  '<script>window.onload=function(){window.print();}<\/script>'+
-  '</body></html>';
+  const hdr = '<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between">'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">MAWATH · خرائط قوقل | mawath.com | info@mawath.com</span>'
+    +'<span style="font-size:8px;font-weight:700;color:#1B2B5E">تقرير تقييم الملف التجاري</span></div>'
+    +'<div style="background:#1B2B5E;padding:12px 18px;display:flex;justify-content:space-between;align-items:center">'
+    +'<div><div style="font-size:18px;font-weight:700;color:#fff">خرائط قوقل · MAWATH</div>'
+    +'<div style="font-size:9px;color:#1BA8B8">تقرير تقييم Google Business Profile</div></div>'
+    +'<div style="text-align:left"><div style="font-size:12px;font-weight:700;color:#fff">'+client+'</div>'
+    +'<div style="font-size:9px;color:rgba(255,255,255,0.5)">'+new Date().toLocaleDateString('ar-SA')+'</div></div></div>';
 
-  var w=window.open('','_blank');
-  w.document.write(html);
-  w.document.close();
+  const ftr = '<div style="background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center">'
+    +'<span style="font-size:11px;font-weight:700;color:#F5C518">MAWATH · خرائط قوقل</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">تقرير سري — للاستخدام الداخلي</span>'
+    +'<span style="font-size:8px;color:rgba(255,255,255,0.4)">mawath.com</span></div>';
+
+  let recsHTML = '';
+  recs.forEach((r,i)=>{
+    const bg = r.type==='info-green'?'#D1FAE5': r.type==='info-red'?'#FEE2E2':'#FEF8DC';
+    const bc = r.type==='info-green'?'#22C55E': r.type==='info-red'?'#EF4444':'#F5C518';
+    const tc = r.type==='info-green'?'#065F46': r.type==='info-red'?'#991B1B':'#7A5800';
+    recsHTML += '<div style="background:'+bg+';border-right:4px solid '+bc+';border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:7px">'
+      +'<div style="font-size:11px;font-weight:700;color:'+tc+';margin-bottom:2px">'+r.t+'</div>'
+      +'<div style="font-size:10px;color:'+tc+';line-height:1.6">'+r.d+'</div>'
+      +'</div>';
+  });
+
+  let detailHTML = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">';
+  [
+    ['📞','الهاتف', d.phone||'غير مدخل', d.phone?'#22C55E':'#EF4444'],
+    ['🌐','الموقع', d.website?'✅ موجود':'❌ غير مدخل', d.website?'#22C55E':'#EF4444'],
+    ['📝','الوصف', d.description?'✅ مكتوب':'❌ غير مكتوب', d.description?'#22C55E':'#EF4444'],
+    ['⏰','المواقيت', d.hours?'✅ محددة':'❌ غير محددة', d.hours?'#22C55E':'#EF4444'],
+    ['📸','الصور', d.images.length+' صورة', d.images.length>=10?'#22C55E':'#F97316'],
+    ['⭐','التقييم', d.rating+'/5', d.rating>=4?'#22C55E':'#EF4444'],
+    ['💬','التقييمات', d.reviews.toLocaleString('ar')+' تقييم', d.reviews>=100?'#22C55E':'#F97316'],
+    ['🔓','الحالة', d.open_state||'—', '#1B2B5E'],
+  ].forEach(([ico,lbl,val,tc])=>{
+    detailHTML += '<div style="background:#F5F7FA;border-radius:6px;padding:8px 10px">'
+      +'<div style="font-size:12px;margin-bottom:3px">'+ico+'</div>'
+      +'<div style="font-size:9px;color:#6C757D;margin-bottom:2px">'+lbl+'</div>'
+      +'<div style="font-size:11px;font-weight:700;color:'+tc+'">'+val+'</div>'
+      +'</div>';
+  });
+  detailHTML += '</div>';
+
+  const body = '<div style="padding:12px 18px;display:flex;gap:12px;border-bottom:2px solid #E4E8EF">'
+    +'<div style="width:80px;height:80px;border-radius:50%;background:'+col+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">'
+    +'<div style="font-size:30px;font-weight:700;color:#fff;line-height:1">'+T+'</div>'
+    +'<div style="font-size:8px;color:rgba(255,255,255,0.7)">/ 100</div></div>'
+    +'<div style="flex:1;background:#F5F7FA;border-radius:8px;padding:10px 12px">'
+    +'<div style="font-size:13px;font-weight:700;color:#1B2B5E;margin-bottom:3px">'+d.title+'</div>'
+    +'<div style="font-size:11px;color:#1BA8B8;margin-bottom:4px">'+d.type+'</div>'
+    +'<div style="font-size:10px;color:#6C757D;margin-bottom:4px">'+d.address+'</div>'
+    +'<div style="font-size:12px;color:#F5C518">'+('★'.repeat(Math.round(d.rating))+'☆'.repeat(5-Math.round(d.rating)))+' '+d.rating+' ('+d.reviews.toLocaleString('ar')+' تقييم)</div>'
+    +'<div style="margin-top:6px;font-size:11px;font-weight:700;color:'+col+'">'+lbl+'</div>'
+    +'</div></div>'
+    +'<div class="sec" style="margin-top:0"><span>🎯 تفصيل درجة التقييم من 100</span></div>'
+    +'<div style="padding:12px 18px">'
+    +sc.criteria.map(c=>bar(c.label,c.score,c.max,c.color)).join('')
+    +'</div>'
+    +'<div class="sec"><span>📋 تفاصيل الملف</span></div>'
+    +'<div style="padding:12px 18px">'+detailHTML+'</div>'
+    +'<div class="sec"><span>💡 التوصيات</span></div>'
+    +'<div style="padding:12px 18px">'+recsHTML+'</div>';
+
+  const html = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">'
+    +'<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">'
+    +css+'</head><body>'
+    +'<table class="pg"><thead><tr><td>'+hdr+'</td></tr></thead>'
+    +'<tfoot><tr><td>'+ftr+'</td></tr></tfoot>'
+    +'<tbody><tr><td>'+body+'</td></tr></tbody></table>'
+    +'</body></html>';
+
+  const w = window.open('','_blank');
+  w.document.open(); w.document.write(html); w.document.close();
+  setTimeout(()=>w.print(), 900);
 }
 
-
+// ── نسخ للواتساب ──
 function copyWA(){
-  if(!_d)return;
-  const txt=`📊 تقرير تقييم الأداء — MAWATH\n━━━━━━━━━━━━━━━━\n🏢 النشاط: ${_d.biz}\n📍 المدينة: ${_d.city}\n📅 التاريخ: ${_d.date}\n\n🎯 الدرجة الكلية: ${_d.T}/100\n${_d.lbl}\n\n📋 تفصيل المعايير:\n• اكتمال الملف: ${_d.S1}/25\n• جودة التقييمات: ${_d.S2}/10\n• الرد على التقييمات: ${_d.S3}/20\n• حداثة النشاط: ${_d.S4}/15\n• الظهور في البحث: ${_d.S5}/30\n\n🎯 أهم فرص التحسين:\n${_d.sorted.slice(0,3).map((c,i)=>`${i+1}. ${c.n} (${c.s}/${c.m}) — ${c.t}`).join('\n')}\n\n━━━━━━━━━━━━━━━━\nMAWATH | mawath.com | info@mawath.com`;
+  if(!window._rep) return;
+  const {client, d, sc, T, lbl, recs} = window._rep;
+  const txt = '🗺️ تقرير تقييم الملف التجاري — MAWATH\n'
+    +'━━━━━━━━━━━━━━━━\n'
+    +'📛 النشاط: '+d.title+'\n'
+    +'📂 النوع: '+d.type+'\n'
+    +'📍 العنوان: '+d.address+'\n'
+    +'📅 '+new Date().toLocaleDateString('ar-SA')+'\n\n'
+    +'🎯 الدرجة الكلية: '+T+'/100\n'
+    +lbl+'\n\n'
+    +'📊 تفصيل الدرجة:\n'
+    +sc.criteria.map(c=>'  • '+c.label+': '+c.score+'/'+c.max).join('\n')+'\n\n'
+    +'📋 تفاصيل الملف:\n'
+    +'  • الهاتف: '+(d.phone||'غير مدخل')+'\n'
+    +'  • الموقع: '+(d.website?'✅ موجود':'❌ غير مدخل')+'\n'
+    +'  • الوصف: '+(d.description?'✅ مكتوب':'❌ غير مكتوب')+'\n'
+    +'  • المواقيت: '+(d.hours?'✅ محددة':'❌ غير محددة')+'\n'
+    +'  • الصور: '+d.images.length+' صورة\n'
+    +'  • التقييم: '+d.rating+' ('+d.reviews.toLocaleString('ar')+' تقييم)\n\n'
+    +'💡 أهم التوصيات:\n'
+    +recs.slice(0,3).map((r,i)=>'  '+(i+1)+'. '+r.t).join('\n')+'\n\n'
+    +'━━━━━━━━━━━━━━━━\n'
+    +'MAWATH · خرائط قوقل | mawath.com';
+
   navigator.clipboard.writeText(txt).then(()=>{
     event.target.textContent='✅ تم النسخ!';
     setTimeout(()=>event.target.textContent='📋 نسخ للواتساب',2000);
