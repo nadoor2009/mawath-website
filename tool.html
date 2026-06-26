@@ -239,16 +239,21 @@ function chk(){
 
 // ── استخراج data_id و place_id من الرابط ──
 function parseGBPUrl(url){
-  const result = {data_id: null, place_id: null, lat: null, lng: null};
-  // استخرج data_id
-  const dm = url.match(/!1s(0x[a-fA-F0-9]+:0x[a-fA-F0-9]+)/);
-  if(dm) result.data_id = dm[1];
-  // استخرج place_id (ChIJ...)
-  const pm = url.match(/place\/[^/]+\/@[^/]+\/.*?!1s(ChIJ[^!&]+)/);
-  if(pm) result.place_id = pm[1];
-  // استخرج الإحداثيات
-  const cm = url.match(/@([\d.]+),([\d.]+)/);
-  if(cm){ result.lat = cm[1]; result.lng = cm[2]; }
+  const result = {data_cid: null, place_id: null};
+  try {
+    // طريقة ١: استخرج data_id وحول الجزء الثاني لـ data_cid
+    const dm = url.match(/!1s(0x[a-fA-F0-9]+)%3A(0x[a-fA-F0-9]+)/i)
+              || url.match(/!1s(0x[a-fA-F0-9]+):(0x[a-fA-F0-9]+)/i);
+    if(dm && dm[2]){
+      result.data_cid = BigInt(dm[2]).toString();
+    }
+    // طريقة ٢: استخرج data_cid مباشرة من الرابط إن وجد
+    const cidm = url.match(/data_cid=(\d+)/);
+    if(cidm) result.data_cid = cidm[1];
+    // طريقة ٣: place_id
+    const pm = url.match(/place_id=(ChIJ[^&]+)/);
+    if(pm) result.place_id = pm[1];
+  } catch(e){ console.log('parse error:', e); }
   return result;
 }
 
@@ -270,7 +275,7 @@ async function analyzeGBP(){
   showSt('يستخرج بيانات الملف من قوقل...','load');
 
   const parsed = parseGBPUrl(url);
-  if(!parsed.data_id && !parsed.place_id){
+  if(!parsed.data_cid && !parsed.place_id){
     showSt('❌ الرابط غير صحيح — تأكد أنه رابط Google Maps للملف التجاري','err');
     btn.disabled = false;
     document.getElementById('a_ico').textContent = '🔍';
@@ -280,8 +285,8 @@ async function analyzeGBP(){
 
   try {
     const param = parsed.place_id
-      ? 'place_id=' + encodeURIComponent(parsed.place_id)
-      : 'data_id=' + encodeURIComponent(parsed.data_id);
+      ? 'place_id=' + parsed.place_id
+      : 'data_cid=' + parsed.data_cid;
 
     const ctrl = new AbortController();
     const timer = setTimeout(()=>ctrl.abort(), 20000);
@@ -297,7 +302,7 @@ async function analyzeGBP(){
     _data = {
       raw: pr,
       title: pr.title || '—',
-      type: pr.type || '—',
+      type: Array.isArray(pr.type) ? pr.type[0] : (pr.type || '—'),
       address: pr.address || '—',
       phone: pr.phone || null,
       website: pr.website || null,
@@ -309,6 +314,10 @@ async function analyzeGBP(){
       images: pr.images || [],
       thumbnail: pr.thumbnail || null,
       extensions: pr.extensions || {},
+      unclaimed: pr.unclaimed_listing || false,
+      rating_summary: pr.rating_summary || [],
+      popular_times: pr.popular_times || null,
+      user_reviews: pr.user_reviews || null,
     };
 
     showInfoCard(_data);
@@ -326,17 +335,25 @@ async function analyzeGBP(){
 
 function showInfoCard(d){
   document.getElementById('info_card').style.display='block';
+  // حساب توزيع التقييمات
+  const neg = d.rating_summary.filter(r=>r.stars<=2).reduce((s,r)=>s+r.amount,0);
+  const pos = d.rating_summary.filter(r=>r.stars>=4).reduce((s,r)=>s+r.amount,0);
+  const negPct = d.reviews>0 ? Math.round(neg/d.reviews*100) : 0;
+
   document.getElementById('info_body').innerHTML =
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    (d.unclaimed?'<div style="background:#FEE2E2;border-right:4px solid #EF4444;border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:10px;font-size:11px;font-weight:700;color:#991B1B">⚠️ الملف غير مطالب به — فعّله فوراً</div>':'')
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
     + [
         ['📛 الاسم', d.title],
         ['📂 النوع', d.type],
         ['📍 العنوان', d.address],
         ['📞 الهاتف', d.phone||'غير مدخل'],
         ['⭐ التقييم', d.rating + ' (' + d.reviews.toLocaleString('ar') + ' تقييم)'],
+        ['👎 تقييمات سلبية', neg + ' تقييم ('+negPct+'٪)'],
         ['🕐 الحالة', d.open_state||'غير محدد'],
-        ['🌐 الموقع', d.website?'✅ موجود':'❌ غير مدخل'],
         ['📸 الصور', d.images.length + ' صورة'],
+        ['🌐 الموقع', d.website?'✅ موجود':'❌ غير مدخل'],
+        ['📅 أوقات العمل', d.hours?'✅ محددة':'❌ غير محددة'],
       ].map(([l,v])=>
         '<div style="background:var(--gl);border-radius:6px;padding:7px 9px">'
         +'<div style="font-size:9px;color:var(--gd);margin-bottom:2px">'+l+'</div>'
@@ -378,13 +395,21 @@ function calcScore(d){
   criteria.push({label:'الصور والمحتوى المرئي', score:s4, max:20, color:'#F97316',
     note: imgs>=20?'محتوى مرئي رائع': imgs>=10?'جيد — أضف المزيد': imgs>=5?'مقبول — الهدف 20+ صورة': imgs>=1?'قليل جداً — أضف صوراً للنشاط':'لا صور — أضف صوراً فوراً'});
 
-  // ٥. الحضور والنشاط (20 نقطة)
-  let active_score = 10; // افتراضي
-  if(d.open_state && d.open_state.includes('مفتوح')) active_score = 15;
-  if(d.description && d.description.length > 100) active_score += 5;
-  const s5 = Math.min(active_score, 20);
-  criteria.push({label:'الحضور والنشاط', score:s5, max:20, color:'#8B5CF6',
-    note: s5>=18?'نشاط ممتاز على الملف': s5>=14?'جيد — أضف منشورات دورية': s5>=10?'متوسط — فعّل خاصية المنشورات':'ضعيف — الملف يحتاج نشاطاً أكبر'});
+  // ٥. جودة التقييمات (20 نقطة)
+  const neg = d.rating_summary ? d.rating_summary.filter(r=>r.stars<=2).reduce((s,r)=>s+r.amount,0) : 0;
+  const negPct = d.reviews>0 ? neg/d.reviews : 0;
+  let s5 = 20;
+  if(d.unclaimed) s5 -= 8;
+  if(negPct>=0.5) s5 -= 8;
+  else if(negPct>=0.3) s5 -= 5;
+  else if(negPct>=0.15) s5 -= 2;
+  s5 = Math.max(s5, 0);
+  const negPctDisplay = Math.round(negPct*100);
+  criteria.push({label:'جودة التقييمات وسمعة الملف', score:s5, max:20, color:'#8B5CF6',
+    note: d.unclaimed?'⚠️ الملف غير مطالب به — خطر كبير على ظهورك':
+          negPctDisplay>=30?'نسبة تقييمات سلبية مرتفعة ('+negPctDisplay+'٪) — يحتاج تحسين عاجل':
+          negPctDisplay>=15?'نسبة سلبية متوسطة ('+negPctDisplay+'٪) — اعمل على تحسين الخدمة':
+          'جودة تقييمات جيدة ('+negPctDisplay+'٪ سلبية فقط)'});
 
   const total = s1+s2+s3+s4+s5;
   return {criteria, total};
@@ -448,6 +473,8 @@ function buildReport(){
 
   // التوصيات
   const recs = [];
+  if(d.unclaimed) recs.push({t:'⚠️ الملف غير مطالب به',d:'الملف غير مُفعَّل باسمك — فعّله فوراً لتتحكم في بياناته وتحسين ظهوره',type:'info-red'});
+  if(d.unclaimed) recs.push({t:'⚠️ الملف غير مطالب به',d:'الملف غير مُفعَّل باسمك — فعّله فوراً للتحكم في بياناته',type:'info-red'});
   if(!d.phone) recs.push({t:'أضف رقم الهاتف',d:'رقم الهاتف يزيد التواصل المباشر مع العملاء — أضفه فوراً',type:'info-red'});
   if(!d.website) recs.push({t:'أضف الموقع الإلكتروني',d:'الموقع يزيد مصداقية النشاط ويحسن الظهور في البحث',type:'info-gold'});
   if(!d.description) recs.push({t:'اكتب وصفاً للنشاط',d:'الوصف الجيد يحسن الظهور في نتائج البحث المحلي',type:'info-red'});
