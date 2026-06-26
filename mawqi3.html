@@ -2895,56 +2895,22 @@ function printReport(){
   }
 
   const compHTML = _competitors.length?
-    _competitors.map((comp,i)=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${i%2?'#fff':'#F5F7FA'};border-bottom:1px solid #E4E8EF">
-      <div style="font-size:15px;font-weight:700;color:#1BA8B8;min-width:22px;flex-shrink:0">${i+1}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:11px;font-weight:700;color:#1B2B5E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${comp.name}</div>
-        <div style="font-size:10px;color:#9AA0A6">${comp.address||''}</div>
-      </div>
-      <div style="text-align:center;flex-shrink:0">
-        <div style="font-size:12px;font-weight:700;color:#F5C518">${comp.rating?comp.rating+'⭐':''}</div>
-        <div style="font-size:9px;color:#9AA0A6">(${(comp.reviews||0).toLocaleString('ar')})</div>
-      </div>
-    </div>`).join('')
+    _competitors.map((comp,i)=>
+    '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:'+(i%2?'#fff':'#F5F7FA')+';border-bottom:1px solid #E4E8EF">'+
+      '<div style="font-size:15px;font-weight:700;color:#1BA8B8;min-width:22px;flex-shrink:0">'+(i+1)+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-size:11px;font-weight:700;color:#1B2B5E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+comp.name+'</div>'+
+        '<div style="font-size:10px;color:#9AA0A6">'+(comp.address||'')+'</div>'+
+      '</div>'+
+      '<div style="text-align:center;flex-shrink:0">'+
+        '<div style="font-size:12px;font-weight:700;color:#F5C518">'+(comp.rating?comp.rating+'⭐':'')+'</div>'+
+        '<div style="font-size:9px;color:#9AA0A6">'+'('+((comp.reviews||0).toLocaleString('ar'))+')'+'</div>'+
+      '</div>'+
+    '</div>').join('')
     :'<div style="padding:12px;font-size:11px;color:#9AA0A6">لم يتم جلب المنافسين</div>';
 
   const ownPct=d.d.housing_total>0?Math.round(d.d.owned/d.d.housing_total*100):0;
   const targetPct=Math.round(d.sc.targetRatio*100);
-
-  const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{font-family:'IBM Plex Sans Arabic',Arial,sans-serif;direction:rtl;background:#fff;color:#1A1A2E}
-@media print{
-  @page{size:A4;margin:22mm 0 14mm 0}
-  .pb{page-break-after:always}
-  .no-print{display:none}
-}
-/* هيدر وفوتر ثابتان في كل الصفحات */
-.pg-header{position:running(header)}
-.pg-footer{position:running(footer)}
-@page{
-  @top-center{content:element(header)}
-  @bottom-center{content:element(footer)}
-}
-/* fallback للمتصفحات العادية */
-.pg-header{background:#1B2B5E;width:100%;margin-bottom:0}
-.pg-footer{background:#1B2B5E;width:100%;margin-top:auto}
-.page{width:210mm;background:#fff;padding:0;display:flex;flex-direction:column;min-height:297mm}
-.gold{background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between}
-.gold span{font-size:8px;font-weight:700;color:#1B2B5E}
-.navy{background:#1B2B5E;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
-.sec-hdr{background:#1B2B5E;padding:7px 18px}
-.sec-hdr span{color:#F5C518;font-weight:700;font-size:11px}
-.foot{background:#1B2B5E;padding:8px 18px;display:flex;justify-content:space-between;align-items:center}
-.tag{background:#fff;border:1px solid #E4E8EF;border-radius:5px;padding:5px 10px;text-align:center;display:inline-block;min-width:70px}
-.opp{background:#FEF8DC;border-right:4px solid #F5C518;border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:7px}
-</style></head><body>
-
-
 
   // هيدر ثابت لكل الصفحات
   const HDR1 = `<div style="background:#F5C518;padding:5px 18px;display:flex;justify-content:space-between;width:100%">
@@ -3095,14 +3061,13 @@ table.layout td{padding:0}
         <div style="font-size:24px;margin-bottom:5px">${recIcon}</div>
         <div style="font-size:15px;font-weight:700;color:${recTextCol};margin-bottom:6px">${d.rec}</div>
         <div style="font-size:11px;color:${recTextCol};line-height:1.8;direction:rtl;text-align:center;unicode-bidi:plaintext">${recDetail}</div>
-        ${d.notes?`<div style="margin-top:8px;font-size:10px;color:#555;border-top:1px solid rgba(0,0,0,0.1);padding-top:7px;text-align:right"><b>ملاحظة:</b> ${d.notes}</div>`:''}
-      </div>
+              </div>
     </div>
 
   </td></tr></tbody>
 </table>
 
-<script>window.onload=function(){window.print();}<\/script>
+<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>
 </body></html>`);
   w.document.close();
 }
